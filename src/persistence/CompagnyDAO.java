@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mapper.CompagnyMapper;
-import model.Compagny;
+import model.Company;
 
 public class CompagnyDAO {
 	
@@ -33,15 +33,15 @@ public class CompagnyDAO {
 	  * 
 	  * @return List of all compagnies 
 	  */
-	 public List<Compagny> getAll() {
+	 public List<Company> getAll() {
 		 
-	        List<Compagny> companyList = new ArrayList<Compagny>();
+	        List<Company> companyList = new ArrayList<Company>();
 
 	        try (PreparedStatement statement = connect.prepareStatement(SELECT_ALL)) {
 	            ResultSet resultSet = statement.executeQuery();
 	            //ResultSet resultat = statement.executeQuery(SELECT_ALL);
 	            while (resultSet.next()) {
-	                Compagny company = CompagnyMapper.convert(resultSet);
+	                Company company = CompagnyMapper.convert(resultSet);
 	                companyList.add(company);
 	            }
 	        } catch (SQLException e) {

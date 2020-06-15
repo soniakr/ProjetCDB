@@ -16,6 +16,11 @@ public class Computer {
 	private Date discontinued;
 	private long compagny_id;
 	
+	public Computer(long id, String name) {
+		this.compagny_id=id;
+		this.name=name;
+	}
+	
 	public Computer(String name, Date introd, Date dis, long comp) {
 		this.name=name;
 		this.introduced=introd;
@@ -64,6 +69,6 @@ public class Computer {
 	}
 	
 	public String toString() {
-		return "Computer :" + this.name + " - id : " + this.id + " Introduced " + this.introduced + " - Discontinued : " + this.discontinued + " - Id Compagny : " + this.compagny_id;
+		return "Computer : " + this.name + " - ID : " + this.id + " - Introduced : " + this.introduced + " - Discontinued : " + this.discontinued + " - Id Compagny : " + this.compagny_id;
 	}
 }

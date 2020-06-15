@@ -10,8 +10,8 @@ public class ConnexionBD {
 	private static boolean driverImported = false; 
 
 	private static final String driverName = "com.mysql.cj.jdbc.Driver";
-	private static final String url = "jdbc:mysql://localhost:3306/computer-database-db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 	private static final String name = "computer-database-db";
+	private static final String url = "jdbc:mysql://localhost:3306/"+ name +"?serverTimezone=UTC";
 	
 	private static final String username = "admincdb";
 	private static final String password = "qwerty1234";

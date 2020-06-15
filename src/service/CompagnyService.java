@@ -2,7 +2,7 @@ package service;
 
 import java.util.List;
 
-import model.Compagny;
+import model.Company;
 import persistence.CompagnyDAO;
 
 public class CompagnyService {
@@ -20,7 +20,7 @@ private static CompagnyService companyService;
     }
 
     
-    public List<Compagny> getAll() {
+    public List<Company> getAll() {
         return compagnyDAO.getAll();
     }
 

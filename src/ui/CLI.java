@@ -3,7 +3,8 @@ package ui;
 import java.util.List;
 import java.util.Scanner;
 
-import model.Compagny;
+import model.Company;
+import model.Computer;
 import service.CompagnyService;
 import service.ComputerService;
 
@@ -18,15 +19,19 @@ public class CLI {
 		
 		 // Page newPage = new Page();
 	       
-	        List<Compagny> allCompagnies = compagnyService.getAll();
-	        int numberOfCompanies = allCompagnies.size();
-	        for(Compagny c : allCompagnies) {
+	        List<Computer> computers = computerService.getAll();
+	        for(Computer c : computers) {
 	        	System.out.println(c.toString());
 	        }
 	}
 	
-	public void listAllCompagnies() {
+	public static void listAllCompagnies() {
 		
+        List<Company> allCompagnies = compagnyService.getAll();
+        int numberOfCompanies = allCompagnies.size();
+        for(Company c : allCompagnies) {
+        	System.out.println(c.toString());
+        }
 	}
 	
 	public void detailsComputer() {
@@ -58,7 +63,7 @@ public class CLI {
 		System.out.println("6 - Quitter ");
 		
 		compagnyService = CompagnyService.getInstance();
-	//	computerService = ComputerService.getInstance();
+		computerService = ComputerService.getInstance();
 		
 		select_option();
 
@@ -75,11 +80,12 @@ public class CLI {
 			switch(answer) {
 				case ("0"):
 					System.out.println("Liste des ordinateurs :");
+					listAllComputers();
 					break;
 					
 				case ("1"):
 					System.out.println("Liste des entreprises :");
-					listAllComputers();
+					listAllCompagnies();
 					break;
 					
 				case ("2"):
