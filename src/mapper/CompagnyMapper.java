@@ -5,6 +5,11 @@ import java.sql.SQLException;
 
 import model.Company;
 
+/**
+ * S'occupe de la convertion 
+ * @param resultSet résultat de la requête
+ * @return un objet Computer
+ */
 public class CompagnyMapper {
 
 	public static Company convert(ResultSet resultSet) {

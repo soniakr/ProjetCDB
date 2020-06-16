@@ -10,8 +10,8 @@ public class ConnexionBD {
 	private static boolean driverImported = false; 
 
 	private static final String driverName = "com.mysql.cj.jdbc.Driver";
-	private static final String name = "computer-database-db";
-	private static final String url = "jdbc:mysql://localhost:3306/"+ name +"?serverTimezone=UTC";
+	private static final String databaseName = "computer-database-db";
+	private static final String databaseUrl = "jdbc:mysql://localhost:3306/"+ databaseName +"?serverTimezone=UTC";
 	
 	private static final String username = "admincdb";
 	private static final String password = "qwerty1234";
@@ -19,7 +19,7 @@ public class ConnexionBD {
 	public ConnexionBD() {}
 
 	/**
-	 * Import du driver à faire que la 1ere fois
+	 * Import du pilote JDBC
 	 */
 	private static void init() {
 		try {
@@ -28,13 +28,13 @@ public class ConnexionBD {
 			return;
 		} catch (Exception e ) { 
 			e.printStackTrace();
-			System.err.println("Erreur import driver : " + e.getMessage());
+			System.err.println("Erreur import du driver");
 		}
 	}
 
 	/**
-	 * Connexion à la BD
-	 * @return Connection 
+	 * Connexion à la base de données
+	 * @return Objet Connection pour réaliser la connexion et l'authentification à la base 
 	 */
 
 	public static Connection getConnection() {
@@ -42,11 +42,13 @@ public class ConnexionBD {
 			init();
 		try {
 			if (connexion == null || connexion.isClosed())
-				connexion = DriverManager.getConnection(url, username, password);
+				connexion = DriverManager.getConnection(databaseUrl, username, password);
 			return connexion;
 		} catch (SQLException e) {
 			e.getMessage();
 			e.printStackTrace();
+			System.err.println("Erreur connexion à la BD");
+
 		}
 		return null;
 	}		

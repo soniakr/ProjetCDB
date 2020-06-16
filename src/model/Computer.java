@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Classe representant l'entité Computer
@@ -14,18 +14,18 @@ public class Computer {
 	private String name;
 	private Date introduced;
 	private Date discontinued;
-	private long compagny_id;
+	private Long company_id;
 	
 	public Computer(long id, String name) {
-		this.compagny_id=id;
+		this.id=id;
 		this.name=name;
 	}
 	
-	public Computer(String name, Date introd, Date dis, long comp) {
+	public Computer(String name, Date introd, Date dis, Long comp) {
 		this.name=name;
 		this.introduced=introd;
 		this.discontinued=dis;
-		this.compagny_id=comp;
+		this.company_id=comp;
 	}
 	
 	public String getName() {
@@ -60,15 +60,15 @@ public class Computer {
 		this.discontinued=d;
 	}
 	
-	public long getIdCompagny() {
-		return this.compagny_id;
+	public Long getIdCompany() {
+		return this.company_id;
 	}
 	
-	public void setIdCompagny(long i) {
-		this.compagny_id=i;
+	public void setIdCompany(Long i) {
+		this.company_id=i;
 	}
 	
 	public String toString() {
-		return "Computer : " + this.name + " - ID : " + this.id + " - Introduced : " + this.introduced + " - Discontinued : " + this.discontinued + " - Id Compagny : " + this.compagny_id;
+		return "Computer : " + this.name + " - ID : " + this.id + " - Introduced : " + this.introduced + " - Discontinued : " + this.discontinued + " - Id Company : " + this.company_id;
 	}
 }

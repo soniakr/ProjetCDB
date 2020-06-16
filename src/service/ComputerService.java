@@ -23,5 +23,21 @@ private static ComputerService computerService;
     public List<Computer> getAll() {
         return computerDAO.getAll();
     }
+    
+    public Computer getById(Long id) {
+    	return computerDAO.findById(id);
+    }
+    
+    public void addComputer(Computer comp) {
+    	computerDAO.insert(comp);
+    }
+    
+    public void updateComputer(Computer comp) {
+    	computerDAO.update(comp);
+    }
+    
+    public void deleteCompter(Long id) {
+    	computerDAO.delete(id);
+    }
 
 }

@@ -17,7 +17,8 @@ public class CompagnyDAO {
 	 private Connection connect = ConnexionBD.getConnection();
 	  
 	 private static final String SELECT_ALL = "SELECT id, name FROM company ORDER BY id";
-	    
+	   
+	 
 	 /**
 	     * Instance of the singleton CompanyDAO.
 	     * @return the instance of CompanyDAO
