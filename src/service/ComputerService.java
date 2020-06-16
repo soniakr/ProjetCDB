@@ -2,7 +2,9 @@ package service;
 
 import java.util.List;
 
+import model.Company;
 import model.Computer;
+import model.Page;
 import persistence.ComputerDAO;
 
 public class ComputerService {
@@ -28,6 +30,11 @@ private static ComputerService computerService;
     	return computerDAO.findById(id);
     }
     
+	public List<Computer> getByPage(Page page) {
+        return computerDAO.getByPage(page);
+
+	}
+    
     public void addComputer(Computer comp) {
     	computerDAO.insert(comp);
     }
@@ -36,7 +43,7 @@ private static ComputerService computerService;
     	computerDAO.update(comp);
     }
     
-    public void deleteCompter(Long id) {
+    public void deleteComputer(Long id) {
     	computerDAO.delete(id);
     }
 

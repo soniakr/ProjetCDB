@@ -11,15 +11,14 @@ import service.ComputerService;
 
 public class CLI {
 	
-	private static Scanner sc;
+	 private static Scanner sc;
 	
 	 private static ComputerService computerService; 
 	 private static CompagnyService compagnyService;
 	 
 	/**
 	 * Affiche la liste de tous les ordinateurs dans la base
-	 */
-	
+	 */	
 	public static void listAllComputers() {
 		
 		 // Page newPage = new Page();
@@ -48,19 +47,18 @@ public class CLI {
 	public static void detailsComputer() {
 		
 		Long computerId=getId();
-		if(computerId!=null) {
-			Computer c = computerService.getById(computerId);
-			if(c==null) {
-				System.err.println("Aucun ordinateur avec cet ID");
-			} else {
-				System.out.println(c.toString());
-			}
-		}else {
-			System.err.println("Erreur récuperation de l'ID");
+		if(computerId!=null){
+			checkId(computerId);
+		} else {
+			System.err.println("Erreur récupération de l'ID");
 		}
 		
 	}
 	
+	/**
+	 * Recupère un entier tapé par l'utilisateur 
+	 * @return un entier correspondant à une ID
+	 */
 	public static Long getId() {
 		
 			System.out.println("Entrez l'identifiant de l'ordinateur svp : ");
@@ -90,6 +88,10 @@ public class CLI {
 			}
 	}
 	
+	/**
+	 * Recupère les informations concernant un ordinateur : nom, dates, id de la compagnie
+	 * @return un objet Computer correspondant 
+	 */
 	public static Computer getInfos() {
 		
 		Date dateCont=null;
@@ -134,12 +136,38 @@ public class CLI {
 	}
 	
 	/**
+	 * Vérifie que l'entier en praramètre correspond bien à un ordinateur dans la base de données
+	 * @param idComp l'id à chercher
+	 * @return true si l'id existe dans la base, false sinon
+	 */
+	public static boolean checkId(Long idComp) {
+		boolean exists=false;
+		if(idComp!=null) {
+			Computer c = computerService.getById(idComp);
+			if(c==null) {
+				System.err.println("Aucun ordinateur avec cet ID");
+			} else {
+				exists=true;
+				System.out.println("Cet ID correspond à l'ordinateur suivant : \n" + c.toString());
+			}
+		}else {
+			System.err.println("Erreur récuperation de l'ID");
+		}
+		return exists;
+	}
+	
+	/**
 	 * Mise à jour des informations sur un ordinateur
 	 */
 	public static void updateComputer() {
-		Computer newComp=getInfos();
-		if(newComp !=null) {
-			computerService.updateComputer(newComp);
+		Long idComp=getId();
+
+		if(checkId(idComp)) {
+			Computer newComp=getInfos();
+			newComp.setId(idComp);
+			if(newComp != null) {
+				computerService.updateComputer(newComp);
+			}
 		}
 	}
 	
@@ -148,7 +176,12 @@ public class CLI {
 	 * Supprimer un ordinateur de la base
 	 */
 	public static void deleteComputer() {
-		
+		Long idComp=getId();
+
+		if(checkId(idComp)) {
+			computerService.deleteComputer(idComp);
+			System.out.println("Suppression réussie.");
+		}
 	}
 	
 	/**
@@ -171,6 +204,7 @@ public class CLI {
 		select_option();
 
 	}
+	
 	/**
 	 * Traiter les entrées du client pour y répondre
 	 */
