@@ -58,7 +58,7 @@ public class Page {
      */
 	public void calculFirstLine() {
 		
-		this.firstLine = number * maxlines;
+		this.firstLine = (number-1) * maxlines;
 	}
 	
 	/**

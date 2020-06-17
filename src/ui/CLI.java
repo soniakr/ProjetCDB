@@ -33,27 +33,10 @@ public class CLI {
 		int nbComputer = computerService.countAll();
         
         while(!stop) {
-            List<Company> allCompaniesbyPage = compagnyService.getByPage(newPage);
-            allCompaniesbyPage.forEach(cp -> System.out.println(cp.toString()));
-            
-            System.out.println( "Page " + newPage.getNumberPage() + "/" + newPage.getTotalPages(nbComputer));
-            System.out.println("Entrez 's' pour Suivant - 'p' pour Précédent et 'q' pour quitter");
-
-            String input = sc.nextLine();
-
-            switch (input.toLowerCase()) {
-	            case "p":
-	                newPage.getPreviousPage();
-	                break;
-	            case "n":
-	                newPage.getNextPage(nbComputer);
-	                break;
-	            case "q":
-	                stop = true;
-	                break;
-	            }
-        } 
-	        
+            List<Company> allComputers = compagnyService.getByPage(newPage);
+            allComputers.forEach(cp -> System.out.println(cp.toString()));
+            optionsPages(newPage,nbComputer,stop);
+        }
 	}
 	
 	/**
@@ -66,26 +49,60 @@ public class CLI {
 		int nbCompanies = compagnyService.countAll();
         
         while(!stop) {
-            List<Company> allCompaniesbyPage = compagnyService.getByPage(newPage);
-            allCompaniesbyPage.forEach(cp -> System.out.println(cp.toString()));
-            
-            System.out.println( "Page " + newPage.getNumberPage() + "/" + newPage.getTotalPages(nbCompanies));
-            System.out.println("Entrez 's' pour Suivant - 'p' pour Précédent et 'q' pour quitter");
+            List<Company> allCompanies = compagnyService.getByPage(newPage);
+            allCompanies.forEach(cp -> System.out.println(cp.toString()));
+            optionsPages(newPage,nbCompanies,stop);           
+        } 
+	}
+	
+	/**
+	 * 
+	 * @param newPage
+	 * @param nbTotal
+	 * @param stop
+	 */
+	public static void optionsPages(Page newPage, int nbTotal, boolean stop) {
+		
+		 System.out.println( "Page " + newPage.getNumberPage() + "/" + newPage.getTotalPages(nbTotal));
+         System.out.println("Entrez 's' pour Suivant - 'p' pour Précédent - 'page ' et le numero de la page et 'q' pour quitter");
 
-            String input = sc.nextLine();
-
-            switch (input.toLowerCase()) {
-	            case "s":
+         String input = sc.nextLine();
+         
+         switch (input.toLowerCase()) {
+	            case "p":
 	                newPage.getPreviousPage();
 	                break;
-	            case "n":
-	                newPage.getNextPage(nbCompanies);
+	            case "s":
+	                newPage.getNextPage(nbTotal);
 	                break;
 	            case "q":
 	                stop = true;
 	                break;
-	            }
-        } 
+	            default : 
+	            	if(input.toLowerCase().startsWith("page ")) {
+	                	String num=input.split(" ")[1];
+	                	
+	                	int idPage;
+						try {
+							idPage = Integer.parseInt(num);
+							System.out.println("Vous avez demandé la page : " + idPage);
+		                	if(idPage>0 && idPage<=newPage.getNbTotalPages()) {
+		                		newPage.setNumberPage(idPage);
+		                		newPage.calculFirstLine();
+		                	} else {
+		                		System.out.println("Cette page n'existe pas");
+		                		break;
+		                	}
+						} catch (NumberFormatException e) {
+							System.err.println("Vous n'avez pas tapé un id de page valide");
+						}
+	                	
+	                } else {
+	                	System.out.println("Commande inconnue.");
+		            	break;
+	                }
+	            
+         }
 	}
 	
 	/**
@@ -188,7 +205,7 @@ public class CLI {
 	}
 	
 	/**
-	 * Vérifie que l'entier en praramètre correspond bien à un ordinateur dans la base de données
+	 * Vérifie que l'entier en paramètre correspond bien à un ordinateur dans la base de données
 	 * @param idComp l'id à chercher
 	 * @return true si l'id existe dans la base, false sinon
 	 */
