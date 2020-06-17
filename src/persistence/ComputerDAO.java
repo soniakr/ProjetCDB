@@ -13,6 +13,11 @@ import mapper.ComputerMapper;
 import model.Computer;
 import model.Page;
 
+/**
+ * Classe qui gére la communication avec la base de données pour la table Computer, l'envoie des requêtes et la réception des réponses
+ * @author sonia
+ *
+ */
 public class ComputerDAO {
 	
 	 private static ComputerDAO computerDAO;
@@ -24,6 +29,8 @@ public class ComputerDAO {
 	 private static final String SELECT_BY_ID = "SELECT * FROM computer WHERE computer.id = ? ";
 	 
 	 private static final String SELECT_PAGE = "SELECT * FROM computer ORDER BY id LIMIT ? OFFSET ?";
+	 
+	 private static final String COUNT = "SELECT COUNT(*) AS total FROM computer";
 
 	 private static final String INSERT = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 
@@ -44,7 +51,7 @@ public class ComputerDAO {
 	}
 	 
 	 /**
-	  * 
+	  * Tout les ordinateurs de la table Computer
 	  * @return Liste de tous le ordinateurs
 	  */
 	 public List<Computer> getAll() {
@@ -66,7 +73,7 @@ public class ComputerDAO {
 	 
 	 /**
 	  * Trouver un ordinateur à partir de l'id
-	  * @param id 
+	  * @param id à rechercher dans la base
 	  * @return l'ordinateur correspondant si il existe
 	  */
 	 public Computer findById(Long id) {
@@ -93,7 +100,7 @@ public class ComputerDAO {
 	 /**
 	  * Retourne la liste de tous les ordinateurs dans une page spécifique
 	  * @param p on cherche les informations contenues dans la page p
-	  * @return
+	  * @return la liste d'ordinateurs
 	  */
 	 public List<Computer> getByPage(Page p) {
 		 
@@ -111,7 +118,7 @@ public class ComputerDAO {
 	                computerList.add(computer);
 	            }
 	        } catch (SQLException e) {
-	            System.err.println("Erreur DAO -> Lister les ordinateurs de la page : " + p.getCurrentPage() + e.getMessage());
+	            System.err.println("Erreur DAO -> Lister les ordinateurs de la page : " + p.getNumberPage() + e.getMessage());
 	        }
 	        return computerList;
 	}
@@ -119,7 +126,7 @@ public class ComputerDAO {
 	 
 	 /**
 	     * Ajouter un ordinateur à la base de données
-	     * @param computer
+	     * @param computer l'entité à insérer dans la table
 	     */
 	    public void insert(Computer computer) {
 	        if (computer != null) {
@@ -134,7 +141,7 @@ public class ComputerDAO {
 	                
 	                Long idCompany = computer.getIdCompany();
 	                if(idCompany!=null) {
-		                statement.setLong(4, idCompany); // TO DO : Probleme quand on insere null en id company
+		                statement.setLong(4, idCompany);
 	                } else {
 		                statement.setNull(4, Types.BIGINT);
 	                }	                
@@ -148,7 +155,7 @@ public class ComputerDAO {
 
 	    /**
 	     * Mise à jour d'un ordinateur de la base de données
-	     * @param computer
+	     * @param computer l'entité avec les modifications à apporter
 	     */
 	    public void update(Computer computer) {
 	    	   if (computer != null) {
@@ -170,10 +177,10 @@ public class ComputerDAO {
 		        }
 	    }
 
-	    /**
-	     * Supprimer un ordinateur de la base de données
-	     * @param id
-	     */
+	/**
+	 * Supprimer un ordinateur de la base de données
+	 * @param id identifiant de l'ordinateur à supprimer
+	*/
 	public void delete(Long id) {
 	    try {
 	    	PreparedStatement statement = connect.prepareStatement(DELETE);
@@ -183,6 +190,28 @@ public class ComputerDAO {
 	        e.printStackTrace();
 	        System.err.println("Erreur supprission de la base de données");
 	   }
+	}
+	
+	/**
+	 * Compter le nombre d'entrées dans la table Computer
+	 * @return le nombre total d'entrées 
+	 */
+	 public int countAll() {
+		 
+	        int result=0;
+	        try {
+	        	PreparedStatement statement = connect.prepareStatement(COUNT);
+	            ResultSet resultSet = statement.executeQuery();
+	            
+	            while (resultSet.next()) {
+	                result=resultSet.getInt("total");
+	            }
+	           System.out.println("Nombre total d'entrées dans la base : " + result);
+	            
+	        } catch (SQLException e) {
+	            System.err.println("Erreur DAO -> CountAll Computer");
+	        }
+	        return result;
 	}
 
 }

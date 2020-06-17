@@ -4,6 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Classe qui s'occupe de la connexion à la base de données
+ * @author sonia
+ *
+ */
 public class ConnexionBD {
 	
 	private static Connection connexion;

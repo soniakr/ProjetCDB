@@ -35,9 +35,7 @@ public class ComputerMapper {
 	          	newComputer.setIntroduced(resultSet.getDate(DISCONTINUED));
 	        }
 	        
-	        //if(resultSet.getLong(COMPANY_ID)!=null) {
-	        newComputer.setIdCompany(resultSet.getLong(COMPANY_ID));
-	        	            
+	        //if(resultSet.getLong(COMPANY_ID)	            
 	        } catch (SQLException e) {
 	        	e.printStackTrace();
 	            System.err.println("Erreur -> Mapping resultSet/Computer");

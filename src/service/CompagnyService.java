@@ -3,8 +3,14 @@ package service;
 import java.util.List;
 
 import model.Company;
+import model.Page;
 import persistence.CompagnyDAO;
 
+/**
+ * Classe de Service qui s'occupe du lien entre le client et le DAO
+ * @author sonia
+ *
+ */
 public class CompagnyService {
 	
 private static CompagnyService companyService;
@@ -24,4 +30,13 @@ private static CompagnyService companyService;
         return compagnyDAO.getAll();
     }
 
+
+	public List<Company> getByPage(Page page) {
+        return compagnyDAO.getByPage(page);
+
+	}
+	
+	public int countAll() {
+		return compagnyDAO.countAll();
+	}
 }

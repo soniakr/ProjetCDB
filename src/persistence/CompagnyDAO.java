@@ -8,11 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mapper.CompagnyMapper;
-import mapper.ComputerMapper;
 import model.Company;
-import model.Computer;
 import model.Page;
 
+/**
+ * Classe qui gére la communication avec la base de données pour la table Company, l'envoie des requêtes et la réception des réponses
+ * @author sonia
+ *
+ */
 public class CompagnyDAO {
 	
 	 private static CompagnyDAO compagnyDAO;
@@ -21,7 +24,9 @@ public class CompagnyDAO {
 	  
 	 private static final String SELECT_ALL = "SELECT * FROM company ORDER BY id";
 	   
-	 private static final String SELECT_BY_ID = "SELECT * FROM company ORDER BY id LIMIT ? OFFSET ? ";
+	 private static final String SELECT_PAGE = "SELECT * FROM company ORDER BY id LIMIT ? OFFSET ? ";
+
+	 private static final String COUNT = "SELECT COUNT(*) AS total FROM company";
 
 	 
 	 /**
@@ -37,7 +42,7 @@ public class CompagnyDAO {
 	 
 	 /**
 	  * 
-	  * @return List of all compagnies 
+	  * @return Liste de toutes les compagnies
 	  */
 	 public List<Company> getAll() {
 		 
@@ -46,13 +51,12 @@ public class CompagnyDAO {
 	        try {
 	        	PreparedStatement statement = connect.prepareStatement(SELECT_ALL);
 	            ResultSet resultSet = statement.executeQuery();
-	            //ResultSet resultat = statement.executeQuery(SELECT_ALL);
 	            while (resultSet.next()) {
 	                Company company = CompagnyMapper.convert(resultSet);
 	                companyList.add(company);
 	            }
 	        } catch (SQLException e) {
-	            System.out.println("Error -> listing all companies");
+	            System.err.println("Erreur DAO -> Lister toutes les company");
 	        }
 	        return companyList;
 	}
@@ -78,8 +82,30 @@ public class CompagnyDAO {
 	                companyList.add(company);
 	            }
 	        } catch (SQLException e) {
-	            System.err.println("Erreur DAO -> Lister les ordinateurs de la page : " + p.getCurrentPage() + e.getMessage());
+	            System.err.println("Erreur DAO -> Lister les company de la page : " + p.getNumberPage() + e.getMessage());
 	        }
-	        return computerList;
+	        return companyList;
+	}
+	 
+	/**
+	 * Compter le nombre d'entrées dans la table Company
+	 * @return le nombre total d'entrées 
+	 */
+	 public int countAll() {
+		 
+	        int result=0;
+	        try {
+	        	PreparedStatement statement = connect.prepareStatement(COUNT);
+	            ResultSet resultSet = statement.executeQuery();
+	            
+	            while (resultSet.next()) {
+	                result=resultSet.getInt("total");
+	            }
+	           System.out.println("Nombre total d'entrées dans la base : " + result);
+	            
+	        } catch (SQLException e) {
+	            System.err.println("Erreur DAO -> CountAll Company");
+	        }
+	        return result;
 	}
 }

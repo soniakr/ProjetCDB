@@ -6,9 +6,15 @@ import java.util.Scanner;
 
 import model.Company;
 import model.Computer;
+import model.Page;
 import service.CompagnyService;
 import service.ComputerService;
 
+/**
+ * Classe qui gére la communication avec le client
+ * @author sonia
+ *
+ */
 public class CLI {
 	
 	 private static Scanner sc;
@@ -16,17 +22,38 @@ public class CLI {
 	 private static ComputerService computerService; 
 	 private static CompagnyService compagnyService;
 	 
+	 
 	/**
-	 * Affiche la liste de tous les ordinateurs dans la base
+	 * Affiche la liste de tous les ordinateurs de la base de données
 	 */	
-	public static void listAllComputers() {
-		
-		 // Page newPage = new Page();
-	       
-	        List<Computer> computers = computerService.getAll();
-	        for(Computer c : computers) {
-	        	System.out.println(c.toString());
-	        }
+	public static void listAllComputers() {      
+
+		Page newPage = new Page();
+		boolean stop=false;
+		int nbComputer = computerService.countAll();
+        
+        while(!stop) {
+            List<Company> allCompaniesbyPage = compagnyService.getByPage(newPage);
+            allCompaniesbyPage.forEach(cp -> System.out.println(cp.toString()));
+            
+            System.out.println( "Page " + newPage.getNumberPage() + "/" + newPage.getTotalPages(nbComputer));
+            System.out.println("Entrez 's' pour Suivant - 'p' pour Précédent et 'q' pour quitter");
+
+            String input = sc.nextLine();
+
+            switch (input.toLowerCase()) {
+	            case "p":
+	                newPage.getPreviousPage();
+	                break;
+	            case "n":
+	                newPage.getNextPage(nbComputer);
+	                break;
+	            case "q":
+	                stop = true;
+	                break;
+	            }
+        } 
+	        
 	}
 	
 	/**
@@ -34,11 +61,31 @@ public class CLI {
 	 */
 	public static void listAllCompagnies() {
 		
-        List<Company> allCompagnies = compagnyService.getAll();
-        int numberOfCompanies = allCompagnies.size();
-        for(Company c : allCompagnies) {
-        	System.out.println(c.toString());
-        }
+		Page newPage = new Page();
+		boolean stop=false;
+		int nbCompanies = compagnyService.countAll();
+        
+        while(!stop) {
+            List<Company> allCompaniesbyPage = compagnyService.getByPage(newPage);
+            allCompaniesbyPage.forEach(cp -> System.out.println(cp.toString()));
+            
+            System.out.println( "Page " + newPage.getNumberPage() + "/" + newPage.getTotalPages(nbCompanies));
+            System.out.println("Entrez 's' pour Suivant - 'p' pour Précédent et 'q' pour quitter");
+
+            String input = sc.nextLine();
+
+            switch (input.toLowerCase()) {
+	            case "s":
+	                newPage.getPreviousPage();
+	                break;
+	            case "n":
+	                newPage.getNextPage(nbCompanies);
+	                break;
+	            case "q":
+	                stop = true;
+	                break;
+	            }
+        } 
 	}
 	
 	/**
@@ -97,40 +144,45 @@ public class CLI {
 		Date dateCont=null;
 		Date dateDisc=null;
 		Long idComp=null;
-		String answer;
 		Computer newComp=null;
-
+		
+		String answer;
 		System.out.println("Entrez le nom de l'ordinateur : ");
 		String name=sc.nextLine();
 		
-		try {
-			System.out.println("Entrez la date Introduced au format YYYY-MM-DD (<Entrer> pour ignorer) : ");
-			answer=sc.nextLine();
-			if(answer.length()>0) {
-				dateCont=Date.valueOf(answer);
-			} 
-			
-			System.out.println("Entrez la date Discontinued au format YYYY-MM-DD (<Entrer> pour ignorer) : ");
-			answer=sc.nextLine();
-			if(answer.length()>0) {
-				dateDisc=Date.valueOf(answer);
-			} 		
-			System.out.println("Entrez l'ID de la compagnie (<Entrer> pour ignorer) : ");
-			
-			answer=sc.nextLine();
-			if(answer.length()>0) {
-				idComp=Long.parseLong(answer);
-	
-			} 	
-			
-			newComp=new Computer(name,dateCont, dateDisc, idComp);
-	
-			System.out.println("Nouvel ordinateur : " + newComp.toString());
-			
+		if(name.length()==0) {
+			System.err.print("Le nom ne peut pas etre vide");
+		} else {
 		
-		} catch(Exception e) {
-			//e.printStackTrace();
-			System.err.println("Erreur de format ");
+			try {
+				System.out.println("Entrez la date Introduced au format YYYY-MM-DD (<Entrer> pour ignorer) : ");
+				answer=sc.nextLine();
+				if(answer.length()>0) {
+					dateCont=Date.valueOf(answer);
+				} 
+				
+				System.out.println("Entrez la date Discontinued au format YYYY-MM-DD (<Entrer> pour ignorer) : ");
+				answer=sc.nextLine();
+				if(answer.length()>0) {
+					dateDisc=Date.valueOf(answer);
+				} 		
+				System.out.println("Entrez l'ID de la compagnie (<Entrer> pour ignorer) : ");
+				
+				answer=sc.nextLine();
+				if(answer.length()>0) {
+					idComp=Long.parseLong(answer);
+		
+				} 	
+				
+				newComp=new Computer(name,dateCont, dateDisc, idComp);
+		
+				System.out.println("Nouvel ordinateur : " + newComp.toString());
+				
+			
+			} catch(Exception e) {
+				//e.printStackTrace();
+				System.err.println("Erreur de format ");
+			}
 		}
 		return newComp;	
 	}
@@ -164,8 +216,8 @@ public class CLI {
 
 		if(checkId(idComp)) {
 			Computer newComp=getInfos();
-			newComp.setId(idComp);
-			if(newComp != null) {
+			if(newComp!=null) {
+				newComp.setId(idComp);
 				computerService.updateComputer(newComp);
 			}
 		}
@@ -189,7 +241,7 @@ public class CLI {
 	 */
 	public static void start() {
 
-		System.out.println("Entrez votre commande: ");
+		System.out.println("Entrez votre commande : ");
 		System.out.println("0 - Liste des ordinateurs");
 		System.out.println("1 - Liste des entreprises");
 		System.out.println("2 - Détails d'un ordinateur");
@@ -249,7 +301,7 @@ public class CLI {
 					
 				case ("6"):
 					System.out.println("Au revoir !");
-					stop=false;
+					stop=false; //TO DO close connexion
 					break;
 					
 				default:

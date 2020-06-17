@@ -2,11 +2,15 @@ package service;
 
 import java.util.List;
 
-import model.Company;
 import model.Computer;
 import model.Page;
 import persistence.ComputerDAO;
 
+/**
+ * Classe de Service qui s'occupe du lien entre le client et le DAO
+ * @author sonia
+ *
+ */
 public class ComputerService {
 	
 private static ComputerService computerService;
@@ -20,7 +24,6 @@ private static ComputerService computerService;
         }
         return computerService;
     }
-
     
     public List<Computer> getAll() {
         return computerDAO.getAll();
@@ -33,6 +36,10 @@ private static ComputerService computerService;
 	public List<Computer> getByPage(Page page) {
         return computerDAO.getByPage(page);
 
+	}
+	
+	public int countAll() {
+		return computerDAO.countAll();
 	}
     
     public void addComputer(Computer comp) {

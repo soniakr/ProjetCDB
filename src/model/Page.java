@@ -8,23 +8,34 @@ package model;
 
 public class Page {
 	
-	private int number; //Numero de la page actuelle
+	private int number; 
+	private int firstLine;
+	private int maxlines; 
+	private int nbTotalPages; 	
 	
-	private int maxlines; //Nombre de lignes par pages 
 	
 	public Page() {
-        this.number = 1; // TO DO Modifier pour que le client puisse modifier ces valeurs
+        this.number = 1;
         this.maxlines = 10;
+        this.firstLine=0;
     }
 
-    public int getCurrentPage() {
-        return number;
+    public int getNumberPage() {
+        return this.number;
     }
 
-    public void setCurrentPage(int current) {
-        this.number = current;
+    public void setfirstLine(int line) {
+        this.firstLine = line;
     }
 
+    public int getFirstLine() {
+        return this.firstLine;
+    }
+
+    public void setNumberPage(int num) {
+        this.number = num;
+    }
+    
     public int getMaxLines() {
         return maxlines;
     }
@@ -32,13 +43,80 @@ public class Page {
     public void setMaxLines(int maxLines) {
         this.maxlines = maxLines;
     }
+    
+    public int getNbTotalPages() {
+        return this.nbTotalPages;
+    }
 
-	public int getFirstLine() {
+    public void setNbTotalPages(int nb) {
+        this.nbTotalPages = nb;
+    }
+    
+    /**
+     * Retourne le numero de la 1ere ligne de la page courante
+     * @return
+     */
+	public void calculFirstLine() {
 		
-		return number * maxlines;
+		this.firstLine = number * maxlines;
+	}
+	
+	/**
+	 * Teste si la page courrante posséde une page précédente ou pas
+	 * @return
+	 */
+	public boolean hasPrevious() {
+		if(number==1) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	/**
+	 * Si elle existe, on passe à la page précédente
+	 */
+	public void getPreviousPage() {
+		if(this.hasPrevious()) {
+			this.number--;
+			this.firstLine-=maxlines;
+		}
+	}
+	
+	/**
+	 * Passe de la page courante à la suivante
+	 * @param total
+	 */
+	public void getNextPage(int total) {
+		if(this.hasNext(total))
+		this.number++;
+		this.firstLine+=maxlines;
 	}
 
-    
-    
-    
+	/**
+	 * Teste si la page courante est la dernière ou pas
+	 * @param total
+	 * @return
+	 */
+	public boolean hasNext(int total) {
+		if(number < this.nbTotalPages) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Calcule le nombre total de pages nécéssaires pour afficher toutes les entrées 
+	 * @param nb le nombre total d'entrées dans la base de données
+	 * @return le nombre de pages nécéssaires pour toute les afficher
+	 */
+	public int getTotalPages(int nbTotal) {
+		if(nbTotal%maxlines==0) {
+			this.nbTotalPages=nbTotal/maxlines;
+			return this.nbTotalPages;
+		} 
+		this.nbTotalPages=nbTotal/maxlines+1;
+		return this.nbTotalPages;	
+	}
+
 }

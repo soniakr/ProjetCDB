@@ -5,19 +5,21 @@ import java.sql.SQLException;
 
 import model.Company;
 
-/**
- * S'occupe de la convertion 
- * @param resultSet résultat de la requête
- * @return un objet Computer
- */
-public class CompagnyMapper {
 
+public class CompagnyMapper {
+	
+	private static Company newCompagny;
+
+	/**
+	 * S'occupe de la convertion du résultat en entité
+	 * @param resultSet résultat de la requête
+	 * @return une entité Company correspondante
+	 */
 	public static Company convert(ResultSet resultSet) {
-		 Company newCompagny = null;
 	        try {
 	            newCompagny = new Company(resultSet.getLong("id"), resultSet.getString("name"));
 	        } catch (SQLException e) {
-	            System.err.println("Error -> convertion resultSet to computer");
+	            System.err.println("Erreur -> Mapping Computer");
 	        }
 	return newCompagny;
 	}
