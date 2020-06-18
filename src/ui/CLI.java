@@ -33,9 +33,9 @@ public class CLI {
 		int nbComputer = computerService.countAll();
         
         while(!stop) {
-            List<Company> allComputers = compagnyService.getByPage(newPage);
+            List<Computer> allComputers = computerService.getByPage(newPage);
             allComputers.forEach(cp -> System.out.println(cp.toString()));
-            optionsPages(newPage,nbComputer,stop);
+            stop=optionsPages(newPage,nbComputer);
         }
 	}
 	
@@ -51,7 +51,7 @@ public class CLI {
         while(!stop) {
             List<Company> allCompanies = compagnyService.getByPage(newPage);
             allCompanies.forEach(cp -> System.out.println(cp.toString()));
-            optionsPages(newPage,nbCompanies,stop);           
+            stop=optionsPages(newPage,nbCompanies);           
         } 
 	}
 	
@@ -61,7 +61,9 @@ public class CLI {
 	 * @param nbTotal
 	 * @param stop
 	 */
-	public static void optionsPages(Page newPage, int nbTotal, boolean stop) {
+	public static boolean optionsPages(Page newPage, int nbTotal) {
+		
+		boolean stop=false;
 		
 		 System.out.println( "Page " + newPage.getNumberPage() + "/" + newPage.getTotalPages(nbTotal));
          System.out.println("Entrez 's' pour Suivant - 'p' pour Précédent - 'page ' et le numero de la page et 'q' pour quitter");
@@ -77,7 +79,8 @@ public class CLI {
 	                break;
 	            case "q":
 	                stop = true;
-	                break;
+	                return stop;
+	               
 	            default : 
 	            	if(input.toLowerCase().startsWith("page ")) {
 	                	String num=input.split(" ")[1];
@@ -103,6 +106,7 @@ public class CLI {
 	                }
 	            
          }
+         return stop;
 	}
 	
 	/**

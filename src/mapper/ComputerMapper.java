@@ -3,6 +3,7 @@ package mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import model.Company;
 import model.Computer;
 
 /**
@@ -17,6 +18,7 @@ public class ComputerMapper {
 	  private static final String INTRODUCED = "introduced";
 	  private static final String DISCONTINUED = "discontinued";
 	  private static final String COMPANY_ID = "company_id";
+	  private static final String COMPANY_NAME = "company_name";
 	
 /**
  * S'occupe de la convertion 
@@ -35,7 +37,8 @@ public class ComputerMapper {
 	          	newComputer.setIntroduced(resultSet.getDate(DISCONTINUED));
 	        }
 	        
-	        //if(resultSet.getLong(COMPANY_ID)	            
+	        newComputer.setCompany(
+	        		new Company(resultSet.getLong(COMPANY_ID), resultSet.getString(COMPANY_NAME)));	        
 	        } catch (SQLException e) {
 	        	e.printStackTrace();
 	            System.err.println("Erreur -> Mapping resultSet/Computer");

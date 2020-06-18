@@ -15,6 +15,7 @@ public class Computer {
 	private Date introduced;
 	private Date discontinued;
 	private Long company_id;
+	private Company company;
 	
 	public Computer(Long id, String name) {
 		this.id=id;
@@ -68,7 +69,15 @@ public class Computer {
 		this.company_id=i;
 	}
 	
+	  public Company getCompany() {
+	        return company;
+	    }
+
+	    public void setCompany(Company company) {
+	        this.company = company;
+	}
+	
 	public String toString() {
-		return "Computer : " + this.name + " - ID : " + this.id + " - Introduced : " + this.introduced + " - Discontinued : " + this.discontinued + " - Id Company : " + this.company_id;
+		return "Computer : " + this.name + " - ID : " + this.id + " - Introduced : " + this.introduced + " - Discontinued : " + this.discontinued + " - Company : " + this.company.getId() + " " + this.company.getName();
 	}
 }

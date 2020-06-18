@@ -28,7 +28,7 @@ public class ComputerDAO {
 	   
 	 private static final String SELECT_BY_ID = "SELECT * FROM computer WHERE computer.id = ? ";
 	 
-	 private static final String SELECT_PAGE = "SELECT * FROM computer ORDER BY id LIMIT ? OFFSET ?";
+	 private static final String SELECT_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY computer.id LIMIT ? OFFSET ?";
 	 
 	 private static final String COUNT = "SELECT COUNT(*) AS total FROM computer";
 
