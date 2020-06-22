@@ -1,14 +1,19 @@
 package ui;
 
-import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
 import model.Company;
 import model.Computer;
 import model.Page;
-import service.CompagnyService;
+import service.CompanyService;
 import service.ComputerService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Classe qui gére la communication avec le client
@@ -17,16 +22,19 @@ import service.ComputerService;
  */
 public class CLI {
 	
-	 private static Scanner sc;
+	//TODO quand le client rentre un id company pour insert/update , vérifier que l'id de la company existe bien 
 	
+	 private static Scanner sc;
+	 private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	 private static ComputerService computerService; 
-	 private static CompagnyService compagnyService;
+	 private static CompanyService companyService;
 	 
+	 private static Logger logger = LoggerFactory.getLogger(CLI.class);
 	 
 	/**
 	 * Affiche la liste de tous les ordinateurs de la base de données
 	 */	
-	public static void listAllComputers() {      
+	public void listAllComputers() {      
 
 		Page newPage = new Page();
 		boolean stop=false;
@@ -42,14 +50,14 @@ public class CLI {
 	/**
 	 * Affiche la liste de toutes les entreprises dans la base
 	 */
-	public static void listAllCompagnies() {
+	public void listAllCompagnies() {
 		
 		Page newPage = new Page();
 		boolean stop=false;
-		int nbCompanies = compagnyService.countAll();
+		int nbCompanies = companyService.countAll();
         
         while(!stop) {
-            List<Company> allCompanies = compagnyService.getByPage(newPage);
+            List<Company> allCompanies = companyService.getByPage(newPage);
             allCompanies.forEach(cp -> System.out.println(cp.toString()));
             stop=optionsPages(newPage,nbCompanies);           
         } 
@@ -61,7 +69,7 @@ public class CLI {
 	 * @param nbTotal
 	 * @param stop
 	 */
-	public static boolean optionsPages(Page newPage, int nbTotal) {
+	public boolean optionsPages(Page newPage, int nbTotal) {
 		
 		boolean stop=false;
 		
@@ -112,7 +120,7 @@ public class CLI {
 	/**
 	 * Affiche les détails à propos d'un ordinateur
 	 */
-	public static void detailsComputer() {
+	public void detailsComputer() {
 		
 		Long computerId=getId();
 		if(computerId!=null){
@@ -127,7 +135,7 @@ public class CLI {
 	 * Recupère un entier tapé par l'utilisateur 
 	 * @return un entier correspondant à une ID
 	 */
-	public static Long getId() {
+	public Long getId() {
 		
 			System.out.println("Entrez l'identifiant de l'ordinateur svp : ");
 			String answer;
@@ -149,21 +157,22 @@ public class CLI {
 	/**
 	 * Création d'une nouvelle entité Computer à insérer dans la base
 	 */
-	public static void createComputer() {
+	public void createComputer() {
 			Computer newComp=getInfos();
 			if(newComp !=null) {
 				computerService.addComputer(newComp);
 			}
+			System.out.println("Création réussie.");
 	}
 	
 	/**
 	 * Recupère les informations concernant un ordinateur : nom, dates, id de la compagnie
 	 * @return un objet Computer correspondant 
 	 */
-	public static Computer getInfos() {
+	public Computer getInfos() {
 		
-		Date dateCont=null;
-		Date dateDisc=null;
+		LocalDate dateCont=null;
+		LocalDate dateDisc=null;
 		Long idComp=null;
 		Computer newComp=null;
 		
@@ -174,36 +183,32 @@ public class CLI {
 		if(name.length()==0) {
 			System.err.print("Le nom ne peut pas etre vide");
 		} else {
-		
-			try {
-				System.out.println("Entrez la date Introduced au format YYYY-MM-DD (<Entrer> pour ignorer) : ");
-				answer=sc.nextLine();
-				if(answer.length()>0) {
-					dateCont=Date.valueOf(answer);
-				} 
-				
-				System.out.println("Entrez la date Discontinued au format YYYY-MM-DD (<Entrer> pour ignorer) : ");
-				answer=sc.nextLine();
-				if(answer.length()>0) {
-					dateDisc=Date.valueOf(answer);
-				} 		
-				System.out.println("Entrez l'ID de la compagnie (<Entrer> pour ignorer) : ");
-				
-				answer=sc.nextLine();
-				if(answer.length()>0) {
-					idComp=Long.parseLong(answer);
-		
-				} 	
-				
-				newComp=new Computer(name,dateCont, dateDisc, idComp);
-		
-				System.out.println("Nouvel ordinateur : " + newComp.toString());
+				try {
+					System.out.println("Entrez la date Introduced au format YYYY-MM-DD (<Entrer> pour ignorer) : ");
+					answer=sc.nextLine();
+					if(answer.length()>0) {
+						dateCont=LocalDate.parse(answer,formatter);
+					} 
+					
+					System.out.println("Entrez la date Discontinued au format YYYY-MM-DD (<Entrer> pour ignorer) : ");
+					answer=sc.nextLine();
+					if(answer.length()>0) {
+						dateDisc=LocalDate.parse(answer,formatter);
+					} 		
+					System.out.println("Entrez l'ID de la compagnie (<Entrer> pour ignorer) : ");
+					
+					answer=sc.nextLine();
+					if(answer.length()>0) {
+						idComp=Long.parseLong(answer);
+
+					} 	
+					newComp=new Computer(name,dateCont, dateDisc, idComp);
+				} catch (NumberFormatException | DateTimeParseException e) { // +  
+					logger.error("Erreur de format : ", e);
+				}
 				
 			
-			} catch(Exception e) {
-				//e.printStackTrace();
-				System.err.println("Erreur de format ");
-			}
+			
 		}
 		return newComp;	
 	}
@@ -213,7 +218,7 @@ public class CLI {
 	 * @param idComp l'id à chercher
 	 * @return true si l'id existe dans la base, false sinon
 	 */
-	public static boolean checkId(Long idComp) {
+	public boolean checkId(Long idComp) {
 		boolean exists=false;
 		if(idComp!=null) {
 			Computer c = computerService.getById(idComp);
@@ -232,7 +237,7 @@ public class CLI {
 	/**
 	 * Mise à jour des informations sur un ordinateur
 	 */
-	public static void updateComputer() {
+	public void updateComputer() {
 		Long idComp=getId();
 
 		if(checkId(idComp)) {
@@ -248,7 +253,7 @@ public class CLI {
 	/**
 	 * Supprimer un ordinateur de la base
 	 */
-	public static void deleteComputer() {
+	public void deleteComputer() {
 		Long idComp=getId();
 
 		if(checkId(idComp)) {
@@ -260,7 +265,7 @@ public class CLI {
 	/**
 	 * Affiche les options disponibles pour le client
 	 */
-	public static void start() {
+	public void start() {
 
 		System.out.println("Entrez votre commande : ");
 		System.out.println("0 - Liste des ordinateurs");
@@ -271,7 +276,7 @@ public class CLI {
 		System.out.println("5 - Suppression d'un ordinateur");
 		System.out.println("6 - Quitter ");
 		
-		compagnyService = CompagnyService.getInstance();
+		companyService = CompanyService.getInstance();
 		computerService = ComputerService.getInstance();
 		
 		select_option();
@@ -281,12 +286,12 @@ public class CLI {
 	/**
 	 * Traiter les entrées du client pour y répondre
 	 */
-	public static void select_option() {
+	public void select_option() {
 		
 		boolean stop=true;
 		sc=new Scanner(System.in);
 		String answer;
-		
+		logger.info("New client on UI");
 		while(stop) {
 			answer=sc.nextLine();
 			switch(answer) {
@@ -322,7 +327,7 @@ public class CLI {
 					
 				case ("6"):
 					System.out.println("Au revoir !");
-					stop=false; //TO DO close connexion
+					stop=false;
 					break;
 					
 				default:

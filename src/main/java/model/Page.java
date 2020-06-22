@@ -56,9 +56,10 @@ public class Page {
      * Retourne le numero de la 1ere ligne de la page courante
      * @return
      */
-	public void calculFirstLine() {
+	public int calculFirstLine() {
 		
 		this.firstLine = (number-1) * maxlines;
+		return this.firstLine;
 	}
 	
 	/**

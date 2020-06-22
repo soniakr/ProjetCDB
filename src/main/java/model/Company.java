@@ -15,6 +15,10 @@ public class Company {
 		this.name=name;
 	}
 	
+	public Company(Long id) {
+		this.id=id;
+	}
+
 	public String getName() {
 		return this.name;
 	}

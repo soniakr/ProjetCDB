@@ -1,6 +1,6 @@
 package model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  * Classe representant l'entité Computer
@@ -12,8 +12,8 @@ public class Computer {
 	
 	private Long id;
 	private String name;
-	private Date introduced;
-	private Date discontinued;
+	private LocalDate introduced;
+	private LocalDate discontinued;
 	private Long company_id;
 	private Company company;
 	
@@ -22,11 +22,20 @@ public class Computer {
 		this.name=name;
 	}
 	
-	public Computer(String name, Date introd, Date dis, Long comp) {
+	public Computer(String name, LocalDate introd, LocalDate dis, Long comp) {
 		this.name=name;
 		this.introduced=introd;
 		this.discontinued=dis;
 		this.company_id=comp;
+	}
+	
+	public Computer(Long id, String name, LocalDate introd, LocalDate dis, Long comp) {
+		this.id=id;
+		this.name=name;
+		this.introduced=introd;
+		this.discontinued=dis;
+		this.company_id=comp;
+		this.company=new Company(comp);
 	}
 	
 	public String getName() {
@@ -45,20 +54,27 @@ public class Computer {
 		this.id=i;
 	}
 	
-	public Date getIntroduced() {
+	public LocalDate getIntroduced() {
 		return this.introduced;
 	}
 	
-	public Date getDiscontinued() {
+	public LocalDate getDiscontinued() {
 		return this.discontinued;
 	}
 	
-	public void setIntroduced(Date d) {
-		this.introduced=d;
+	public void setIntroduced(LocalDate newDate) throws Exception {
+		
+		if(newDate != null && this.discontinued!=null && newDate.compareTo(this.discontinued) > 0) {
+			throw new Exception("Discontinued date must be greater");
+		}
+		this.introduced = newDate;
 	}
 	
-	public void setDiscontinued(Date d) {
-		this.discontinued=d;
+	public void setDiscontinued(LocalDate newDate) throws Exception {
+		if(newDate != null && this.introduced!=null && this.introduced.compareTo(newDate) > 0) {
+			throw new Exception("Discontinued date must be greater");
+		}
+		this.discontinued = newDate;
 	}
 	
 	public Long getIdCompany() {
@@ -69,11 +85,11 @@ public class Computer {
 		this.company_id=i;
 	}
 	
-	  public Company getCompany() {
+	public Company getCompany() {
 	        return company;
 	    }
 
-	    public void setCompany(Company company) {
+	public void setCompany(Company company) {
 	        this.company = company;
 	}
 	

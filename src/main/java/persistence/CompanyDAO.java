@@ -7,7 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import mapper.CompagnyMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mapper.CompanyMapper;
 import model.Company;
 import model.Page;
 
@@ -16,9 +19,9 @@ import model.Page;
  * @author sonia
  *
  */
-public class CompagnyDAO {
+public class CompanyDAO {
 	
-	 private static CompagnyDAO compagnyDAO;
+	 private static CompanyDAO compagnyDAO;
 	 
 	 private Connection connect = ConnexionBD.getConnection();
 	  
@@ -27,15 +30,16 @@ public class CompagnyDAO {
 	 private static final String SELECT_PAGE = "SELECT * FROM company ORDER BY id LIMIT ? OFFSET ? ";
 
 	 private static final String COUNT = "SELECT COUNT(*) AS total FROM company";
-
+	 
+	 private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
 	 
 	 /**
 	     * Instance of the singleton CompanyDAO.
 	     * @return the instance of CompanyDAO
 	     */
-	 public static CompagnyDAO getInstance() {
+	 public static CompanyDAO getInstance() {
 	        if (compagnyDAO == null) {
-	            compagnyDAO = new CompagnyDAO();
+	            compagnyDAO = new CompanyDAO();
 	        }
 	        return compagnyDAO;
 	}
@@ -52,11 +56,11 @@ public class CompagnyDAO {
 	        	PreparedStatement statement = connect.prepareStatement(SELECT_ALL);
 	            ResultSet resultSet = statement.executeQuery();
 	            while (resultSet.next()) {
-	                Company company = CompagnyMapper.convert(resultSet);
+	                Company company = CompanyMapper.convert(resultSet);
 	                companyList.add(company);
 	            }
 	        } catch (SQLException e) {
-	            System.err.println("Erreur DAO -> Lister toutes les company");
+	            logger.error("Erreur DAO -> Lister toutes les company",e);
 	        }
 	        return companyList;
 	}
@@ -67,24 +71,29 @@ public class CompagnyDAO {
 	  * @return
 	  */
 	 public List<Company> getByPage(Page p) {
-		 
-	        List<Company> companyList = new ArrayList<Company>();
+	     
+		 List<Company> companyList = new ArrayList<Company>();
 
-	        try  {
-	        	PreparedStatement statement = connect.prepareStatement(SELECT_PAGE);
-	        	
-                statement.setInt(1, p.getMaxLines());
-                statement.setInt(2, p.getFirstLine());
+		 if(p!=null) {	 
 
-	        	ResultSet resultSet = statement.executeQuery();
-	        	while (resultSet.next()) {
-	                Company company = CompagnyMapper.convert(resultSet);
-	                companyList.add(company);
-	            }
-	        } catch (SQLException e) {
-	            System.err.println("Erreur DAO -> Lister les company de la page : " + p.getNumberPage() + e.getMessage());
-	        }
-	        return companyList;
+		        try  {
+		        	PreparedStatement statement = connect.prepareStatement(SELECT_PAGE);
+		        	
+	                statement.setInt(1, p.getMaxLines());
+	                statement.setInt(2, p.getFirstLine());
+
+		        	ResultSet resultSet = statement.executeQuery();
+		        	while (resultSet.next()) {
+		                Company company = CompanyMapper.convert(resultSet);
+		                companyList.add(company);
+		            }
+		        } catch (SQLException e) {
+		        	logger.error("Erreur DAO -> Lister les company de la page : " + p.getNumberPage() + e.getMessage());
+		        }
+		 }  else {
+			 logger.error("La page demandée est null");
+		 }
+	     return companyList;
 	}
 	 
 	/**
@@ -104,7 +113,7 @@ public class CompagnyDAO {
 	           System.out.println("Nombre total d'entrées dans la base : " + result);
 	            
 	        } catch (SQLException e) {
-	            System.err.println("Erreur DAO -> CountAll Company");
+	            logger.error("Erreur DAO -> CountAll Company");
 	        }
 	        return result;
 	}

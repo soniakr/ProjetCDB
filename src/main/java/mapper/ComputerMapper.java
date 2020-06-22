@@ -1,7 +1,6 @@
 package mapper;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import model.Company;
 import model.Computer;
@@ -30,17 +29,16 @@ public class ComputerMapper {
 	    try {
 	        newComputer = new Computer(resultSet.getLong(ID_COMPUTER), resultSet.getString(NAME_COMPUTER));
 	        if(resultSet.getDate(INTRODUCED)!=null) {
-	           	newComputer.setIntroduced(resultSet.getDate(INTRODUCED));
+	           	newComputer.setIntroduced(resultSet.getDate(INTRODUCED).toLocalDate());
 	        }
 	            
 	        if(resultSet.getDate(DISCONTINUED)!=null) {
-	          	newComputer.setIntroduced(resultSet.getDate(DISCONTINUED));
+	          	newComputer.setDiscontinued(resultSet.getDate(DISCONTINUED).toLocalDate());
 	        }
 	        
 	        newComputer.setCompany(
 	        		new Company(resultSet.getLong(COMPANY_ID), resultSet.getString(COMPANY_NAME)));	        
-	        } catch (SQLException e) {
-	        	e.printStackTrace();
+	        } catch (Exception e) {
 	            System.err.println("Erreur -> Mapping resultSet/Computer");
 	        }
 	        return newComputer;

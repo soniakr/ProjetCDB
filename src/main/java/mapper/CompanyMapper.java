@@ -5,8 +5,7 @@ import java.sql.SQLException;
 
 import model.Company;
 
-
-public class CompagnyMapper {
+public class CompanyMapper {
 	
 	private static Company newCompagny;
 
@@ -23,5 +22,5 @@ public class CompagnyMapper {
 	        }
 	return newCompagny;
 	}
-
+//
 }
