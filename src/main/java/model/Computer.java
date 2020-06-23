@@ -96,4 +96,16 @@ public class Computer {
 	public String toString() {
 		return "Computer : " + this.name + " - ID : " + this.id + " - Introduced : " + this.introduced + " - Discontinued : " + this.discontinued + " - Company : " + this.company.getId() + " " + this.company.getName();
 	}
+	
+	public boolean equals(Computer comp) {
+		
+		if (this.getId()==comp.getId() 
+				&& this.getName().equals(comp.getName()) 
+				&& this.getIntroduced().equals(comp.getIntroduced())
+				&& this.getDiscontinued().equals(comp.getDiscontinued())
+				&& this.getCompany().getId() == comp.getCompany().getId()) {
+			return true;
+		}
+		return false;
+	}
 }

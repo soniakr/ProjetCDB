@@ -11,7 +11,6 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ui.CLI;
 
 /**
  * Classe qui s'occupe de la connexion à la base de données

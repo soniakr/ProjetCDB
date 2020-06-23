@@ -65,7 +65,6 @@ public class ComputerDAO {
 
 	        try (PreparedStatement statement = connect.prepareStatement(SELECT_ALL)) {
 	            ResultSet resultSet = statement.executeQuery();
-	            //ResultSet resultat = statement.executeQuery(SELECT_ALL);
 	            while (resultSet.next()) {
 	                Computer computer = ComputerMapper.convert(resultSet);
 	                computerList.add(computer);

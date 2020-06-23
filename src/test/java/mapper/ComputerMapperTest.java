@@ -50,13 +50,13 @@ public class ComputerMapperTest {
 	    Computer computer = ComputerMapper.convert(resultSet);
 	    Computer computerTest = new Computer(id,name,introduced.toLocalDate(), discontinued.toLocalDate(), id_company);
 	    
-	   assertEquals(computerTest.getId(), computer.getId());
-	   assertEquals(computerTest.getName(), computer.getName());
-	   assertEquals(computerTest.getIntroduced(), computer.getIntroduced());
-	   assertEquals(computerTest.getDiscontinued(), computer.getDiscontinued());
-	   assertEquals(computerTest.getCompany().getId(), computer.getCompany().getId());
+	    assertEquals(computerTest.getId(), computer.getId());
+	    assertEquals(computerTest.getName(), computer.getName());
+	    assertEquals(computerTest.getIntroduced(), computer.getIntroduced());
+	    assertEquals(computerTest.getDiscontinued(), computer.getDiscontinued());
+	    assertEquals(computerTest.getCompany().getId(), computer.getCompany().getId());
 
-	    //assertEquals(computerTest,computer);
+	    //TODO assertEquals(computerTest,computer);
 	}
 
 }

@@ -67,7 +67,7 @@ public class Page {
 	 * @return
 	 */
 	public boolean hasPrevious() {
-		if(number==1) {
+		if(getNumberPage()==1) {
 			return false;
 		} else {
 			return true;
@@ -77,21 +77,25 @@ public class Page {
 	/**
 	 * Si elle existe, on passe à la page précédente
 	 */
-	public void getPreviousPage() {
+	public int getPreviousPage() {
 		if(this.hasPrevious()) {
 			this.number--;
 			this.firstLine-=maxlines;
 		}
+		return this.number;
 	}
 	
 	/**
 	 * Passe de la page courante à la suivante
 	 * @param total
 	 */
-	public void getNextPage(int total) {
-		if(this.hasNext(total))
-		this.number++;
-		this.firstLine+=maxlines;
+	public int getNextPage() {
+		if(this.hasNext()) {
+			this.number++;
+			this.firstLine+=maxlines;
+		}
+		return this.number;
+
 	}
 
 	/**
@@ -99,8 +103,8 @@ public class Page {
 	 * @param total
 	 * @return
 	 */
-	public boolean hasNext(int total) {
-		if(number < this.nbTotalPages) {
+	public boolean hasNext() {
+		if(getNumberPage() < getNbTotalPages()) {
 			return true;
 		}
 		return false;

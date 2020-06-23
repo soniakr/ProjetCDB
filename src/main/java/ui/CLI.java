@@ -21,9 +21,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class CLI {
-	
-	//TODO quand le client rentre un id company pour insert/update , vérifier que l'id de la company existe bien 
-	
+		
 	 private static Scanner sc;
 	 private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	 private static ComputerService computerService; 
@@ -83,7 +81,7 @@ public class CLI {
 	                newPage.getPreviousPage();
 	                break;
 	            case "s":
-	                newPage.getNextPage(nbTotal);
+	                newPage.getNextPage();
 	                break;
 	            case "q":
 	                stop = true;
@@ -126,7 +124,7 @@ public class CLI {
 		if(computerId!=null){
 			checkId(computerId);
 		} else {
-			System.err.println("Erreur récupération de l'ID");
+			logger.error("Erreur récupération de l'ID");
 		}
 		
 	}
@@ -171,7 +169,7 @@ public class CLI {
 	 */
 	public Computer getInfos() {
 		
-		LocalDate dateCont=null;
+		LocalDate dateIntroduced=null;
 		LocalDate dateDisc=null;
 		Long idComp=null;
 		Computer newComp=null;
@@ -187,14 +185,21 @@ public class CLI {
 					System.out.println("Entrez la date Introduced au format YYYY-MM-DD (<Entrer> pour ignorer) : ");
 					answer=sc.nextLine();
 					if(answer.length()>0) {
-						dateCont=LocalDate.parse(answer,formatter);
+						dateIntroduced=LocalDate.parse(answer,formatter);
 					} 
 					
 					System.out.println("Entrez la date Discontinued au format YYYY-MM-DD (<Entrer> pour ignorer) : ");
 					answer=sc.nextLine();
 					if(answer.length()>0) {
 						dateDisc=LocalDate.parse(answer,formatter);
-					} 		
+					} 
+					
+					if(dateDisc!=null && dateIntroduced!=null && dateIntroduced.isAfter(dateDisc)) {
+						System.out.println("Introduced doit être avant Discontinued");
+						dateDisc=null;
+						dateIntroduced=null;
+						throw new DateTimeParseException(name, name, 0);
+					}
 					System.out.println("Entrez l'ID de la compagnie (<Entrer> pour ignorer) : ");
 					
 					answer=sc.nextLine();
@@ -202,7 +207,7 @@ public class CLI {
 						idComp=Long.parseLong(answer);
 
 					} 	
-					newComp=new Computer(name,dateCont, dateDisc, idComp);
+					newComp=new Computer(name,dateIntroduced, dateDisc, idComp);
 				} catch (NumberFormatException | DateTimeParseException e) { // +  
 					logger.error("Erreur de format : ", e);
 				}
@@ -229,7 +234,7 @@ public class CLI {
 				System.out.println("Cet ID correspond à l'ordinateur suivant : \n" + c.toString());
 			}
 		}else {
-			System.err.println("Erreur récuperation de l'ID");
+			logger.error("Erreur récuperation de l'ID");
 		}
 		return exists;
 	}
