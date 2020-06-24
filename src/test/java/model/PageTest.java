@@ -7,6 +7,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
+import com.excilys.formation.cbd.model.Page;
+
 public class PageTest {
 	
     private Page page = Mockito.mock(Page.class);

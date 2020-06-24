@@ -11,7 +11,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import model.Computer;
+import com.excilys.formation.cbd.mapper.ComputerMapper;
+import com.excilys.formation.cbd.model.Computer;
 
 public class ComputerMapperTest {
 

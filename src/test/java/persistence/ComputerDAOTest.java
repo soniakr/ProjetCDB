@@ -12,7 +12,8 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Test;
 
-import model.Computer;
+import com.excilys.formation.cbd.model.Computer;
+import com.excilys.formation.cbd.persistence.ComputerDAO;
 
 public class ComputerDAOTest extends DBTestCase {
 	
@@ -40,6 +41,9 @@ public class ComputerDAOTest extends DBTestCase {
 	public void testGetAll() {
 		ComputerDAO computerDAO = ComputerDAO.getInstance();
 		List<Computer> computers = computerDAO.getAll();
+		for(Computer c : computers) {
+			System.out.println(c.toString());
+		}
 	}
 
 	@Test

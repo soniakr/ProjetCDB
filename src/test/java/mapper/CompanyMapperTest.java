@@ -11,7 +11,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import model.Company;
+import com.excilys.formation.cbd.mapper.CompanyMapper;
+import com.excilys.formation.cbd.model.Company;
 
 public class CompanyMapperTest {
 
