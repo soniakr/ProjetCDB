@@ -9,6 +9,9 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.formation.cbd.mapper.ComputerMapper;
 import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.model.Page;
@@ -23,6 +26,8 @@ public class ComputerDAO {
 	 private static ComputerDAO computerDAO;
 	 
 	 private Connection connect;
+	 
+	 private static Logger logger = LoggerFactory.getLogger(ConnexionBD.class);
 	  
 	 private static final String SELECT_ALL = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY computer.id";
 	   
@@ -71,7 +76,7 @@ public class ComputerDAO {
 	            }
 	            connect.close();
 	        } catch (SQLException e) {
-	            System.err.println("Erreur DAO -> Lister tous les ordinateurs : " + e.getMessage());
+	        	logger.error("Erreur DAO -> Lister tous les ordinateurs : " + e.getMessage());
 	        }
 	        return computerList;
 	}
@@ -97,7 +102,7 @@ public class ComputerDAO {
 
 	            } catch (SQLException e) {
 	              
-		            System.err.println("Erreur DAO -> Ordinateur par ID : " + e.getMessage());
+	            	logger.error("Erreur DAO -> Ordinateur par ID : " + e.getMessage());
 
 	            }
 	        }
@@ -128,7 +133,7 @@ public class ComputerDAO {
 	            }
 	            connect.close();
 	        } catch (SQLException e) {
-	            System.err.println("Erreur DAO -> Lister les ordinateurs de la page : " + p.getNumberPage() + e.getMessage());
+	        	logger.error("Erreur DAO -> Lister les ordinateurs de la page : " + p.getNumberPage() + e.getMessage());
 	        }
 	        return computerList;
 	}
@@ -165,8 +170,7 @@ public class ComputerDAO {
 	                statement.execute();
 	                connect.close();
 	            } catch (SQLException e) {
-	                e.printStackTrace();
-	                System.err.println("Erreur insertion base de données ( Vérifier que l'ID de l'entreprise existe bien) ");
+	                logger.error("Erreur insertion base de données ( Vérifier que l'ID de l'entreprise existe bien) ");
 	            }	
 	        }
 	    }
@@ -192,7 +196,7 @@ public class ComputerDAO {
 		                statement.execute();
 		                connect.close();
 		            } catch (SQLException e) {
-		                e.printStackTrace();
+		                logger.error("ErreurDAO : update ");
 		            }
 		        }
 	    }
@@ -210,8 +214,7 @@ public class ComputerDAO {
 	        statement.execute();
 	        connect.close();
 	   } catch (SQLException e) {
-	        e.printStackTrace();
-	        System.err.println("Erreur supprission de la base de données");
+	        logger.error("Erreur suppression de la base de données");
 	   }
 	}
 	
@@ -233,7 +236,7 @@ public class ComputerDAO {
 	            
 	           connect.close();
 	        } catch (SQLException e) {
-	            System.err.println("Erreur DAO -> CountAll Computer");
+	        	logger.error("Erreur DAO -> CountAll Computer");
 	        }
 	        return result;
 	}

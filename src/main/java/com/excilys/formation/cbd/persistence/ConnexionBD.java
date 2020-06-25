@@ -69,7 +69,6 @@ public class ConnexionBD {
 	           password = prop.getProperty("password");
 	           
 	           databaseUrl=databaseUrl+databaseName+extension;	
-	           System.out.println(databaseUrl);
 	           input.close();
 
 	        } catch (IOException e) {

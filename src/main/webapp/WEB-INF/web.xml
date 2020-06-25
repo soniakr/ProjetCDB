@@ -9,4 +9,14 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>AddComputerServlet</display-name>
+    <servlet-name>AddComputerServlet</servlet-name>
+    <servlet-class>com.excilys.formation.cbd.servlets.AddComputerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddComputerServlet</servlet-name>
+    <url-pattern>/AddComputerServlet</url-pattern>
+  </servlet-mapping>
 </web-app>

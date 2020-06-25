@@ -15,7 +15,7 @@
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="dashboard.html"> Application - Computer Database </a>
+            <a class="navbar-brand" href="dashboard.jsp"> Application - Computer Database </a>
         </div>
     </header>
 
@@ -34,7 +34,7 @@
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer.html">Add Computer</a> 
+                    <a class="btn btn-success" id="addComputer" href="addComputer.jsp">Add Computer</a> 
                     <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
@@ -100,27 +100,34 @@
     <footer class="navbar-fixed-bottom">
         <div class="container text-center">
             <ul class="pagination">
-                <li>
-                    <a href="#" aria-label="Previous">
+          <li>
+              	<c:if test="${pageIterator>0}">
+              		<a href="ListComputers?pageIterator=${pageIterator-1}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
-                  </a>
+                    </a>
+				</c:if>      
               </li>
-              <li><a href="#">1</a></li>
-              <li><a href="#">2</a></li>
-              <li><a href="#">3</a></li>
-              <li><a href="#">4</a></li>
-              <li><a href="#">5</a></li>
-              <li>
-                <a href="#" aria-label="Next">
+              <c:forEach  var = "i" begin = "0" end = "5">
+              <c:if test="${pageIterator+i<=maxPages}">
+              
+              <li><a href="ListComputers?pageIterator=${pageIterator+i}"><c:out value="${pageIterator+i}"></c:out></a></li>			  
+			  </c:if>
+			  </c:forEach>
+                
+          	  <li>
+              
+              <c:if test="${pageIterator<maxPages}">
+                <a href="ListComputers?pageIterator=${pageIterator+1}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
-            </li>
+                </c:if>
+		</li>
         </ul>
-		</div>
+		
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default">10</button>
-            <button type="button" class="btn btn-default">50</button>
-            <button type="button" class="btn btn-default">100</button>
+            <button type="button" class="btn btn-default"><a href="ListComputers?taillePage=10">10</a></button>
+            <button type="button" class="btn btn-default"><a href="ListComputers?taillePage=50">50</a></button>
+            <button type="button" class="btn btn-default"><a href="ListComputers?taillePage=100">100</a></button>
         </div>
 
     </footer>
