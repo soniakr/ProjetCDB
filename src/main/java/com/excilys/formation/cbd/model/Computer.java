@@ -38,6 +38,10 @@ public class Computer {
 		this.company=new Company(comp);
 	}
 	
+	public Computer() {
+		super();
+	}
+
 	public String getName() {
 		return this.name;
 	}

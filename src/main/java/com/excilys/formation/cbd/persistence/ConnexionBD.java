@@ -1,6 +1,5 @@
 package com.excilys.formation.cbd.persistence;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -23,9 +22,6 @@ public class ConnexionBD {
 	private static boolean driverImported = false; 
 	
 	private static Logger logger = LoggerFactory.getLogger(ConnexionBD.class);
-
-	
-	private static final String ressourcesFile="config.properties";
 
 	private static String driverName;
 	private static String databaseName;

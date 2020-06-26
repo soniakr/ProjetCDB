@@ -1,7 +1,12 @@
 package com.excilys.formation.cbd.mapper;
 
 import java.sql.ResultSet;
+import java.time.LocalDate;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.formation.cbd.dto.ComputerDTO;
 import com.excilys.formation.cbd.model.Company;
 import com.excilys.formation.cbd.model.Computer;
 
@@ -19,6 +24,8 @@ public class ComputerMapper {
 	  private static final String COMPANY_ID = "company_id";
 	  private static final String COMPANY_NAME = "company_name";
 	
+		private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
+
 /**
  * S'occupe de la convertion 
  * @param resultSet résultat de la requête
@@ -43,4 +50,49 @@ public class ComputerMapper {
 	        }
 	        return newComputer;
 	}
+	
+	/**
+	 * Fonction pour convertir un computer en computerDTO
+	 * @param computer
+	 * @return
+	 */
+	public static ComputerDTO convertToComputerDTO(Computer computer) {
+		ComputerDTO computerDto= new ComputerDTO();
+		String id = String.valueOf(computer.getId());
+		computerDto.setId(id);
+		
+		if(computer.getIntroduced()!=null) {
+			computerDto.setIntroduced(computer.getIntroduced().toString());
+		}
+		if(computer.getDiscontinued()!=null) {
+			computerDto.setDiscontinued(computer.getDiscontinued().toString());
+		}
+		computerDto.setName(computer.getName());
+		computerDto.setCompany(CompanyMapper.companyToCompanyDto(computer.getCompany()));
+	//	System.out.println(computerDto.getCompany().getName());
+		return computerDto;
+	}
+
+	public static Computer toComputer(ComputerDTO computerDTO) {
+		        Computer computer = new Computer();
+		        try {
+		            if (computerDTO.getId() != null) {
+		                computer.setId(Long.valueOf(computerDTO.getId()));
+		            }
+		            computer.setName(computerDTO.getName());
+		            if (computerDTO.getIntroduced() != null && !computerDTO.getIntroduced().equals("")) {
+		                computer.setIntroduced(LocalDate.parse(computerDTO.getIntroduced()));
+		            }
+		            if (computerDTO.getDiscontinued() != null && !computerDTO.getDiscontinued().equals("")) {
+		                computer.setDiscontinued(LocalDate.parse(computerDTO.getDiscontinued()));
+		            }
+		            if (computerDTO.getCompany() != null) {
+		                computer.setCompany(CompanyMapper.toCompany(computerDTO.getCompany()));
+		            }
+		        } catch (Exception e) {
+		            logger.error("error mapping computerDTO to Computer : " + e.toString());
+		        }
+		        return computer;	
+	}
+	
 }

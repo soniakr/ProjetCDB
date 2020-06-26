@@ -3,6 +3,7 @@ package com.excilys.formation.cbd.mapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.excilys.formation.cbd.dto.CompanyDTO;
 import com.excilys.formation.cbd.model.Company;
 
 public class CompanyMapper {
@@ -18,9 +19,25 @@ public class CompanyMapper {
 	        try {
 	            newCompagny = new Company(resultSet.getLong("id"), resultSet.getString("name"));
 	        } catch (SQLException e) {
-	            System.err.println("Erreur -> Mapping Computer");
+	            System.err.println("Erreur -> Mapping company");
 	        }
-	return newCompagny;
+	        return newCompagny;
 	}
-//
+
+
+	public static CompanyDTO companyToCompanyDto(Company company) {
+		CompanyDTO companyDto= new CompanyDTO();
+		
+		String id = String.valueOf(company.getId());
+		companyDto.setId(id);
+		companyDto.setName(company.getName());
+		
+		return companyDto;
+	}
+
+
+	public static Company toCompany(CompanyDTO company) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

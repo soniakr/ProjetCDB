@@ -1,6 +1,7 @@
 package com.excilys.formation.cbd.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -9,6 +10,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.excilys.formation.cbd.dto.ComputerDTO;
+import com.excilys.formation.cbd.mapper.CompanyMapper;
+import com.excilys.formation.cbd.mapper.ComputerMapper;
 import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.model.Page;
 import com.excilys.formation.cbd.service.ComputerService;
@@ -22,6 +29,9 @@ public class ListComputerServlet extends HttpServlet{
 	private int taillePage=10;
 	
 	public ComputerService computerService=ComputerService.getInstance();
+	
+	private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
+
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
@@ -51,10 +61,13 @@ public class ListComputerServlet extends HttpServlet{
 			}
 
 		}
-        List<Computer> allComputers = computerService.getByPage(newPage);
-        
+	   List<ComputerDTO>allComputersDTO=new ArrayList<ComputerDTO>();
+       List<Computer> allComputers = computerService.getByPage(newPage);
+       
+       allComputers.stream().forEach(computer->allComputersDTO.add(ComputerMapper.convertToComputerDTO(computer)));
+
        request.setAttribute("pageIterator", pageIterator);
-       request.setAttribute("computersList", allComputers);
+       request.setAttribute("computersList", allComputersDTO);
        request.setAttribute("nbComputers", nbComputer);
 
 		

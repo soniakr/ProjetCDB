@@ -26,6 +26,11 @@ private static CompanyService companyService;
     }
 
 
+	public List<Company> getAll() {
+        return companyDAO.getAll();
+
+	}
+
 	public List<Company> getByPage(Page page) {
         return companyDAO.getByPage(page);
 
