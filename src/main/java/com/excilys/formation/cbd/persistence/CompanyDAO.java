@@ -23,7 +23,7 @@ public class CompanyDAO {
 	
 	 private static CompanyDAO compagnyDAO;
 	 
-	 private Connection connect = ConnexionBD.getConnection();
+	 private Connection connect;
 	  
 	 private static final String SELECT_ALL = "SELECT * FROM company ORDER BY id";
 	   
@@ -44,24 +44,31 @@ public class CompanyDAO {
 	        return compagnyDAO;
 	}
 	 
+	 public void connectBD() {
+		 	connect = ConnexionBD.getConnection();
+
+	 }
+	 
 	 /**
 	  * 
 	  * @return Liste de toutes les compagnies
 	  */
 	 public List<Company> getAll() {
-		 
+		 	
+		 	connectBD();
 	        List<Company> companyList = new ArrayList<Company>();
 
-	        try {
-	        	PreparedStatement statement = connect.prepareStatement(SELECT_ALL);
+	        try (PreparedStatement statement = connect.prepareStatement(SELECT_ALL)){
 	            ResultSet resultSet = statement.executeQuery();
 	            while (resultSet.next()) {
 	                Company company = CompanyMapper.convert(resultSet);
 	                companyList.add(company);
 	            }
+	            connect.close();
 	        } catch (SQLException e) {
 	            logger.error("Erreur DAO -> Lister toutes les company",e);
 	        }
+
 	        return companyList;
 	}
 	 
@@ -72,6 +79,7 @@ public class CompanyDAO {
 	  */
 	 public List<Company> getByPage(Page p) {
 	     
+		 connectBD();
 		 List<Company> companyList = new ArrayList<Company>();
 
 		 if(p!=null) {	 
@@ -87,6 +95,8 @@ public class CompanyDAO {
 		                Company company = CompanyMapper.convert(resultSet);
 		                companyList.add(company);
 		            }
+		            connect.close();
+
 		        } catch (SQLException e) {
 		        	logger.error("Erreur DAO -> Lister les company de la page : " + p.getNumberPage() + e.getMessage());
 		        }
@@ -101,7 +111,7 @@ public class CompanyDAO {
 	 * @return le nombre total d'entrées 
 	 */
 	 public int countAll() {
-		 
+		 	connectBD();
 	        int result=0;
 	        try {
 	        	PreparedStatement statement = connect.prepareStatement(COUNT);
@@ -111,7 +121,8 @@ public class CompanyDAO {
 	                result=resultSet.getInt("total");
 	            }
 	           System.out.println("Nombre total d'entrées dans la base : " + result);
-	            
+	            connect.close();
+
 	        } catch (SQLException e) {
 	            logger.error("Erreur DAO -> CountAll Company");
 	        }

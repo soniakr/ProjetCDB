@@ -37,29 +37,22 @@ public class AddComputerServlet extends HttpServlet {
 	public CompanyService companyService=CompanyService.getInstance();
 	public ComputerService computerService=ComputerService.getInstance();
 	
-	List<CompanyDTO> companyDtoList=new ArrayList<CompanyDTO>();
-
 	private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
 
     public AddComputerServlet() {
         super();
     }
 
-
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		System.out.println("dans le do get");
-		
-		List<Company> companyList=new ArrayList<Company>();
-		companyList=companyService.getAll();
+		List<Company> companyList=companyService.getAll();
+		List<CompanyDTO> companyDtoList=new ArrayList<CompanyDTO>();
 
 		companyList.stream().forEach(company->companyDtoList.add(
 						   CompanyMapper.companyToCompanyDto(company)));
+		
 		request.setAttribute("companies", companyDtoList);
-		System.out.println(companyDtoList.size());
-
 		request.getRequestDispatcher("views/addComputer.jsp").forward(request, response);
-		System.out.println("envoyé");
 
 	}
 

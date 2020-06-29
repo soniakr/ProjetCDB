@@ -45,11 +45,11 @@ public class ListComputerServlet extends HttpServlet{
 			taillePage=Integer.parseInt(request.getParameter("taillePage"));
 		} 
 		newPage.setMaxLines(taillePage);
-		System.out.println("les pages sont mnt de taille : " + newPage.getMaxLines());
+		//System.out.println("Taille pages : : " + newPage.getMaxLines());
 
 		
 		int maxPages=newPage.getTotalPages(nbComputer);
-		System.out.println("nombre de pages max :"+ maxPages);
+		//System.out.println("nombre de pages max :"+ maxPages);
 		request.setAttribute("maxPages", maxPages);
 		
 		if(request.getParameter("pageIterator")!=null) {

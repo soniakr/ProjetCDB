@@ -19,4 +19,14 @@
     <servlet-name>AddComputerServlet</servlet-name>
     <url-pattern>/AddComputerServlet</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>EditComputerServlet</display-name>
+    <servlet-name>EditComputerServlet</servlet-name>
+    <servlet-class>com.excilys.formation.cbd.servlets.EditComputerServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>EditComputerServlet</servlet-name>
+    <url-pattern>/EditComputerServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
