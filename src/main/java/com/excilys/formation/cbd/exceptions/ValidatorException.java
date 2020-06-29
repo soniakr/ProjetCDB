@@ -1,4 +1,4 @@
-package com.excilys.formtion.cbd.exceptions;
+package com.excilys.formation.cbd.exceptions;
 
 public class ValidatorException extends RuntimeException{
 

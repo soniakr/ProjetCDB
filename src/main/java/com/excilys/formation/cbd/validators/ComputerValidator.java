@@ -1,31 +1,37 @@
 package com.excilys.formation.cbd.validators;
 
-import com.excilys.formation.cbd.model.Computer;
-import com.excilys.formtion.cbd.exceptions.ValidatorException;
+import java.time.LocalDate;
+
+import com.excilys.formation.cbd.dto.ComputerDTO;
+import com.excilys.formation.cbd.exceptions.ValidatorException;
 
 public class ComputerValidator {
 	
 	
-	public  void validateComputer(Computer computer) {
-		validateDates(computer);
-		validateComputerName(computer);
+	public boolean validateComputer(ComputerDTO computerDTO) {
+		if(validateDates(computerDTO) && validateComputerName(computerDTO)){
+			return true;
+		}
+		return false;
 	}
 	
 	
-	private void validateDates(Computer computer){
-		if(computer.getIntroduced()== null || computer.getDiscontinued()==null) {
-			//Do nothing
-		} else {
-			if(!(computer.getDiscontinued().isAfter(computer.getIntroduced()))) {
-			
+	private boolean validateDates(ComputerDTO computerDTO){
+		if(computerDTO.getIntroduced()!= null && computerDTO.getDiscontinued()!=null) {
+			LocalDate intro = LocalDate.parse(computerDTO.getIntroduced());
+			LocalDate disc = LocalDate.parse(computerDTO.getDiscontinued());
+
+			if(!(disc.isAfter(intro))) {
 				throw new ValidatorException("ValidatorException: Introduced date should be before discontinuedDate");
 			}
 		}
+		return true;
 	}
 	
-	private void validateComputerName(Computer computer){
-		if(computer.getName()==null || computer.getName().equals("")) {
+	private boolean validateComputerName(ComputerDTO computerDTO){
+		if(computerDTO.getName()==null || computerDTO.getName().equals("")) {
 			throw new ValidatorException("ValidatorException: Computer Name is required");
 		}
+		return true;
 	}
 }

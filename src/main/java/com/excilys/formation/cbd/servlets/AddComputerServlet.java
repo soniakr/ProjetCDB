@@ -1,7 +1,6 @@
 package com.excilys.formation.cbd.servlets;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +21,7 @@ import com.excilys.formation.cbd.model.Company;
 import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.service.CompanyService;
 import com.excilys.formation.cbd.service.ComputerService;
+import com.excilys.formation.cbd.validators.ComputerValidator;
 
 /**
  * Servlet implementation class AddComputerServlet
@@ -37,6 +37,8 @@ public class AddComputerServlet extends HttpServlet {
 	public CompanyService companyService=CompanyService.getInstance();
 	public ComputerService computerService=ComputerService.getInstance();
 	
+	List<CompanyDTO> companyDtoList=new ArrayList<CompanyDTO>();
+
 	private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
 
     public AddComputerServlet() {
@@ -45,30 +47,51 @@ public class AddComputerServlet extends HttpServlet {
 
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		List<CompanyDTO> companyDtoList=new ArrayList<CompanyDTO>();
+		
+		System.out.println("dans le do get");
+		
 		List<Company> companyList=new ArrayList<Company>();
 		companyList=companyService.getAll();
 
 		companyList.stream().forEach(company->companyDtoList.add(
 						   CompanyMapper.companyToCompanyDto(company)));
 		request.setAttribute("companies", companyDtoList);
+		System.out.println(companyDtoList.size());
+
 		request.getRequestDispatcher("views/addComputer.jsp").forward(request, response);
+		System.out.println("envoyé");
+
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CompanyDTO companyDTO=new CompanyDTO(Long.parseLong(request.getParameter("companyId")));
-		ComputerDTO computerDTO=new ComputerDTO(request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),companyDTO);
 		
-		Computer computer = ComputerMapper.toComputer(computerDTO);
-       // if (computerService.allowedToCreateOrEdit(computer)) {
-            computerService.addComputer(computer);
-            logger.info("computer creation ok");
-        //} else {
-        //    logger.error("computer creation not allowed");		
-		doGet(request, response);
+		try {
+			CompanyDTO companyDTO=null;
+			if(request.getParameter("companyId")!=null) {
+				companyDTO=new CompanyDTO(Long.parseLong(request.getParameter("companyId")));
+			}
+			ComputerDTO computerDTO=new ComputerDTO(request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),companyDTO);
+			
+			System.out.println("id company : " + request.getParameter("companyId"));
+			System.out.println("Name : " + request.getParameter("computerName") + "   " + request.getParameter("introduced") + "  " + request.getParameter("discontinued"));
+			
+			ComputerValidator validator= new ComputerValidator();
+			if(validator.validateComputer(computerDTO)) {
+				Computer computer = ComputerMapper.toComputer(computerDTO);
+				computerService.addComputer(computer);
+				logger.info("Success");		
+			} else {
+				logger.error("Insert not allowed");		
+			}
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			logger.error("Insert not allowed");
+		} finally {
+			doGet(request, response);
+		}
 	}
 
 }

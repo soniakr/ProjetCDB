@@ -60,5 +60,8 @@ public class ComputerDTO {
         this.company = companyDTO;
     }
     
+	public String toString() {
+		return "Computer : " + this.name + " - ID : " + this.idComputer + " - Introduced : " + this.introducedDate + " - Discontinued : " + this.discontinuedDate + " - Company : " + this.company.getId() + " " + this.company.getName();
+	}
     
 }

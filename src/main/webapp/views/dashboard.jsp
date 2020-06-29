@@ -107,7 +107,7 @@
                     </a>
 				</c:if>      
               </li> 
-              <c:forEach  var = "i" begin = "0" end = "5">
+              <c:forEach  var = "i" begin = "1" end = "5">
               <c:if test="${pageIterator+i<=maxPages}">
               
               <li><a href="ListComputers?pageIterator=${pageIterator+i}"><c:out value="${pageIterator+i}"></c:out></a></li>			  
@@ -125,9 +125,9 @@
         </ul>
 		
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default"><a href="ListComputers?taillePage=10">10</a></button>
-            <button type="button" class="btn btn-default"><a href="ListComputers?taillePage=50">50</a></button>
-            <button type="button" class="btn btn-default"><a href="ListComputers?taillePage=100">100</a></button>
+            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=10'">10</button>
+            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=50'">50</button>
+            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=100'">100</button>
         </div>
 
     </footer>
