@@ -19,6 +19,10 @@ public class Company {
 		this.id=id;
 	}
 
+	public Company() {
+		super();
+	}
+
 	public String getName() {
 		return this.name;
 	}

@@ -24,7 +24,7 @@ public class ComputerMapper {
 	  private static final String COMPANY_ID = "company_id";
 	  private static final String COMPANY_NAME = "company_name";
 	
-		private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
+	  private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
 
 /**
  * S'occupe de la convertion 
@@ -69,11 +69,16 @@ public class ComputerMapper {
 		}
 		computerDto.setName(computer.getName());
 		computerDto.setCompany(CompanyMapper.companyToCompanyDto(computer.getCompany()));
-	//	System.out.println(computerDto.getCompany().getName());
 		return computerDto;
 	}
 
 	
+	/**
+	 * Convertir un computerDTO en Computer
+	 * On ne procède à aucune vérification des champs car ils sont validés par le validator
+	 * @param un computerDTO
+	 * @return l'objet Computer correspondant
+	 */
 	public static Computer toComputer(ComputerDTO computerDTO) {
 		        Computer computer = new Computer();
 		        try {

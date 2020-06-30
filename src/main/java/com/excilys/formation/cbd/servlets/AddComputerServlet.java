@@ -34,15 +34,18 @@ public class AddComputerServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
        
-	public CompanyService companyService=CompanyService.getInstance();
-	public ComputerService computerService=ComputerService.getInstance();
+	private CompanyService companyService=CompanyService.getInstance();
+	private ComputerService computerService=ComputerService.getInstance();
 	
 	private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
 
     public AddComputerServlet() {
         super();
     }
-
+    
+    /**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		List<Company> companyList=companyService.getAll();
@@ -67,9 +70,6 @@ public class AddComputerServlet extends HttpServlet {
 				companyDTO=new CompanyDTO(Long.parseLong(request.getParameter("companyId")));
 			}
 			ComputerDTO computerDTO=new ComputerDTO(request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),companyDTO);
-			
-			System.out.println("id company : " + request.getParameter("companyId"));
-			System.out.println("Name : " + request.getParameter("computerName") + "   " + request.getParameter("introduced") + "  " + request.getParameter("discontinued"));
 			
 			ComputerValidator validator= new ComputerValidator();
 			if(validator.validateComputer(computerDTO)) {

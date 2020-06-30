@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import java.io.FileInputStream;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.dbunit.DBTestCase;
@@ -12,10 +13,13 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.Test;
 
+import com.excilys.formation.cbd.model.Company;
 import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.persistence.ComputerDAO;
 
 public class ComputerDAOTest extends DBTestCase {
+	
+	private static ComputerDAO computerDAO = ComputerDAO.getInstance();
 	
 	public ComputerDAOTest(String name) {
         super(name);
@@ -27,19 +31,12 @@ public class ComputerDAOTest extends DBTestCase {
 
 	@Test
 	public void testGetInstance() {
-		 ComputerDAO computerDAO = ComputerDAO.getInstance();
 	     assertNotNull(computerDAO);
 	     assertEquals("Deux instances : ce n'est pas un Singleton", ComputerDAO.getInstance(), computerDAO);
 	}
 
 	@Test
-	public void testConnectBD() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testGetAll() {
-		ComputerDAO computerDAO = ComputerDAO.getInstance();
 		List<Computer> computers = computerDAO.getAll();
 		for(Computer c : computers) {
 			System.out.println(c.toString());
@@ -53,33 +50,49 @@ public class ComputerDAOTest extends DBTestCase {
 	}
 
 	@Test
-	public void testGetByPage() {
-		fail("Not yet implemented");
-	}
-
-	@Test
 	public void testInsert() {
-		fail("Not yet implemented");
+		String name = "Computer test created";
+		LocalDate introduced = LocalDate.parse("2019-08-24");
+		LocalDate discontinued = LocalDate.parse("2020-08-24");
+		Company company = new Company();
+		company.setId(1L);
+		Computer computer = new Computer(name,introduced,discontinued, company.getId());
+		computerDAO.insert(computer);
+		assertEquals(5, computerDAO.getAll().size());
 	}
 
 	@Test
 	public void testUpdate() {
-		fail("Not yet implemented");
+		Long id = 10L;
+		Computer computer = computerDAO.findById(id);
+		computer.setName("ComputerTest");
+		computerDAO.update(computer);
+		assertEquals(computer.getName(), (computerDAO.findById((id)).getName()));
 	}
 
 	@Test
 	public void testDelete() {
-		fail("Not yet implemented");
-	}
+		Long id = 4L;
+	/*	assertTrue(computerDAO.exist(id));
+	    computerDAO.delete(id);
+	    assertFalse(computerDAO.exist(id));
+	*/}
 
 	@Test
 	public void testCountAll() {
-		fail("Not yet implemented");
-	}
+		assertEquals(4, computerDAO.countAll());	}
 
+	protected DatabaseOperation getSetUpOperation() throws Exception{
+        return DatabaseOperation.REFRESH;
+    }
+
+    protected DatabaseOperation getTearDownOperation() throws Exception{
+        return DatabaseOperation.NONE;
+}
+    
 	@Override
 	protected IDataSet getDataSet() throws Exception {
-        return new FlatXmlDataSetBuilder().build(new FileInputStream("src/main/resources/database.xml"));
+        return new FlatXmlDataSetBuilder().build(new FileInputStream("src/test/resources/database.xml"));
 	}
 
 }

@@ -44,6 +44,10 @@ public class CompanyDAO {
 	        return compagnyDAO;
 	}
 	 
+	 /**
+	  * Connection à la base de données 
+	  */
+	 
 	 public void connectBD() {
 		 	connect = ConnexionBD.getConnection();
 

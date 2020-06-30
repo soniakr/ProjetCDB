@@ -32,7 +32,9 @@ public class ListComputerServlet extends HttpServlet{
 	
 	private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
 
-
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	*/
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		int nbComputer = computerService.countAll();
@@ -45,11 +47,8 @@ public class ListComputerServlet extends HttpServlet{
 			taillePage=Integer.parseInt(request.getParameter("taillePage"));
 		} 
 		newPage.setMaxLines(taillePage);
-		//System.out.println("Taille pages : : " + newPage.getMaxLines());
-
 		
 		int maxPages=newPage.getTotalPages(nbComputer);
-		//System.out.println("nombre de pages max :"+ maxPages);
 		request.setAttribute("maxPages", maxPages);
 		
 		if(request.getParameter("pageIterator")!=null) {

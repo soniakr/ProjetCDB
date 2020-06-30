@@ -2,7 +2,7 @@ package com.excilys.formation.cbd.exceptions;
 
 public class ValidatorException extends RuntimeException{
 
-	private static final long serialVersionUID = 2617274370538071681L;
+	private static final long serialVersionUID = 1L;
 	
 	public ValidatorException() {
 		super();
