@@ -11,11 +11,19 @@ import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.operation.DatabaseOperation;
 import org.junit.Test;
 
 import com.excilys.formation.cbd.model.Company;
 import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.persistence.ComputerDAO;
+import com.excilys.formation.cbd.model.Computer.ComputerBuilder;
+
+/**
+ * Classe de Test pour ComputerDAO
+ * @author sonia
+ *
+ */
 
 public class ComputerDAOTest extends DBTestCase {
 	
@@ -56,7 +64,11 @@ public class ComputerDAOTest extends DBTestCase {
 		LocalDate discontinued = LocalDate.parse("2020-08-24");
 		Company company = new Company();
 		company.setId(1L);
-		Computer computer = new Computer(name,introduced,discontinued, company.getId());
+		Computer computer = new ComputerBuilder(name)
+							.initializeWithIntroducedDate(introduced)
+							.initializeWithDiscontinuedDate(discontinued)
+							.initializeWithCompanyID(company.getId())
+.build(); 
 		computerDAO.insert(computer);
 		assertEquals(5, computerDAO.getAll().size());
 	}

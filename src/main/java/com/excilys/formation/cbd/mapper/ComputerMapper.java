@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.excilys.formation.cbd.dto.ComputerDTO;
 import com.excilys.formation.cbd.model.Company;
 import com.excilys.formation.cbd.model.Computer;
+import com.excilys.formation.cbd.model.Computer.ComputerBuilder;
 
 /**
  * Classe s'occupant du Mapping entre la base de données et l'entité Computer
@@ -34,8 +35,12 @@ public class ComputerMapper {
 	public static Computer convert(ResultSet resultSet) {
 		Computer newComputer = null;
 	    try {
-	        newComputer = new Computer(resultSet.getLong(ID_COMPUTER), resultSet.getString(NAME_COMPUTER));
-	        if(resultSet.getDate(INTRODUCED)!=null) {
+	        //newComputer = new Computer(resultSet.getLong(ID_COMPUTER), resultSet.getString(NAME_COMPUTER));
+	        
+	    	newComputer = new ComputerBuilder(resultSet.getString(NAME_COMPUTER))
+					.initializeWithId(resultSet.getLong(ID_COMPUTER))
+					.build(); 
+	    	if(resultSet.getDate(INTRODUCED)!=null) {
 	           	newComputer.setIntroduced(resultSet.getDate(INTRODUCED).toLocalDate());
 	        }
 	            
@@ -58,8 +63,10 @@ public class ComputerMapper {
 	 */
 	public static ComputerDTO convertToComputerDTO(Computer computer) {
 		ComputerDTO computerDto= new ComputerDTO();
-		String id = String.valueOf(computer.getId());
-		computerDto.setId(id);
+		if(computer.getId()!=null) { //Peut être nul si on insert
+			String id = String.valueOf(computer.getId());
+			computerDto.setId(id);
+		}
 		
 		if(computer.getIntroduced()!=null) {
 			computerDto.setIntroduced(computer.getIntroduced().toString());
@@ -94,6 +101,7 @@ public class ComputerMapper {
 		            }
 		            if (computerDTO.getCompany() != null) {
 		                computer.setCompany(CompanyMapper.toCompany(computerDTO.getCompany()));
+		                computer.setIdCompany(Long.valueOf(computerDTO.getCompany().getId()));
 		            }
 		        } catch (Exception e) {
 		            logger.error("error mapping computerDTO to Computer : " + e.toString());

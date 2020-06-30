@@ -14,6 +14,8 @@ import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.model.Page;
 import com.excilys.formation.cbd.service.CompanyService;
 import com.excilys.formation.cbd.service.ComputerService;
+import com.excilys.formation.cbd.model.Computer.ComputerBuilder;
+
 
 /**
  * Classe qui gére la communication avec le client
@@ -207,8 +209,14 @@ public class CLI {
 						idComp=Long.parseLong(answer);
 
 					} 	
-					newComp=new Computer(name,dateIntroduced, dateDisc, idComp);
-				} catch (NumberFormatException | DateTimeParseException e) { // +  
+				//	newComp=new Computer(name,dateIntroduced, dateDisc, idComp);
+
+					Computer computer = new ComputerBuilder(name)
+										.initializeWithIntroducedDate(dateIntroduced)
+										.initializeWithDiscontinuedDate(dateDisc)
+										.initializeWithCompanyID(idComp)
+			.build(); 
+				} catch (NumberFormatException | DateTimeParseException e) {  
 					logger.error("Erreur de format : ", e);
 				}
 				

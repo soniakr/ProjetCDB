@@ -232,7 +232,7 @@ public class ComputerDAO {
 	            while (resultSet.next()) {
 	                result=resultSet.getInt("total");
 	            }
-	           System.out.println("Nombre total d'entrées dans la base : " + result);
+	           logger.info("Nombre total d'entrées dans la base : " + result);
 	            
 	           connect.close();
 	        } catch (SQLException e) {

@@ -17,6 +17,16 @@ public class Computer {
 	private Long company_id;
 	private Company company;
 	
+	
+	private Computer(ComputerBuilder computerBuilder) {
+		this.id=computerBuilder.id;
+		this.name=computerBuilder.name;
+		this.introduced=computerBuilder.introduced;
+		this.discontinued=computerBuilder.discontinued;
+		this.company=computerBuilder.company;
+		this.company_id=computerBuilder.company_id;
+}
+	/*
 	public Computer(Long id, String name) {
 		this.id=id;
 		this.name=name;
@@ -37,9 +47,8 @@ public class Computer {
 		this.company_id=comp;
 		this.company=new Company(comp);
 	}
-	
+	*/
 	public Computer() {
-		super();
 	}
 
 	public String getName() {
@@ -112,4 +121,52 @@ public class Computer {
 		}
 		return false;
 	}
+	
+	/**
+	 * La classe Builder
+	 */
+	public static class ComputerBuilder{
+		private Long id;
+		private String name;
+		private LocalDate introduced;
+		private LocalDate discontinued;
+		private Long company_id;
+		private Company company;
+		
+		public ComputerBuilder(String name) {
+			this.name=name;
+		}
+		
+		public ComputerBuilder initializeWithId(Long id) {
+			this.id=id;
+			return this;
+		}
+		
+		public ComputerBuilder initializeWithIntroducedDate(LocalDate introduced) {
+			this.introduced=introduced;
+			return this;
+		}
+		
+		public ComputerBuilder initializeWithDiscontinuedDate(LocalDate discontinued) {
+			this.discontinued=discontinued;
+			return this;
+	    }
+		
+		public ComputerBuilder initializeWithCompanyID(Long company_id) {
+			this.company_id=company_id;
+			return this;
+		}
+		
+		public ComputerBuilder initializeWithCompany(Company company) {
+			this.company=company;
+			return this;
+		}
+		
+		public Computer build() {
+			Computer computer = new Computer(this);
+			return computer;
+		}
+
+		
+}
 }

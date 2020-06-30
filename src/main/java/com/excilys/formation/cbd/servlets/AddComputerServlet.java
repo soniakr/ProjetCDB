@@ -66,11 +66,14 @@ public class AddComputerServlet extends HttpServlet {
 		
 		try {
 			CompanyDTO companyDTO=null;
+			System.out.println(" id recup :" + Long.parseLong(request.getParameter("companyId")));
 			if(request.getParameter("companyId")!=null) {
 				companyDTO=new CompanyDTO(Long.parseLong(request.getParameter("companyId")));
 			}
 			ComputerDTO computerDTO=new ComputerDTO(request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),companyDTO);
 			
+			System.out.println("id dans dto : " + computerDTO.getCompany().getId());
+
 			ComputerValidator validator= new ComputerValidator();
 			if(validator.validateComputer(computerDTO)) {
 				Computer computer = ComputerMapper.toComputer(computerDTO);
