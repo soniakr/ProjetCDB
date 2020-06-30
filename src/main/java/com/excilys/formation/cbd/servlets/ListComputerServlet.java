@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.cbd.dto.ComputerDTO;
+import com.excilys.formation.cbd.dto.mappers.ComputerDtoMapper;
 import com.excilys.formation.cbd.mapper.CompanyMapper;
 import com.excilys.formation.cbd.mapper.ComputerMapper;
 import com.excilys.formation.cbd.model.Computer;
@@ -30,7 +31,7 @@ public class ListComputerServlet extends HttpServlet{
 	
 	public ComputerService computerService=ComputerService.getInstance();
 	
-	private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
+	private static Logger logger = LoggerFactory.getLogger(ListComputerServlet.class);
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -63,7 +64,7 @@ public class ListComputerServlet extends HttpServlet{
 	   List<ComputerDTO>allComputersDTO=new ArrayList<ComputerDTO>();
        List<Computer> allComputers = computerService.getByPage(newPage);
        
-       allComputers.stream().forEach(computer->allComputersDTO.add(ComputerMapper.convertToComputerDTO(computer)));
+       allComputers.stream().forEach(computer->allComputersDTO.add(ComputerDtoMapper.convertToComputerDTO(computer)));
 
        request.setAttribute("pageIterator", pageIterator);
        request.setAttribute("computersList", allComputersDTO);

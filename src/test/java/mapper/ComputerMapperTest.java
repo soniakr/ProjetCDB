@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 
 import com.excilys.formation.cbd.mapper.ComputerMapper;
 import com.excilys.formation.cbd.model.Computer;
+import com.excilys.formation.cbd.model.Computer.ComputerBuilder;
 
 public class ComputerMapperTest {
 
@@ -49,7 +50,12 @@ public class ComputerMapperTest {
 	        fail("SQL exception :" + e.getMessage());
 	    }
 	    Computer computer = ComputerMapper.convert(resultSet);
-	    Computer computerTest = new Computer(id,name,introduced.toLocalDate(), discontinued.toLocalDate(), id_company);
+	    Computer computerTest =  new ComputerBuilder(name)
+								.initializeWithId(id)
+								.initializeWithIntroducedDate(introduced.toLocalDate())
+								.initializeWithDiscontinuedDate(discontinued.toLocalDate())
+								.initializeWithCompanyID(id_company)
+								.build(); 
 	    
 	    assertEquals(computerTest.getId(), computer.getId());
 	    assertEquals(computerTest.getName(), computer.getName());

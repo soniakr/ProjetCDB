@@ -35,7 +35,7 @@
                 </div>
                 <div class="pull-right">
                     <a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-default" id="editComputer" href="editComputer" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
         </div>
@@ -85,7 +85,7 @@
 				                            <input type="checkbox" name="cb" class="cb" value="0">
 				                        </td>
 				                        <td>
-				                            <a href="editComputer.jsp" onclick=""><c:out value="${computer.name}"></c:out></a>
+				                            <a href="editComputer?idComputer=${computer.id}" onclick=""><c:out value="${computer.name}"></c:out></a>
 				                        </td>
 				                        <td><c:out value="${computer.introduced}"></c:out> </td>
 				                        <td><c:out value="${computer.discontinued}"></c:out> </td>

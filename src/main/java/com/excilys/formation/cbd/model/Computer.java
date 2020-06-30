@@ -25,29 +25,8 @@ public class Computer {
 		this.discontinued=computerBuilder.discontinued;
 		this.company=computerBuilder.company;
 		this.company_id=computerBuilder.company_id;
-}
-	/*
-	public Computer(Long id, String name) {
-		this.id=id;
-		this.name=name;
 	}
 	
-	public Computer(String name, LocalDate introd, LocalDate dis, Long comp) {
-		this.name=name;
-		this.introduced=introd;
-		this.discontinued=dis;
-		this.company_id=comp;
-	}
-	
-	public Computer(Long id, String name, LocalDate introd, LocalDate dis, Long comp) {
-		this.id=id;
-		this.name=name;
-		this.introduced=introd;
-		this.discontinued=dis;
-		this.company_id=comp;
-		this.company=new Company(comp);
-	}
-	*/
 	public Computer() {
 	}
 

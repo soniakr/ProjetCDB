@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.cbd.dto.CompanyDTO;
 import com.excilys.formation.cbd.dto.ComputerDTO;
+import com.excilys.formation.cbd.dto.mappers.CompanyDtoMapper;
+import com.excilys.formation.cbd.dto.mappers.ComputerDtoMapper;
 import com.excilys.formation.cbd.mapper.CompanyMapper;
 import com.excilys.formation.cbd.mapper.ComputerMapper;
 import com.excilys.formation.cbd.model.Company;
@@ -37,7 +39,7 @@ public class AddComputerServlet extends HttpServlet {
 	private CompanyService companyService=CompanyService.getInstance();
 	private ComputerService computerService=ComputerService.getInstance();
 	
-	private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
+	private static Logger logger = LoggerFactory.getLogger(AddComputerServlet.class);
 
     public AddComputerServlet() {
         super();
@@ -52,7 +54,7 @@ public class AddComputerServlet extends HttpServlet {
 		List<CompanyDTO> companyDtoList=new ArrayList<CompanyDTO>();
 
 		companyList.stream().forEach(company->companyDtoList.add(
-						   CompanyMapper.companyToCompanyDto(company)));
+						   CompanyDtoMapper.companyToCompanyDto(company)));
 		
 		request.setAttribute("companies", companyDtoList);
 		request.getRequestDispatcher("views/addComputer.jsp").forward(request, response);
@@ -66,17 +68,14 @@ public class AddComputerServlet extends HttpServlet {
 		
 		try {
 			CompanyDTO companyDTO=null;
-			System.out.println(" id recup :" + Long.parseLong(request.getParameter("companyId")));
 			if(request.getParameter("companyId")!=null) {
 				companyDTO=new CompanyDTO(Long.parseLong(request.getParameter("companyId")));
 			}
-			ComputerDTO computerDTO=new ComputerDTO(request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),companyDTO);
 			
-			System.out.println("id dans dto : " + computerDTO.getCompany().getId());
-
+			ComputerDTO computerDTO=new ComputerDTO(request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),companyDTO);
 			ComputerValidator validator= new ComputerValidator();
 			if(validator.validateComputer(computerDTO)) {
-				Computer computer = ComputerMapper.toComputer(computerDTO);
+				Computer computer = ComputerDtoMapper.toComputer(computerDTO);
 				computerService.addComputer(computer);
 				logger.info("Success");		
 			} else {

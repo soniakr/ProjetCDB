@@ -23,21 +23,4 @@ public class CompanyMapper {
 	        }
 	        return newCompagny;
 	}
-
-
-	public static CompanyDTO companyToCompanyDto(Company company) {
-		CompanyDTO companyDto= new CompanyDTO();
-		
-		String id = String.valueOf(company.getId());
-		companyDto.setId(id);
-		companyDto.setName(company.getName());
-		
-		return companyDto;
-	}
-
-
-	public static Company toCompany(CompanyDTO company) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
