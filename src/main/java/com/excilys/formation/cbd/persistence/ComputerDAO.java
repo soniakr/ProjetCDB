@@ -33,9 +33,13 @@ public class ComputerDAO {
 	   
 	 private static final String SELECT_BY_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.id = ?  ";
 	 
+	 private static final String SELECT_BY_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.name LIKE ? LIMIT ? OFFSET ?";
+
 	 private static final String SELECT_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY computer.id LIMIT ? OFFSET ?";
 	 
 	 private static final String COUNT = "SELECT COUNT(*) AS total FROM computer";
+	 
+	 private static final String COUNT_BY_NAME = "SELECT COUNT(*) AS total FROM computer WHERE computer.name LIKE ?";
 
 	 private static final String INSERT = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 
@@ -56,7 +60,7 @@ public class ComputerDAO {
 	}
 	 
 	 public void connectBD() {
-		 	connect = ConnexionBD.getConnection();
+		 	connect = ConnexionHikari.getConnection();
 
 	 }
 	 
@@ -103,11 +107,40 @@ public class ComputerDAO {
 	            } catch (SQLException e) {
 	              
 	            	logger.error("Erreur DAO -> Ordinateur par ID : " + e.getMessage());
-
 	            }
 	        }
 	        return result;
 	}
+	 
+	 
+	 /**
+	  * Tout les ordinateurs qui ont un nom donné
+	  * @return Liste de tous le ordinateurs
+	  */
+	 public List<Computer> getAllByName(Page p, String name) {
+		 	connectBD();
+	        List<Computer> computerList = new ArrayList<Computer>();
+
+	        try (PreparedStatement statement = connect.prepareStatement(SELECT_BY_NAME)) {
+	        	
+                statement.setString(1, "%" + name + "%");
+                statement.setInt(2, p.getMaxLines());
+                statement.setInt(3, p.getFirstLine());
+                
+	        	ResultSet resultSet = statement.executeQuery();
+	            while (resultSet.next()) {
+	                Computer computer = ComputerMapper.convert(resultSet);
+	                computerList.add(computer);
+	            }
+	            
+	            connect.close();
+	        } catch (SQLException e) {
+	        	logger.error("Erreur DAO -> Lister tous les ordinateurs par nom : " + e.getMessage());
+	        }
+	        return computerList;
+	}
+	 
+	 
 	 
 	 /**
 	  * Retourne la liste de tous les ordinateurs dans une page spécifique
@@ -170,7 +203,7 @@ public class ComputerDAO {
 	                statement.execute();
 	                connect.close();
 	            } catch (SQLException e) {
-	                logger.error("Erreur insertion base de données ( Vérifier que l'ID de l'entreprise existe bien) ");
+	                logger.error("Erreur insertion base de données (Vérifier que l'ID de l'entreprise existe bien) ");
 	            }	
 	        }
 	    }
@@ -206,10 +239,8 @@ public class ComputerDAO {
 	 * @param id identifiant de l'ordinateur à supprimer
 	*/
 	public void delete(Long id) {
-		 
-	    try {
-	    	connectBD();
-	    	PreparedStatement statement = connect.prepareStatement(DELETE);
+    	connectBD();
+	    try (PreparedStatement statement = connect.prepareStatement(DELETE)) {
 	        statement.setLong(1, id);
 	        statement.execute();
 	        connect.close();
@@ -222,11 +253,20 @@ public class ComputerDAO {
 	 * Compter le nombre d'entrées dans la table Computer
 	 * @return le nombre total d'entrées 
 	 */
-	 public int countAll() {
+	 public int countAll(String s) {
 		 connectBD();
 	        int result=0;
+	        PreparedStatement statement;
 	        try {
-	        	PreparedStatement statement = connect.prepareStatement(COUNT);
+	        	if(s==null) {
+		        	statement = connect.prepareStatement(COUNT);
+	            	System.out.println("count tout court");
+
+	        	} else {
+		        	statement = connect.prepareStatement(COUNT_BY_NAME);
+	                statement.setString(1, "%" + s + "%");
+	            	System.out.println("count by name");
+	        	}
 	            ResultSet resultSet = statement.executeQuery();
 	            
 	            while (resultSet.next()) {
@@ -238,6 +278,8 @@ public class ComputerDAO {
 	        } catch (SQLException e) {
 	        	logger.error("Erreur DAO -> CountAll Computer");
 	        }
+        	System.out.println("res : " + result);
+
 	        return result;
 	}
 

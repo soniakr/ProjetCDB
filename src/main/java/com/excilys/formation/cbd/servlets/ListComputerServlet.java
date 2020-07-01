@@ -38,8 +38,11 @@ public class ListComputerServlet extends HttpServlet{
 	*/
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int nbComputer = computerService.countAll();
-		pageIterator=0;
+		List<ComputerDTO>allComputersDTO=new ArrayList<ComputerDTO>();
+	    List<Computer> allComputers;
+		
+		int nbComputer;
+		pageIterator=1;
 		pageDemande=0;
 		
 		Page newPage = new Page();
@@ -49,6 +52,16 @@ public class ListComputerServlet extends HttpServlet{
 		} 
 		newPage.setMaxLines(taillePage);
 		
+		String search =(request.getParameter("search")!=null)?request.getParameter("search"):null;
+		
+		if(search != null) {
+			allComputers=computerService.getAllByName(newPage,search);
+		} else {
+		    allComputers = computerService.getByPage(newPage);
+		}
+	    nbComputer = computerService.countAll(search);
+	    System.out.println("nombre de comp trouvées : " + nbComputer);
+
 		int maxPages=newPage.getTotalPages(nbComputer);
 		request.setAttribute("maxPages", maxPages);
 		
@@ -61,8 +74,6 @@ public class ListComputerServlet extends HttpServlet{
 			}
 
 		}
-	   List<ComputerDTO>allComputersDTO=new ArrayList<ComputerDTO>();
-       List<Computer> allComputers = computerService.getByPage(newPage);
        
        allComputers.stream().forEach(computer->allComputersDTO.add(ComputerDtoMapper.convertToComputerDTO(computer)));
 
@@ -75,6 +86,14 @@ public class ListComputerServlet extends HttpServlet{
 	}
 	 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		System.out.println("dans le post : " + request.getParameter("selection"));
+		String[] computerIdsAsListString=request.getParameter("selection").split(",");
+		
+		for(String idString:computerIdsAsListString) {
+			computerService.deleteComputer(Long.parseLong(idString));
+		}
+
 		doGet(request, response);
 	}
 	

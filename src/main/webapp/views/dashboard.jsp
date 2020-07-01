@@ -35,13 +35,13 @@
                 </div>
                 <div class="pull-right">
                     <a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="editComputer" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
                 </div>
             </div>
         </div>
 
-        <form id="deleteForm" action="#" method="POST">
-            <input type="hidden" name="selection" value="">
+        <form id="deleteForm" action="ListComputers" method="POST">
+            <input type="hidden" id="selection" name="selection" value="">
         </form>
 
         <div class="container" style="margin-top: 10px;">
@@ -82,7 +82,7 @@
 				 <c:forEach items="${computersList}" var="computer">
 				                    <tr>
 				                        <td class="editMode">
-				                            <input type="checkbox" name="cb" class="cb" value="0">
+				                            <input type="checkbox" name="cb" class="cb" value="${computer.id}">
 				                        </td>
 				                        <td>
 				                            <a href="editComputer?idComputer=${computer.id}" onclick=""><c:out value="${computer.name}"></c:out></a>
@@ -107,7 +107,7 @@
                     </a>
 				</c:if>      
               </li> 
-              <c:forEach  var = "i" begin = "1" end = "5">
+              <c:forEach  var = "i" begin = "0" end = "5">
               <c:if test="${pageIterator+i<=maxPages}">
               
               <li><a href="ListComputers?pageIterator=${pageIterator+i}"><c:out value="${pageIterator+i}"></c:out></a></li>			  
@@ -131,9 +131,9 @@
         </div>
 
     </footer>
-<script src="../js/jquery.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/dashboard.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/dashboard.js"></script>
 
 </body>
 </html>

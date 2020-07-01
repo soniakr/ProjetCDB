@@ -29,6 +29,10 @@ private static ComputerService computerService;
         return computerDAO.getAll();
     }
     
+    public List<Computer> getAllByName(Page newPage, String name) {
+        return computerDAO.getAllByName(newPage, name);
+    }
+    
     public Computer getById(Long id) {
     	return computerDAO.findById(id);
     }
@@ -38,8 +42,8 @@ private static ComputerService computerService;
 
 	}
 	
-	public int countAll() {
-		return computerDAO.countAll();
+	public int countAll(String s) {
+		return computerDAO.countAll(s);
 	}
     
     public void addComputer(Computer comp) {
