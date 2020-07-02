@@ -102,7 +102,7 @@
             <ul class="pagination">
           <li>
               	<c:if test="${pageIterator>0}">
-              		<a href="ListComputers?pageIterator=${pageIterator-1}" aria-label="Previous">
+              		<a href="ListComputers?pageIterator=${pageIterator-1}&search=${search}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                     </a>
 				</c:if>      
@@ -110,14 +110,14 @@
               <c:forEach  var = "i" begin = "0" end = "5">
               <c:if test="${pageIterator+i<=maxPages}">
               
-              <li><a href="ListComputers?pageIterator=${pageIterator+i}"><c:out value="${pageIterator+i}"></c:out></a></li>			  
+              <li><a href="ListComputers?pageIterator=${pageIterator+i}&search=${search}"><c:out value="${pageIterator+i}"></c:out></a></li>			  
 			  </c:if>
 			  </c:forEach>
                 
           	  <li>
               
               <c:if test="${pageIterator<maxPages}">
-                <a href="ListComputers?pageIterator=${pageIterator+1}" aria-label="Next">
+                <a href="ListComputers?pageIterator=${pageIterator+1}&search=${search}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
                 </c:if>
@@ -125,9 +125,9 @@
         </ul>
 		
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=10'">10</button>
-            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=50'">50</button>
-            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=100'">100</button>
+            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=10&search=${search}'">10</button>
+            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=50&search=${search}'">50</button>
+            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=100&search=${search}'">100</button>
         </div>
 
     </footer>

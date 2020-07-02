@@ -52,14 +52,14 @@ public class ListComputerServlet extends HttpServlet{
 		} 
 		newPage.setMaxLines(taillePage);
 		
-		String search =(request.getParameter("search")!=null)?request.getParameter("search"):null;
+		String toSearch =(request.getParameter("search")!=null)?request.getParameter("search"):null;
 		
-		if(search != null) {
-			allComputers=computerService.getAllByName(newPage,search);
+		if(toSearch != null) {
+			allComputers=computerService.getAllByName(newPage,toSearch);
 		} else {
 		    allComputers = computerService.getByPage(newPage);
 		}
-	    nbComputer = computerService.countAll(search);
+	    nbComputer = computerService.countAll(toSearch);
 	    System.out.println("nombre de comp trouvées : " + nbComputer);
 
 		int maxPages=newPage.getTotalPages(nbComputer);
@@ -80,6 +80,7 @@ public class ListComputerServlet extends HttpServlet{
        request.setAttribute("pageIterator", pageIterator);
        request.setAttribute("computersList", allComputersDTO);
        request.setAttribute("nbComputers", nbComputer);
+       request.setAttribute("search", toSearch);
 
 		
 		request.getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
