@@ -17,7 +17,7 @@ public class ComputerValidator {
 	
 	
 	private boolean validateDates(ComputerDTO computerDTO){
-		if(computerDTO.getIntroduced()!= null && computerDTO.getDiscontinued()!=null) {
+		if(computerDTO.getIntroduced()!= null && !computerDTO.getIntroduced().equals("") && !computerDTO.getDiscontinued().equals("") &&computerDTO.getDiscontinued()!=null) {
 			LocalDate intro = LocalDate.parse(computerDTO.getIntroduced());
 			LocalDate disc = LocalDate.parse(computerDTO.getDiscontinued());
 

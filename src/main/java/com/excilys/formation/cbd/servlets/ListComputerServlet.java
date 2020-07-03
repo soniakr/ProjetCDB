@@ -75,6 +75,7 @@ public class ListComputerServlet extends HttpServlet{
 		}
 		
 		if(toSearch != null ) {
+			System.out.println("iciii");
 			allComputers=computerService.getAllByName(newPage,toSearch,orderBy);
 		} else {
 		    allComputers = computerService.getByPage(newPage,orderBy);

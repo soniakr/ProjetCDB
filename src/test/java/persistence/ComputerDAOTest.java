@@ -92,7 +92,7 @@ public class ComputerDAOTest extends DBTestCase {
 
 	@Test
 	public void testCountAll() {
-		assertEquals(4, computerDAO.countAll());	}
+		assertEquals(4, computerDAO.countAll(null));	}
 
 	protected DatabaseOperation getSetUpOperation() throws Exception{
         return DatabaseOperation.REFRESH;

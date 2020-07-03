@@ -122,15 +122,17 @@ public class ComputerDAO {
 	 public List<Computer> getAllByName(Page p, String name, String orderBy) {
 		 	connectBD();
 	        List<Computer> computerList = new ArrayList<Computer>();
+	        String request = orderBy(orderBy,SELECT_BY_NAME);
 
-	        try (PreparedStatement statement = connect.prepareStatement(SELECT_BY_NAME)) {
+	        try (PreparedStatement statement = connect.prepareStatement(request)) {
 	        	
                 statement.setString(1, "%" + name + "%");
                 statement.setString(2, "%" + name + "%");
-                statement.setString(3, "computer."+orderBy); //TODO Changer le orderBy
+                
+               // statement.setString(3, "computer."+orderBy); //TODO Changer le orderBy
 
-                statement.setInt(4, p.getMaxLines());
-                statement.setInt(5, p.getFirstLine());
+                statement.setInt(3, p.getMaxLines());
+                statement.setInt(4, p.getFirstLine());
                 
 	        	ResultSet resultSet = statement.executeQuery();
 	            while (resultSet.next()) {
@@ -145,7 +147,7 @@ public class ComputerDAO {
 	        return computerList;
 	}
 	 
-	 public String orderBy(String s) {
+	 public String orderBy(String s, String requete) {
 		 	
 		 	System.out.println("la requete qui arrive : " +s);
 	        String order;
@@ -167,7 +169,7 @@ public class ComputerDAO {
 	        }
 	        System.out.println("----- ORDER : "+ order);
 
-	        String res = String.format(SELECT_PAGE,order);
+	        String res = String.format(requete,order);
 	        System.out.println(res);
 	        return res;
 	 }
@@ -182,7 +184,7 @@ public class ComputerDAO {
 		 
 	        List<Computer> computerList = new ArrayList<Computer>();
 	    	connectBD();
-	        String res = orderBy(orderBy);
+	        String res = orderBy(orderBy,SELECT_PAGE);
 
 	        try  {
 	        	PreparedStatement statement = connect.prepareStatement(res);
