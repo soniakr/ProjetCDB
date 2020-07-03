@@ -61,23 +61,23 @@ public class ListComputerServlet extends HttpServlet{
 			toSearch=request.getParameter("search");
 		}
 		
-		if(toSearch != null ) {
-			allComputers=computerService.getAllByName(newPage,toSearch,orderBy);
-		} else {
-		    allComputers = computerService.getByPage(newPage,orderBy);
-		}
-		
 	    nbComputer = computerService.countAll(toSearch);
 		int maxPages=newPage.getTotalPages(nbComputer);
 		request.setAttribute("maxPages", maxPages);
 		
-		if(request.getParameter("pageIterator")!=null) {
+		if(request.getParameter("pageIterator")!=null && !request.getParameter("pageIterator").equals("")) {
 			pageDemande=Integer.parseInt(request.getParameter("pageIterator"));
 			if(pageDemande>0 && pageDemande<=maxPages) {
 				pageIterator=Integer.parseInt(request.getParameter("pageIterator"));
 	    		newPage.setNumberPage(pageIterator);
 	    		newPage.calculFirstLine();
 			}
+		}
+		
+		if(toSearch != null ) {
+			allComputers=computerService.getAllByName(newPage,toSearch,orderBy);
+		} else {
+		    allComputers = computerService.getByPage(newPage,orderBy);
 		}
        
        allComputers.stream().forEach(computer->allComputersDTO.add(ComputerDtoMapper.convertToComputerDTO(computer)));

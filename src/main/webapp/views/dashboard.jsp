@@ -143,7 +143,7 @@
             <ul class="pagination">
           <li>
               	<c:if test="${pageIterator>1}">
-              		<a href="ListComputers?pageIterator=${pageIterator-1}&search=${search}" aria-label="Previous">
+              		<a href="ListComputers?pageIterator=${pageIterator-1}&search=${search}&orderby=${orderby}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                     </a>
 				</c:if>      
@@ -151,14 +151,14 @@
               <c:forEach  var = "i" begin = "0" end = "5">
               <c:if test="${pageIterator+i<=maxPages}">
               
-              <li><a href="ListComputers?pageIterator=${pageIterator+i}&search=${search}"><c:out value="${pageIterator+i}"></c:out></a></li>			  
+              <li><a href="ListComputers?pageIterator=${pageIterator+i}&search=${search}&orderby=${orderby}"><c:out value="${pageIterator+i}"></c:out></a></li>			  
 			  </c:if>
 			  </c:forEach>
                 
           	  <li>
               
               <c:if test="${pageIterator<maxPages}">
-                <a href="ListComputers?pageIterator=${pageIterator+1}&search=${search}" aria-label="Next">
+                <a href="ListComputers?pageIterator=${pageIterator+1}&search=${search}&orderby=${orderby}" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
                 </c:if>
