@@ -29,16 +29,16 @@ private static ComputerService computerService;
         return computerDAO.getAll();
     }
     
-    public List<Computer> getAllByName(Page newPage, String name) {
-        return computerDAO.getAllByName(newPage, name);
+    public List<Computer> getAllByName(Page newPage, String name, String orderBy) {
+        return computerDAO.getAllByName(newPage, name, orderBy);
     }
     
     public Computer getById(Long id) {
     	return computerDAO.findById(id);
     }
     
-	public List<Computer> getByPage(Page page) {
-        return computerDAO.getByPage(page);
+	public List<Computer> getByPage(Page page, String orderBy) {
+        return computerDAO.getByPage(page, orderBy);
 
 	}
 	

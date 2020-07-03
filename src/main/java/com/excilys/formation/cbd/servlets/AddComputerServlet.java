@@ -68,7 +68,7 @@ public class AddComputerServlet extends HttpServlet {
 		
 		try {
 			CompanyDTO companyDTO=null;
-			if(request.getParameter("companyId")!=null) {
+			if(request.getParameter("companyId")!="") {
 				companyDTO=new CompanyDTO(Long.parseLong(request.getParameter("companyId")));
 			}
 			

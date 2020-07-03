@@ -31,6 +31,8 @@ public class CompanyDAO {
 
 	 private static final String COUNT = "SELECT COUNT(*) AS total FROM company";
 	 
+	 private static final String DELETE_COMPANY="DELETE FROM company WHERE id= ?";
+	 
 	 private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
 	 
 	 /**
@@ -117,19 +119,48 @@ public class CompanyDAO {
 	 public int countAll() {
 		 	connectBD();
 	        int result=0;
-	        try {
-	        	PreparedStatement statement = connect.prepareStatement(COUNT);
+	        try (PreparedStatement statement = connect.prepareStatement(COUNT)){
+	        	
 	            ResultSet resultSet = statement.executeQuery();
 	            
 	            while (resultSet.next()) {
 	                result=resultSet.getInt("total");
 	            }
 	           System.out.println("Nombre total d'entrées dans la base : " + result);
-	            connect.close();
+	            
+	           connect.close();
 
 	        } catch (SQLException e) {
 	            logger.error("Erreur DAO -> CountAll Company");
 	        }
 	        return result;
 	}
+	 /*
+	 public void deleteCompany(Long id) {
+		 connectBD();
+		 try (PreparedStatement computers = connect.prepareStatement(GET_COMPANY_COMPUTERS)){
+				connect.setAutoCommit(false);
+				computers.setLong(1, id);
+	            ResultSet result= computers.executeQuery();
+	            
+	            String id_computers = result.next() ? String.valueOf(result.getLong("id"))  :"";
+				while(result.next()) {
+					id_computers+= "," + result.getLong("id");
+				}
+				
+				PreparedStatement deleteComputers = connect.prepareStatement(DELETE_COMPUTERS+ids+");");
+				deleteComputers.executeUpdate();
+				//delete companies
+				PreparedStatement deleteCompany = connect.prepareStatement(DELETE_COMPANY);
+				deleteCompany.setLong(1, id);
+				deleteCompany.executeUpdate();				
+				
+				connect.commit();
+				
+	          
+	        } catch (SQLException e) {
+	        	logger.error("error in delete a company",e);
+
+	        }
+	}*/
 }

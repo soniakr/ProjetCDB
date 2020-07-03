@@ -38,10 +38,11 @@ public class CLI {
 
 		Page newPage = new Page();
 		boolean stop=false;
-		int nbComputer = computerService.countAll();
+		String name=null;
+		int nbComputer = computerService.countAll(name);
         
         while(!stop) {
-            List<Computer> allComputers = computerService.getByPage(newPage);
+            List<Computer> allComputers = computerService.getByPage(newPage, name);
             allComputers.forEach(c -> System.out.println(c.toString()));
             stop=optionsPages(newPage,nbComputer);
         }

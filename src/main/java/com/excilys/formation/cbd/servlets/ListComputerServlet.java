@@ -28,6 +28,7 @@ public class ListComputerServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private int pageIterator, pageDemande;
 	private int taillePage=10;
+	private String orderBy="id";
 	
 	public ComputerService computerService=ComputerService.getInstance();
 	
@@ -43,8 +44,7 @@ public class ListComputerServlet extends HttpServlet{
 		
 		int nbComputer;
 		pageIterator=1;
-		pageDemande=0;
-		
+		pageDemande=0;		
 		Page newPage = new Page();
 	
 		if(request.getParameter("taillePage")!=null) {
@@ -52,16 +52,22 @@ public class ListComputerServlet extends HttpServlet{
 		} 
 		newPage.setMaxLines(taillePage);
 		
-		String toSearch =(request.getParameter("search")!=null)?request.getParameter("search"):null;
-		
-		if(toSearch != null) {
-			allComputers=computerService.getAllByName(newPage,toSearch);
-		} else {
-		    allComputers = computerService.getByPage(newPage);
+		if(request.getParameter("orderby")!=null && !request.getParameter("orderby").equals("")) {
+			orderBy=request.getParameter("orderby");
+			System.out.println("order by :" + orderBy);
 		}
+		String toSearch=null;
+		if(request.getParameter("search")!=null && !request.getParameter("search").equals("")) {
+			toSearch=request.getParameter("search");
+		}
+		
+		if(toSearch != null ) {
+			allComputers=computerService.getAllByName(newPage,toSearch,orderBy);
+		} else {
+		    allComputers = computerService.getByPage(newPage,orderBy);
+		}
+		
 	    nbComputer = computerService.countAll(toSearch);
-	    System.out.println("nombre de comp trouvées : " + nbComputer);
-
 		int maxPages=newPage.getTotalPages(nbComputer);
 		request.setAttribute("maxPages", maxPages);
 		
@@ -72,7 +78,6 @@ public class ListComputerServlet extends HttpServlet{
 	    		newPage.setNumberPage(pageIterator);
 	    		newPage.calculFirstLine();
 			}
-
 		}
        
        allComputers.stream().forEach(computer->allComputersDTO.add(ComputerDtoMapper.convertToComputerDTO(computer)));
@@ -81,11 +86,12 @@ public class ListComputerServlet extends HttpServlet{
        request.setAttribute("computersList", allComputersDTO);
        request.setAttribute("nbComputers", nbComputer);
        request.setAttribute("search", toSearch);
-
-		
-		request.getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
+       request.setAttribute("orderby", orderBy);
+       request.setAttribute("taillePage", taillePage);
+       request.getRequestDispatcher("/views/dashboard.jsp").forward(request, response);
 	}
 	 
+	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		System.out.println("dans le post : " + request.getParameter("selection"));
@@ -94,7 +100,7 @@ public class ListComputerServlet extends HttpServlet{
 		for(String idString:computerIdsAsListString) {
 			computerService.deleteComputer(Long.parseLong(idString));
 		}
-
+		
 		doGet(request, response);
 	}
 	

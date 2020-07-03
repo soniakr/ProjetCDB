@@ -60,18 +60,59 @@
                             </span>
                         </th>
                         <th>
-                            Computer name
+                       
+                               <p>
+                                Computer name
+                               
+			            		<a href="ListComputers?taillePage=${taillePage}&orderby=computer.name.ASC" >
+			            			<span class="glyphicon glyphicon-sort-by-alphabet"></span>
+			            		</a>
+			            		
+			            		<a href="ListComputers?taillePage=${taillePage}&orderby=computer.name.DESC">
+			            			<span class="glyphicon glyphicon-sort-by-alphabet-alt"> </span>
+			            		</a>
+								</p>
                         </th>
                         <th>
-                            Introduced date
+                              <p>
+                                Introduced Date
+                               
+			            		<a href="ListComputers?orderby=computer.introduced.ASC">
+			            			<span class="glyphicon glyphicon-sort-by-order"></span>
+			            		</a>
+			            		
+			            		<a  href="ListComputers?orderby=computer.introduced.DESC">
+			            			<span class="glyphicon glyphicon-sort-by-order-alt"> </span>
+			            		</a>
+								</p>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
-                            Discontinued date
+                              <p>
+                                Discontinued Date
+                               
+			            		<a href="ListComputers?orderby=computer.discontinued.ASC">
+			            			<span class="glyphicon glyphicon-sort-by-order"></span>
+			            		</a>
+			            		
+			            		<a  href="ListComputers?orderby=computer.discontinued.DESC">
+			            			<span class="glyphicon glyphicon-sort-by-order-alt"> </span>
+			            		</a>
+								</p>
                         </th>
                         <!-- Table header for Company -->
                         <th>
-                            Company
+                            <p>
+                                Company
+                               
+			            		<a href="ListComputers?orderby=company_name.ASC">
+			            			<span class="glyphicon glyphicon-sort-by-alphabet"></span>
+			            		</a>
+			            		
+			            		<a  href="ListComputers?orderby=company_name.DESC">
+			            			<span class="glyphicon glyphicon-sort-by-alphabet-alt"> </span>
+			            		</a>
+								</p>
                         </th>
 
                     </tr>
@@ -101,7 +142,7 @@
         <div class="container text-center">
             <ul class="pagination">
           <li>
-              	<c:if test="${pageIterator>0}">
+              	<c:if test="${pageIterator>1}">
               		<a href="ListComputers?pageIterator=${pageIterator-1}&search=${search}" aria-label="Previous">
                       <span aria-hidden="true">&laquo;</span>
                     </a>
@@ -125,9 +166,9 @@
         </ul>
 		
         <div class="btn-group btn-group-sm pull-right" role="group" >
-            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=10&search=${search}'">10</button>
-            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=50&search=${search}'">50</button>
-            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=100&search=${search}'">100</button>
+            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=10&search=${search}&orderby=${orderby}'">10</button>
+            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=50&search=${search}&orderby=${orderby}'">50</button>
+            <button type="button" class="btn btn-default" onclick="window.location.href='ListComputers?taillePage=100&search=${search}&orderby=${orderby}'">100</button>
         </div>
 
     </footer>

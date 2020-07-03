@@ -33,19 +33,21 @@ public class ComputerDAO {
 	   
 	 private static final String SELECT_BY_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.id = ?  ";
 	 
-	 private static final String SELECT_BY_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.name LIKE ? LIMIT ? OFFSET ?";
+	 private static final String SELECT_BY_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ? ORDER BY %s LIMIT ? OFFSET ? ";
 
-	 private static final String SELECT_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY computer.id LIMIT ? OFFSET ?";
+	 private static final String SELECT_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY %s LIMIT ? OFFSET ?";
 	 
-	 private static final String COUNT = "SELECT COUNT(*) AS total FROM computer";
+	 private static final String COUNT = "SELECT COUNT(*) AS total FROM computer ";
 	 
-	 private static final String COUNT_BY_NAME = "SELECT COUNT(*) AS total FROM computer WHERE computer.name LIKE ?";
+	 private static final String COUNT_BY_NAME = "SELECT COUNT(*) AS total FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
 
 	 private static final String INSERT = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 
 	 private static final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
 
 	 private static final String DELETE = "DELETE FROM computer WHERE id = ?";
+	 
+	 static final String DELETE_COMPUTER_WITH_COMPANY_ID="DELETE FROM computer WHERE company_id= ? ";
 	
 	
 	/**
@@ -117,15 +119,18 @@ public class ComputerDAO {
 	  * Tout les ordinateurs qui ont un nom donné
 	  * @return Liste de tous le ordinateurs
 	  */
-	 public List<Computer> getAllByName(Page p, String name) {
+	 public List<Computer> getAllByName(Page p, String name, String orderBy) {
 		 	connectBD();
 	        List<Computer> computerList = new ArrayList<Computer>();
 
 	        try (PreparedStatement statement = connect.prepareStatement(SELECT_BY_NAME)) {
 	        	
                 statement.setString(1, "%" + name + "%");
-                statement.setInt(2, p.getMaxLines());
-                statement.setInt(3, p.getFirstLine());
+                statement.setString(2, "%" + name + "%");
+                statement.setString(3, "computer."+orderBy); //TODO Changer le orderBy
+
+                statement.setInt(4, p.getMaxLines());
+                statement.setInt(5, p.getFirstLine());
                 
 	        	ResultSet resultSet = statement.executeQuery();
 	            while (resultSet.next()) {
@@ -140,29 +145,56 @@ public class ComputerDAO {
 	        return computerList;
 	}
 	 
-	 
+	 public String orderBy(String s) {
+		 	
+		 	System.out.println("la requete qui arrive : " +s);
+	        String order;
+	        String[] arguments = s.split("\\.");
+		 	System.out.println("taille de mon tab : " + arguments.length);
+
+	        if(arguments.length==3) {
+		        System.out.println("ici");
+
+	        	order=arguments[0]+"."+arguments[1]+ " " + arguments[2];
+	        } else if (arguments.length==2){
+		        System.out.println("ici2");
+
+	        	order=arguments[0]+ " " + arguments[1];
+	        } else {
+		        System.out.println("ici3");
+
+	        	order="computer.id";
+	        }
+	        System.out.println("----- ORDER : "+ order);
+
+	        String res = String.format(SELECT_PAGE,order);
+	        System.out.println(res);
+	        return res;
+	 }
 	 
 	 /**
 	  * Retourne la liste de tous les ordinateurs dans une page spécifique
 	  * @param p on cherche les informations contenues dans la page p
+	 * @param orderBy 
 	  * @return la liste d'ordinateurs
 	  */
-	 public List<Computer> getByPage(Page p) {
+	 public List<Computer> getByPage(Page p, String orderBy) {
 		 
 	        List<Computer> computerList = new ArrayList<Computer>();
+	    	connectBD();
+	        String res = orderBy(orderBy);
 
 	        try  {
-		    	connectBD();
+	        	PreparedStatement statement = connect.prepareStatement(res);
 
-	        	PreparedStatement statement = connect.prepareStatement(SELECT_PAGE);
-	        	
                 statement.setInt(1, p.getMaxLines());
                 statement.setInt(2, p.getFirstLine());
-
+                
 	        	ResultSet resultSet = statement.executeQuery();
 	            while (resultSet.next()) {
 	                Computer computer = ComputerMapper.convert(resultSet);
 	                computerList.add(computer);
+	                System.out.println(computer.toString());
 	            }
 	            connect.close();
 	        } catch (SQLException e) {
@@ -260,12 +292,11 @@ public class ComputerDAO {
 	        try {
 	        	if(s==null) {
 		        	statement = connect.prepareStatement(COUNT);
-	            	System.out.println("count tout court");
-
 	        	} else {
 		        	statement = connect.prepareStatement(COUNT_BY_NAME);
 	                statement.setString(1, "%" + s + "%");
-	            	System.out.println("count by name");
+	                statement.setString(2, "%" + s + "%");
+
 	        	}
 	            ResultSet resultSet = statement.executeQuery();
 	            
