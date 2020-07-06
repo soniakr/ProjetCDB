@@ -128,9 +128,6 @@ public class ComputerDAO {
 	        	
                 statement.setString(1, "%" + name + "%");
                 statement.setString(2, "%" + name + "%");
-                
-               // statement.setString(3, "computer."+orderBy); //TODO Changer le orderBy
-
                 statement.setInt(3, p.getMaxLines());
                 statement.setInt(4, p.getFirstLine());
                 

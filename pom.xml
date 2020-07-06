@@ -11,10 +11,13 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     
     <junit.version>4.11</junit.version>
+    <jstl.version>1.2</jstl.version>
     <mysql-connector-java.version>8.0.20</mysql-connector-java.version>
     <mockito-all.version>1.10.19</mockito-all.version>
-    <slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
-    <slf4j-api.version>1.6.1</slf4j-api.version>
+    <HikariCP.version>3.2.0</HikariCP.version>
+    <dbunit.version>2.7.0</dbunit.version>
+    <slf4j-log4j12.version>1.7.5</slf4j-log4j12.version>
+    <slf4j-api.version>1.7.5</slf4j-api.version>
 </properties>
 
 <build>
@@ -56,53 +59,54 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+			<version>${jstl.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>${mysql-connector-java.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.zaxxer</groupId>
+		    <artifactId>HikariCP</artifactId>
+		    <version>${HikariCP.version}</version>
 		</dependency>
 
 		<dependency>
+       <groupId>org.slf4j</groupId>
+       <artifactId>slf4j-api</artifactId>
+       <version>${slf4j-api.version}</version>
+  		</dependency>
+   
+	   <dependency>
+	       <groupId>org.slf4j</groupId>
+	       <artifactId>slf4j-log4j12</artifactId>
+	       <version>${slf4j-log4j12.version}</version>
+	   </dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockito-all.version}</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
 		
 		<dependency>
 		  <groupId>org.dbunit</groupId>
 		  <artifactId>dbunit</artifactId>
-		  <version>2.7.0</version>
+		  <version>${dbunit.version}</version>
 		  <scope>test</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>com.zaxxer</groupId>
-		    <artifactId>HikariCP</artifactId>
-		    <version>3.2.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.20</version>
-			<scope>runtime</scope>
-		</dependency>
-
-		<dependency>
-       <groupId>org.slf4j</groupId>
-       <artifactId>slf4j-api</artifactId>
-       <version>1.7.5</version>
-  		</dependency>
-   
-	   <dependency>
-	       <groupId>org.slf4j</groupId>
-	       <artifactId>slf4j-log4j12</artifactId>
-	       <version>1.7.5</version>
-	   </dependency>
-
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.9.5</version>
-			<scope>test</scope>
 		</dependency>
 		
 		<dependency>

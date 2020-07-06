@@ -11,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.formation.cbd.mapper.CompanyMapper;
+import com.excilys.formation.cbd.mapper.ComputerMapper;
 import com.excilys.formation.cbd.model.Company;
+import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.model.Page;
 
 /**
@@ -28,10 +30,16 @@ public class CompanyDAO {
 	 private static final String SELECT_ALL = "SELECT * FROM company ORDER BY id";
 	   
 	 private static final String SELECT_PAGE = "SELECT * FROM company ORDER BY id LIMIT ? OFFSET ? ";
+	 
+	 private static final String SELECT_BY_ID = "SELECT * FROM company WHERE company.id = ?  ";
 
 	 private static final String COUNT = "SELECT COUNT(*) AS total FROM company";
 	 
 	 private static final String DELETE_COMPANY="DELETE FROM company WHERE id= ?";
+	 
+	 private final static String GET_COMPANY_COMPUTERS = "select id from computer where company_id = ?";
+	
+	 private final static String DELETE_COMPUTERS = "DELETE FROM computer WHERE id IN (";
 	 
 	 private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
 	 
@@ -76,6 +84,29 @@ public class CompanyDAO {
 	        }
 
 	        return companyList;
+	}
+	 
+	 
+	 public Company findById(Long id) {
+	    	connectBD();
+
+	        Company result=null;
+	        if (id != null) {
+	            try (PreparedStatement statement = connect.prepareStatement(SELECT_BY_ID)) {
+	                statement.setLong(1, id);
+	                ResultSet resultSet = statement.executeQuery();
+
+	                while (resultSet.next()) {
+	                    result = CompanyMapper.convert(resultSet);
+	                }
+	                connect.close();
+
+	            } catch (SQLException e) {
+	              
+	            	logger.error("Erreur DAO -> Find Company by ID : " + e.getMessage());
+	            }
+	        }
+	        return result;
 	}
 	 
 	 /**
@@ -135,7 +166,12 @@ public class CompanyDAO {
 	        }
 	        return result;
 	}
-	 /*
+	 
+	 /**
+	  * Suppression d'une company, on commence par supprimer tous les ordinateurs appartenants à la company
+	  * @param id identifiant de la company à supprimer
+	  */
+	 
 	 public void deleteCompany(Long id) {
 		 connectBD();
 		 try (PreparedStatement computers = connect.prepareStatement(GET_COMPANY_COMPUTERS)){
@@ -148,19 +184,18 @@ public class CompanyDAO {
 					id_computers+= "," + result.getLong("id");
 				}
 				
-				PreparedStatement deleteComputers = connect.prepareStatement(DELETE_COMPUTERS+ids+");");
+				PreparedStatement deleteComputers = connect.prepareStatement(DELETE_COMPUTERS+id_computers+");");
 				deleteComputers.executeUpdate();
-				//delete companies
+
 				PreparedStatement deleteCompany = connect.prepareStatement(DELETE_COMPANY);
 				deleteCompany.setLong(1, id);
 				deleteCompany.executeUpdate();				
 				
-				connect.commit();
-				
+				connect.commit();			
 	          
 	        } catch (SQLException e) {
-	        	logger.error("error in delete a company",e);
+	        	logger.error("Error DAO -> Delete a company ",e);
 
 	        }
-	}*/
+	}
 }

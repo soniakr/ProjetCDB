@@ -48,7 +48,7 @@
                             </div>                  
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Add" class="btn btn-primary">
+                            <input type="submit" value="Add" class="btn btn-primary" onclick="ListComputers">
                             or
                             <a href="ListComputers" class="btn btn-default">Cancel</a>
                         </div>
@@ -59,6 +59,6 @@
     </section>
     <script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/validatorForm.js"></script>
+	<script src="js/validator.js"></script>
 </body>
 </html>

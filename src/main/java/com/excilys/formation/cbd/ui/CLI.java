@@ -102,15 +102,15 @@ public class CLI {
 		                		newPage.setNumberPage(idPage);
 		                		newPage.calculFirstLine();
 		                	} else {
-		                		System.out.println("Cette page n'existe pas");
+		                		logger.error("Cette page n'existe pas");
 		                		break;
 		                	}
 						} catch (NumberFormatException e) {
-							System.err.println("Vous n'avez pas tapé un id de page valide");
+							logger.error("Vous n'avez pas tapé un id de page valide");
 						}
 	                	
 	                } else {
-	                	System.out.println("Commande inconnue.");
+	                	logger.error("Commande inconnue.");
 		            	break;
 	                }
 	            
@@ -138,7 +138,7 @@ public class CLI {
 	 */
 	public Long getId() {
 		
-			System.out.println("Entrez l'identifiant de l'ordinateur svp : ");
+			System.out.println("Entrez l'identifiant svp : ");
 			String answer;
 			Long computerId=null;
 			boolean idOk=false;
@@ -149,7 +149,7 @@ public class CLI {
 					idOk=true;
 					System.out.println("Vous avez selectionné l'ID : " + computerId);
 				} catch (Exception e) {
-					System.err.println("Veuillez entrer un nombre svp " + e.getMessage());
+					logger.error("Veuillez entrer un nombre svp " + e.getMessage());
 				}
 			}
 			return computerId;
@@ -163,7 +163,7 @@ public class CLI {
 			if(newComp !=null) {
 				computerService.addComputer(newComp);
 			}
-			System.out.println("Création réussie.");
+			logger.info("Création réussie.");
 	}
 	
 	/**
@@ -198,7 +198,7 @@ public class CLI {
 					} 
 					
 					if(dateDisc!=null && dateIntroduced!=null && dateIntroduced.isAfter(dateDisc)) {
-						System.out.println("Introduced doit être avant Discontinued");
+						logger.error("Introduced doit être avant Discontinued");
 						dateDisc=null;
 						dateIntroduced=null;
 						throw new DateTimeParseException(name, name, 0);
@@ -209,10 +209,8 @@ public class CLI {
 					if(answer.length()>0) {
 						idComp=Long.parseLong(answer);
 
-					} 	
-				//	newComp=new Computer(name,dateIntroduced, dateDisc, idComp);
-
-					Computer computer = new ComputerBuilder(name)
+					} 
+					newComp = new ComputerBuilder(name)
 										.initializeWithIntroducedDate(dateIntroduced)
 										.initializeWithDiscontinuedDate(dateDisc)
 										.initializeWithCompanyID(idComp)
@@ -237,10 +235,10 @@ public class CLI {
 		if(idComp!=null) {
 			Computer c = computerService.getById(idComp);
 			if(c==null) {
-				System.err.println("Aucun ordinateur avec cet ID");
+				logger.error("Aucun ordinateur avec cet ID");
 			} else {
 				exists=true;
-				System.out.println("Cet ID correspond à l'ordinateur suivant : \n" + c.toString());
+				logger.info("Cet ID correspond à l'ordinateur suivant : \n" + c.toString());
 			}
 		}else {
 			logger.error("Erreur récuperation de l'ID");
@@ -272,10 +270,43 @@ public class CLI {
 
 		if(checkId(idComp)) {
 			computerService.deleteComputer(idComp);
-			System.out.println("Suppression réussie.");
+			logger.info("Suppression ordinateur réussie.");
 		}
 	}
 	
+	/**
+	 * Supprimer une entreprise de la base 
+	 */
+	private void deleteCompany() {
+		Long idCompany=getId();
+
+		if(checkIdCompany(idCompany)) {
+			companyService.deleteCompany(idCompany);
+			logger.info("Suppression company réussie.");
+		}
+	}
+
+	/**
+	 * Verifier que la company avec l'id demandé existe bien
+	 * @param idComp
+	 * @return true si la company existe, false sinon
+	 */
+	private boolean checkIdCompany(Long idComp) {
+		boolean exists=false;
+		if(idComp!=null) {
+			Company c = companyService.getById(idComp);
+			if(c==null) {
+				logger.error("Aucune compagnie avec cet ID");
+			} else {
+				exists=true;
+				logger.info("Cet ID correspond à la compagnie suivant : \n" + c.toString());
+			}
+		}else {
+			logger.error("Erreur récuperation de l'ID");
+		}
+		return exists;
+	}
+
 	/**
 	 * Affiche les options disponibles pour le client
 	 */
@@ -288,7 +319,8 @@ public class CLI {
 		System.out.println("3 - Création d'un ordinateur");
 		System.out.println("4 - Mise à jour d'un ordinateur");
 		System.out.println("5 - Suppression d'un ordinateur");
-		System.out.println("6 - Quitter ");
+		System.out.println("6 - Suppression d'une entreprise");
+		System.out.println("7 - Quitter ");
 		
 		companyService = CompanyService.getInstance();
 		computerService = ComputerService.getInstance();
@@ -340,6 +372,11 @@ public class CLI {
 					break;
 					
 				case ("6"):
+					System.out.println("Supprimer une entreprise :");
+					deleteCompany();
+					break;
+					
+				case ("7"):
 					System.out.println("Au revoir !");
 					stop=false;
 					break;

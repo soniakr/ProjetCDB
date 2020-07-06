@@ -39,4 +39,15 @@ private static CompanyService companyService;
 	public int countAll() {
 		return companyDAO.countAll();
 	}
+
+
+	public void deleteCompany(Long idCompany) {
+		companyDAO.deleteCompany(idCompany);		
+	}
+
+
+	public Company getById(Long idCompany) {
+		return companyDAO.findById(idCompany);
+	}
+	
 }
