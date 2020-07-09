@@ -4,15 +4,23 @@ public class ComputerDTO {
 	
 	private String idComputer;
     private String name;
-    private String introducedDate;
-    private String discontinuedDate;
+    private String introduced;
+    private String discontinued;
     private CompanyDTO company;
     
-
+	private ComputerDTO(ComputerDTOBuilder computerBuilder) {
+		this.idComputer=computerBuilder.id;
+		this.name=computerBuilder.name;
+		this.introduced=computerBuilder.introduced;
+		this.discontinued=computerBuilder.discontinued;
+		this.company=computerBuilder.company;
+	}
+	
+	
     public ComputerDTO(String name, String introduced, String discontinued, CompanyDTO company) {
 		this.name=name;
-		this.introducedDate=introduced;
-		this.discontinuedDate=discontinued;
+		this.introduced=introduced;
+		this.discontinued=discontinued;
 		this.company=company;
 	}
 
@@ -37,19 +45,19 @@ public class ComputerDTO {
     }
 
     public String getIntroduced() {
-        return introducedDate;
+        return introduced;
     }
 
     public void setIntroduced(String introducedDate) {
-        this.introducedDate = introducedDate;
+        this.introduced = introducedDate;
     }
 
     public String getDiscontinued() {
-        return discontinuedDate;
+        return discontinued;
     }
 
     public void setDiscontinued(String discontinuedDate) {
-        this.discontinuedDate = discontinuedDate;
+        this.discontinued = discontinuedDate;
     }
 
     public CompanyDTO getCompany() {
@@ -61,7 +69,47 @@ public class ComputerDTO {
     }
     
 	public String toString() {
-		return "Computer : " + this.name + " - ID : " + this.idComputer + " - Introduced : " + this.introducedDate + " - Discontinued : " + this.discontinuedDate + " - Company : " + this.company.getId() + " " + this.company.getName();
+		return "Computer DTO : " + this.name + " - ID : " + this.idComputer + " - Introduced : " + this.introduced + " - Discontinued : " + this.discontinued + " - Company : " + this.company.getId() + " " + this.company.getName();
 	}
+	
+	/**
+	 * La classe Builder
+	 */
+	public static class ComputerDTOBuilder{
+		private String id;
+		private String name;
+		private String introduced;
+		private String discontinued;
+		private CompanyDTO company;
+		
+		public ComputerDTOBuilder(String name) {
+			this.name=name;
+		}
+		
+		public ComputerDTOBuilder initializeWithId(String id) {
+			this.id=id;
+			return this;
+		}
+		
+		public ComputerDTOBuilder initializeWithIntroducedDate(String introduced) {
+			this.introduced=introduced;
+			return this;
+		}
+		
+		public ComputerDTOBuilder initializeWithDiscontinuedDate(String discontinued) {
+			this.discontinued=discontinued;
+			return this;
+	    }
+		
+		public ComputerDTOBuilder initializeWithCompany(CompanyDTO company) {
+			this.company=company;
+			return this;
+		}
+		
+		public ComputerDTO build() {
+			ComputerDTO computer = new ComputerDTO(this);
+			return computer;
+		}	
+}
     
 }

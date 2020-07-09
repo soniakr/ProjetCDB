@@ -322,8 +322,8 @@ public class CLI {
 		System.out.println("6 - Suppression d'une entreprise");
 		System.out.println("7 - Quitter ");
 		
-		companyService = CompanyService.getInstance();
-		computerService = ComputerService.getInstance();
+		//companyService = CompanyService.getInstance();
+		//computerService = ComputerService.getInstance();
 		
 		select_option();
 

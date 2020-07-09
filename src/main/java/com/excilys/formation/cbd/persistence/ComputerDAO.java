@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.excilys.formation.cbd.mapper.ComputerMapper;
 import com.excilys.formation.cbd.model.Computer;
@@ -21,9 +22,8 @@ import com.excilys.formation.cbd.model.Page;
  * @author sonia
  *
  */
+@Component
 public class ComputerDAO {
-	
-	 private static ComputerDAO computerDAO;
 	 
 	 private Connection connect;
 	 
@@ -48,18 +48,14 @@ public class ComputerDAO {
 	 private static final String DELETE = "DELETE FROM computer WHERE id = ?";
 	 
 	 static final String DELETE_COMPUTER_WITH_COMPANY_ID="DELETE FROM computer WHERE company_id= ? ";
-	
-	
-	/**
-	 * Instance du singleton
-	 * @return
-	 */
+	 
+	 /*
 	 public static ComputerDAO getInstance() {
 	        if (computerDAO == null) {
 	            computerDAO = new ComputerDAO();
 	        }
 	        return computerDAO;
-	}
+	}*/
 	 
 	 public void connectBD() {
 		 	connect = ConnexionHikari.getConnection();

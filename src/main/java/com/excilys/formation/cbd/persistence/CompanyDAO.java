@@ -9,11 +9,10 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.formation.cbd.mapper.CompanyMapper;
-import com.excilys.formation.cbd.mapper.ComputerMapper;
 import com.excilys.formation.cbd.model.Company;
-import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.model.Page;
 
 /**
@@ -21,6 +20,8 @@ import com.excilys.formation.cbd.model.Page;
  * @author sonia
  *
  */
+
+@Repository
 public class CompanyDAO {
 	
 	 private static CompanyDAO compagnyDAO;

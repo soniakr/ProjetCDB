@@ -5,14 +5,15 @@ import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+@Component
 public class ConnexionHikari {
 	
 	private static Connection connect;
-	private static ConnexionHikari instance;
 
 	private static HikariConfig hikariConfig; 
     private static HikariDataSource dataSource;
@@ -24,8 +25,6 @@ public class ConnexionHikari {
     	dataSource= new HikariDataSource(hikariConfig);
     }
 
-	public ConnexionHikari() { }
-
 	public static Connection getConnection() {
 		try {
 			connect = dataSource.getConnection();
@@ -34,14 +33,14 @@ public class ConnexionHikari {
 		}
 		return connect;
 	}
-
+/*
 	public static ConnexionHikari getInstance() {
 		if (instance == null) {
 			instance = new ConnexionHikari();
 		}
 		return instance;
 	}
-
+*/
 	public static Connection disconnect() {
 		if (connect != null) {
 			try {

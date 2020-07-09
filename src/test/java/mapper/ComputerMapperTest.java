@@ -61,9 +61,7 @@ public class ComputerMapperTest {
 	    assertEquals(computerTest.getName(), computer.getName());
 	    assertEquals(computerTest.getIntroduced(), computer.getIntroduced());
 	    assertEquals(computerTest.getDiscontinued(), computer.getDiscontinued());
-	    assertEquals(computerTest.getCompany().getId(), computer.getCompany().getId());
-
-	    //TODO assertEquals(computerTest,computer);
+	
 	}
 
 }

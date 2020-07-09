@@ -13,6 +13,7 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.formation.cbd.model.Company;
 import com.excilys.formation.cbd.model.Computer;
@@ -27,7 +28,8 @@ import com.excilys.formation.cbd.model.Computer.ComputerBuilder;
 
 public class ComputerDAOTest extends DBTestCase {
 	
-	private static ComputerDAO computerDAO = ComputerDAO.getInstance();
+	@Autowired
+	private static ComputerDAO computerDAO;
 	
 	public ComputerDAOTest(String name) {
         super(name);
@@ -35,13 +37,7 @@ public class ComputerDAOTest extends DBTestCase {
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_CONNECTION_URL, "jdbc:mysql://localhost:3306/computer-database-empty?serverTimezone=UTC");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_USERNAME, "usertest");
         System.setProperty(PropertiesBasedJdbcDatabaseTester.DBUNIT_PASSWORD, "qwerty1234");
-    }		
-
-	@Test
-	public void testGetInstance() {
-	     assertNotNull(computerDAO);
-	     assertEquals("Deux instances : ce n'est pas un Singleton", ComputerDAO.getInstance(), computerDAO);
-	}
+    }
 
 	@Test
 	public void testGetAll() {

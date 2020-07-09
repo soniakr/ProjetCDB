@@ -17,7 +17,11 @@ public class CompanyDtoMapper {
 	}
 
 
-	public static Company toCompany(CompanyDTO company) {
-		return null;
+	public static Company toCompany(CompanyDTO companyDto) {
+		Company company = new Company();
+		company.setId(Long.parseLong(companyDto.getId()));
+		company.setName(companyDto.getName());
+		
+		return company;
 	}
 }

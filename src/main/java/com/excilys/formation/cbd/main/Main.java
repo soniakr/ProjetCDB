@@ -1,5 +1,9 @@
 package com.excilys.formation.cbd.main;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import com.excilys.formation.cbd.config.SpringConfig;
 import com.excilys.formation.cbd.ui.CLI;
 
 /**
@@ -10,7 +14,10 @@ import com.excilys.formation.cbd.ui.CLI;
 public class Main {
 	
 	public static void main(String []args) {
-		new CLI().start();
+		
+		ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
+		CLI user= context.getBean(CLI.class);;
+		user.start();
 	}
 
 }

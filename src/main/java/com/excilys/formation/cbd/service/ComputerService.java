@@ -2,6 +2,9 @@ package com.excilys.formation.cbd.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.model.Page;
 import com.excilys.formation.cbd.persistence.ComputerDAO;
@@ -11,19 +14,19 @@ import com.excilys.formation.cbd.persistence.ComputerDAO;
  * @author sonia
  *
  */
+@Service
 public class ComputerService {
-	
-private static ComputerService computerService;
-	
-    private ComputerDAO computerDAO = ComputerDAO.getInstance();
+		
+	@Autowired
+    private ComputerDAO computerDAO;
 
     //synchronized?
-    public static ComputerService getInstance() {
+/*    public static ComputerService getInstance() {
         if (computerService == null) {
             computerService = new ComputerService();
         }
         return computerService;
-    }
+    }*/
     
     public List<Computer> getAll() {
         return computerDAO.getAll();
