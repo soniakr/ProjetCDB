@@ -1,4 +1,4 @@
-package mapper;
+package com.excilys.formation.cbd.mapper;
 
 import static org.junit.Assert.*;
 

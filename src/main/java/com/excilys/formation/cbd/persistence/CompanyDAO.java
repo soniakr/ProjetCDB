@@ -28,11 +28,11 @@ public class CompanyDAO {
 	 
 	 private Connection connect;
 	  
-	 private static final String SELECT_ALL = "SELECT * FROM company ORDER BY id";
+	 private static final String SELECT_ALL = "SELECT company.id, company.name FROM company ORDER BY id";
 	   
-	 private static final String SELECT_PAGE = "SELECT * FROM company ORDER BY id LIMIT ? OFFSET ? ";
+	 private static final String SELECT_PAGE = "SELECT company.id, company.name FROM company ORDER BY id LIMIT ? OFFSET ? ";
 	 
-	 private static final String SELECT_BY_ID = "SELECT * FROM company WHERE company.id = ?  ";
+	 private static final String SELECT_BY_ID = "SELECT company.id, company.name FROM company WHERE company.id = ?  ";
 
 	 private static final String COUNT = "SELECT COUNT(*) AS total FROM company";
 	 

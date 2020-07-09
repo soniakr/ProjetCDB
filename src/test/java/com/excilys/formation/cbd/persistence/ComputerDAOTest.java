@@ -1,4 +1,4 @@
-package persistence;
+package com.excilys.formation.cbd.persistence;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
@@ -9,15 +9,22 @@ import java.util.List;
 
 import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
+import org.dbunit.database.DatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import com.excilys.formation.cbd.config.SpringConfig;
 import com.excilys.formation.cbd.model.Company;
 import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.persistence.ComputerDAO;
+import com.excilys.formation.cbd.persistence.ConnexionHikari;
 import com.excilys.formation.cbd.model.Computer.ComputerBuilder;
 
 /**
@@ -25,11 +32,20 @@ import com.excilys.formation.cbd.model.Computer.ComputerBuilder;
  * @author sonia
  *
  */
-
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = SpringConfig.class)
 public class ComputerDAOTest extends DBTestCase {
 	
 	@Autowired
 	private static ComputerDAO computerDAO;
+	@Autowired
+	private ConnexionHikari connectionHikari;
+	
+	@Before
+	public void setUp() throws Exception {
+		DatabaseConnection connectionJUnit = new DatabaseConnection(connectionHikari.getConnection());
+		getSetUpOperation().execute(connectionJUnit, getDataSet());
+	}
 	
 	public ComputerDAOTest(String name) {
         super(name);
@@ -42,9 +58,8 @@ public class ComputerDAOTest extends DBTestCase {
 	@Test
 	public void testGetAll() {
 		List<Computer> computers = computerDAO.getAll();
-		for(Computer c : computers) {
-			System.out.println(c.toString());
-		}
+		assertEquals(computers.size(),4);
+		
 	}
 
 	@Test
@@ -64,7 +79,7 @@ public class ComputerDAOTest extends DBTestCase {
 							.initializeWithIntroducedDate(introduced)
 							.initializeWithDiscontinuedDate(discontinued)
 							.initializeWithCompanyID(company.getId())
-.build(); 
+							.build(); 
 		computerDAO.insert(computer);
 		assertEquals(5, computerDAO.getAll().size());
 	}
@@ -96,7 +111,7 @@ public class ComputerDAOTest extends DBTestCase {
 
     protected DatabaseOperation getTearDownOperation() throws Exception{
         return DatabaseOperation.NONE;
-}
+    }
     
 	@Override
 	protected IDataSet getDataSet() throws Exception {

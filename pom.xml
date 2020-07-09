@@ -16,8 +16,12 @@
     <mockito-all.version>1.10.19</mockito-all.version>
     <HikariCP.version>3.2.0</HikariCP.version>
     <dbunit.version>2.7.0</dbunit.version>
+    <javax.servlet-api.version>4.0.0</javax.servlet-api.version>    
     <slf4j-log4j12.version>1.7.5</slf4j-log4j12.version>
     <slf4j-api.version>1.7.5</slf4j-api.version>
+    <spring-context.version>5.2.7.RELEASE</spring-context.version>
+    <spring-web.version>5.2.7.RELEASE</spring-web.version>
+    <spring-test.version>5.2.7.RELEASE</spring-test.version>
 </properties>
 
 <build>
@@ -112,26 +116,27 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>4.0.0</version>
+			<version>${javax.servlet-api.version}</version>
 			<scope>provided</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-core</artifactId>
-		    <version>5.2.3.RELEASE</version>
 		</dependency>
 			<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-context</artifactId>
-		    <version>5.2.3.RELEASE</version>
+		   	<version>${spring-context.version}</version>
 		</dependency>
 			<!-- https://mvnrepository.com/artifact/org.springframework/spring-web -->
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-web</artifactId>
-		    <version>5.2.3.RELEASE</version>
+		    <version>${spring-web.version}</version>
 		</dependency>	
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring-test.version}</version>
+			<scope>test</scope>
+		</dependency>
 </dependencies>
 </project>

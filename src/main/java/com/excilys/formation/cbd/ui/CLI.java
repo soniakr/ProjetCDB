@@ -8,6 +8,8 @@ import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.excilys.formation.cbd.model.Company;
 import com.excilys.formation.cbd.model.Computer;
@@ -22,12 +24,16 @@ import com.excilys.formation.cbd.model.Computer.ComputerBuilder;
  * @author sonia
  *
  */
+
+@Component
 public class CLI {
 		
 	 private static Scanner sc;
 	 private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	 private static ComputerService computerService; 
-	 private static CompanyService companyService;
+	 @Autowired
+	 private ComputerService computerService; 
+	 @Autowired
+	 private CompanyService companyService;
 	 
 	 private static Logger logger = LoggerFactory.getLogger(CLI.class);
 	 

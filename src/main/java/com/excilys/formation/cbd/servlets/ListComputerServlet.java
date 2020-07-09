@@ -62,7 +62,6 @@ public class ListComputerServlet extends HttpServlet{
 		
 		if(request.getParameter("orderby")!=null && !request.getParameter("orderby").equals("")) {
 			orderBy=request.getParameter("orderby");
-			System.out.println("order by :" + orderBy);
 		}
 		String toSearch=null;
 		if(request.getParameter("search")!=null && !request.getParameter("search").equals("")) {
@@ -83,7 +82,6 @@ public class ListComputerServlet extends HttpServlet{
 		}
 		
 		if(toSearch != null ) {
-			System.out.println("iciii");
 			allComputers=computerService.getAllByName(newPage,toSearch,orderBy);
 		} else {
 		    allComputers = computerService.getByPage(newPage,orderBy);
@@ -103,7 +101,6 @@ public class ListComputerServlet extends HttpServlet{
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		System.out.println("dans le post : " + request.getParameter("selection"));
 		String[] computerIdsAsListString=request.getParameter("selection").split(",");
 		
 		for(String idString:computerIdsAsListString) {

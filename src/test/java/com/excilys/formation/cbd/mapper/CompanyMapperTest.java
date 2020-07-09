@@ -1,4 +1,4 @@
-package mapper;
+package com.excilys.formation.cbd.mapper;
 
 import static org.junit.Assert.*;
 
@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import com.excilys.formation.cbd.mapper.CompanyMapper;
 import com.excilys.formation.cbd.model.Company;
 
 public class CompanyMapperTest {

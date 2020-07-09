@@ -1,4 +1,4 @@
-package model;
+package com.excilys.formation.cbd.model;
 
 import static org.junit.Assert.*;
 
