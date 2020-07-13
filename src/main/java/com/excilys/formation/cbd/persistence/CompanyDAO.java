@@ -9,11 +9,13 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.formation.cbd.mapper.CompanyMapper;
 import com.excilys.formation.cbd.model.Company;
 import com.excilys.formation.cbd.model.Page;
+import com.excilys.formation.cbd.persistence.mapper.CompanyMapper;
 
 /**
  * Classe qui gére la communication avec la base de données pour la table Company, l'envoie des requêtes et la réception des réponses
@@ -24,7 +26,9 @@ import com.excilys.formation.cbd.model.Page;
 @Repository
 public class CompanyDAO {
 	
-	 private static CompanyDAO compagnyDAO;
+	 
+	 @Autowired
+	 private JdbcTemplate jdbcTemplate; 
 	 
 	 private Connection connect;
 	  
@@ -42,72 +46,33 @@ public class CompanyDAO {
 	
 	 private final static String DELETE_COMPUTERS = "DELETE FROM computer WHERE id IN (";
 	 
-	 private static Logger logger = LoggerFactory.getLogger(CompanyMapper.class);
+	 private static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	 
 	 /**
-	     * Instance of the singleton CompanyDAO.
-	     * @return the instance of CompanyDAO
-	     */
-	 public static CompanyDAO getInstance() {
-	        if (compagnyDAO == null) {
-	            compagnyDAO = new CompanyDAO();
-	        }
-	        return compagnyDAO;
-	}
-	 
-	 /**
-	  * Connection à la base de données 
-	  */
-	 
-	 public void connectBD() {
-		 	connect = ConnexionBD.getConnection();
-
-	 }
-	 
-	 /**
-	  * 
 	  * @return Liste de toutes les compagnies
 	  */
 	 public List<Company> getAll() {
 		 	
-		 	connectBD();
-	        List<Company> companyList = new ArrayList<Company>();
-
-	        try (PreparedStatement statement = connect.prepareStatement(SELECT_ALL)){
-	            ResultSet resultSet = statement.executeQuery();
-	            while (resultSet.next()) {
-	                Company company = CompanyMapper.convert(resultSet);
-	                companyList.add(company);
-	            }
-	            connect.close();
+		 List<Company> companies = new ArrayList<Company>();
+			try ( Connection connect = ConnexionHikari.getConnection()){
+				companies=jdbcTemplate.query(SELECT_ALL, new CompanyMapper());
 	        } catch (SQLException e) {
-	            logger.error("Erreur DAO -> Lister toutes les company",e);
+	            logger.error("Error when listing all computers",e);
 	        }
-
-	        return companyList;
+			return companies;	
 	}
 	 
 	 
-	 public Company findById(Long id) {
-	    	connectBD();
-
-	        Company result=null;
-	        if (id != null) {
-	            try (PreparedStatement statement = connect.prepareStatement(SELECT_BY_ID)) {
-	                statement.setLong(1, id);
-	                ResultSet resultSet = statement.executeQuery();
-
-	                while (resultSet.next()) {
-	                    result = CompanyMapper.convert(resultSet);
-	                }
-	                connect.close();
-
-	            } catch (SQLException e) {
-	              
-	            	logger.error("Erreur DAO -> Find Company by ID : " + e.getMessage());
-	            }
-	        }
-	        return result;
+	 public Company findById(Long id) {		 
+		 Company company = new Company();
+			if(id!=null) {
+				try ( Connection connect = ConnexionHikari.getConnection()){
+					company = jdbcTemplate.queryForObject(SELECT_BY_ID, new CompanyMapper(), id);
+		        } catch (SQLException e) {
+		           logger.error("Error when finding a computer with its ID",e);
+		        }
+			}
+			return company;
 	}
 	 
 	 /**
@@ -117,31 +82,16 @@ public class CompanyDAO {
 	  */
 	 public List<Company> getByPage(Page p) {
 	     
-		 connectBD();
-		 List<Company> companyList = new ArrayList<Company>();
+		 List<Company> companiesList = new ArrayList<Company>();
 
-		 if(p!=null) {	 
-
-		        try  {
-		        	PreparedStatement statement = connect.prepareStatement(SELECT_PAGE);
-		        	
-	                statement.setInt(1, p.getMaxLines());
-	                statement.setInt(2, p.getFirstLine());
-
-		        	ResultSet resultSet = statement.executeQuery();
-		        	while (resultSet.next()) {
-		                Company company = CompanyMapper.convert(resultSet);
-		                companyList.add(company);
-		            }
-		            connect.close();
-
-		        } catch (SQLException e) {
-		        	logger.error("Erreur DAO -> Lister les company de la page : " + p.getNumberPage() + e.getMessage());
-		        }
-		 }  else {
-			 logger.error("La page demandée est null");
-		 }
-	     return companyList;
+			try (Connection connect = ConnexionHikari.getConnection()){
+				
+				companiesList = jdbcTemplate.query(SELECT_PAGE, new CompanyMapper(), p.getMaxLines(), p.getFirstLine());
+		
+			} catch (SQLException e) {
+				logger.error("Erreur DAO -> Lister les ordinateurs de la page : " + p.getNumberPage() + e.getMessage());
+			}
+			return companiesList;
 	}
 	 
 	/**
@@ -149,23 +99,15 @@ public class CompanyDAO {
 	 * @return le nombre total d'entrées 
 	 */
 	 public int countAll() {
-		 	connectBD();
-	        int result=0;
-	        try (PreparedStatement statement = connect.prepareStatement(COUNT)){
-	        	
-	            ResultSet resultSet = statement.executeQuery();
-	            
-	            while (resultSet.next()) {
-	                result=resultSet.getInt("total");
-	            }
-	           System.out.println("Nombre total d'entrées dans la base : " + result);
-	            
-	           connect.close();
-
-	        } catch (SQLException e) {
-	            logger.error("Erreur DAO -> CountAll Company");
-	        }
-	        return result;
+		 int total = 0;
+			try (Connection connect = ConnexionHikari.getConnection()){
+				
+				total = jdbcTemplate.queryForObject(COUNT, Integer.class);
+			
+			 } catch (SQLException e) {
+		            logger.error("Error when counting the number of computers",e);
+		     }
+	        return total; 
 	}
 	 
 	 /**
@@ -174,7 +116,7 @@ public class CompanyDAO {
 	  */
 	 
 	 public void deleteCompany(Long id) {
-		 connectBD();
+		 connect = ConnexionHikari.getConnection();
 		 try (PreparedStatement computers = connect.prepareStatement(GET_COMPANY_COMPUTERS)){
 				connect.setAutoCommit(false);
 				computers.setLong(1, id);

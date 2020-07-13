@@ -83,7 +83,7 @@ public class ComputerDAOTest extends DBTestCase {
 		computerDAO.insert(computer);
 		assertEquals(5, computerDAO.getAll().size());
 	}
-
+	
 	@Test
 	public void testUpdate() {
 		Long id = 10L;
@@ -103,7 +103,8 @@ public class ComputerDAOTest extends DBTestCase {
 
 	@Test
 	public void testCountAll() {
-		assertEquals(4, computerDAO.countAll(null));	}
+		assertEquals(4, computerDAO.countAll(null));	
+	}
 
 	protected DatabaseOperation getSetUpOperation() throws Exception{
         return DatabaseOperation.REFRESH;

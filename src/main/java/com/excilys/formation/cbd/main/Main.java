@@ -1,5 +1,7 @@
 package com.excilys.formation.cbd.main;
 
+import java.util.ArrayList;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -18,6 +20,7 @@ public class Main {
 		ApplicationContext context = new AnnotationConfigApplicationContext(SpringConfig.class);
 		CLI user= context.getBean(CLI.class);;
 		user.start();
+		
 	}
 
 }

@@ -57,7 +57,7 @@ public class ComputerDtoMapperTest {
 		Mockito.when(computerDto.getName()).thenReturn(name);
 		Mockito.when(computerDto.getIntroduced()).thenReturn(introduced.toString());
 		Mockito.when(computerDto.getDiscontinued()).thenReturn(discontinued.toString());
-		Mockito.when(computerDto.getCompany().getId()).thenReturn(id_company.toString());
+	//	Mockito.when(computerDto.getCompany().getId()).thenReturn(id_company.toString());
 
 		Computer computerMapper = ComputerDtoMapper.toComputer(computerDto);
 

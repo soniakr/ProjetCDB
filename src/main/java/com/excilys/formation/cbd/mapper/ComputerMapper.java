@@ -34,9 +34,7 @@ public class ComputerMapper {
  */
 	public static Computer convert(ResultSet resultSet) {
 		Computer newComputer = null;
-	    try {
-	        //newComputer = new Computer(resultSet.getLong(ID_COMPUTER), resultSet.getString(NAME_COMPUTER));
-	        
+	    try {	        
 	    	newComputer = new ComputerBuilder(resultSet.getString(NAME_COMPUTER))
 					.initializeWithId(resultSet.getLong(ID_COMPUTER))
 					.build(); 
@@ -51,7 +49,7 @@ public class ComputerMapper {
 	        newComputer.setCompany(
 	        		new Company(resultSet.getLong(COMPANY_ID), resultSet.getString(COMPANY_NAME)));	        
 	        } catch (Exception e) {
-	            System.err.println("Erreur -> Mapping resultSet/Computer");
+	            logger.error("Erreur -> Mapping resultSet/Computer");
 	        }
 	        return newComputer;
 	}

@@ -3,6 +3,7 @@ package com.excilys.formation.cbd.persistence;
 import static org.junit.Assert.*;
 
 import java.io.FileInputStream;
+import java.util.List;
 
 import org.dbunit.DBTestCase;
 import org.dbunit.PropertiesBasedJdbcDatabaseTester;
@@ -10,8 +11,21 @@ import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import com.excilys.formation.cbd.config.SpringConfig;
+import com.excilys.formation.cbd.model.Company;
+import com.excilys.formation.cbd.model.Computer;
+
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes = SpringConfig.class)
 public class CompanyDAOTest extends DBTestCase{
+	
+	@Autowired
+	private static CompanyDAO companyDAO;
 	
 	public CompanyDAOTest(String name) {
         super(name);
@@ -23,7 +37,8 @@ public class CompanyDAOTest extends DBTestCase{
 	
 	@Test
 	public void testGetAll() {
-		fail("Not yet implemented");
+		List<Company> companies = companyDAO.getAll();
+		assertEquals(companies.size(),2);
 	}
 
 	@Test
@@ -33,7 +48,8 @@ public class CompanyDAOTest extends DBTestCase{
 
 	@Test
 	public void testCountAll() {
-		fail("Not yet implemented");
+		assertEquals(2, companyDAO.countAll());	
+
 	}
 	
 	protected DatabaseOperation getSetUpOperation() throws Exception{

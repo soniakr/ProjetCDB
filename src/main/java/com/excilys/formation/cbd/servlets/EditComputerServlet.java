@@ -67,7 +67,6 @@ public class EditComputerServlet extends HttpServlet {
 		
 		if(request.getParameter("idComputer")!=null) {
 			idComputer=	Long.parseLong(request.getParameter("idComputer"));
-			System.out.println("id du comp à update : " + idComputer);
 		}
 		
 		Computer computerToUpdate=computerService.getById(idComputer);
@@ -100,7 +99,7 @@ public class EditComputerServlet extends HttpServlet {
 			Computer computer = ComputerDtoMapper.toComputer(computerDTO);
 			computer.setId(idComputer);
 			computerService.updateComputer(computer);
-			logger.info("Success");		
+			logger.info("Success update");		
 		} else {
 			logger.error("Update not allowed");		
 		}

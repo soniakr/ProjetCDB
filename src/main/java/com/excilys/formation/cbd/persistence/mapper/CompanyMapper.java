@@ -1,4 +1,4 @@
-package com.excilys.formation.cbd.mapper;
+package com.excilys.formation.cbd.persistence.mapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,3 +25,4 @@ public class CompanyMapper implements RowMapper<Company>{
         return newCompany;
 	}
 }
+

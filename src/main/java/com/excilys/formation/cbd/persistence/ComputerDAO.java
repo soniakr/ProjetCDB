@@ -12,9 +12,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
-import com.excilys.formation.cbd.mapper.ComputerMapper;
+import com.excilys.formation.cbd.persistence.mapper.ComputerMapper;
 import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.model.Page;
 
@@ -25,12 +26,13 @@ import com.excilys.formation.cbd.model.Page;
  * @author sonia
  *
  */
-@Component
+@Repository
 public class ComputerDAO {
+	
+	@Autowired
+	private JdbcTemplate jdbcTemplate; 
 
-	private Connection connect;
-
-	private static Logger logger = LoggerFactory.getLogger(ConnexionBD.class);
+	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
 	private static final String SELECT_ALL = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY computer.id";
 
@@ -52,36 +54,21 @@ public class ComputerDAO {
 
 	static final String DELETE_COMPUTER_WITH_COMPANY_ID = "DELETE FROM computer WHERE company_id= ? ";
 
-	/*
-	 * public static ComputerDAO getInstance() { if (computerDAO == null) {
-	 * computerDAO = new ComputerDAO(); } return computerDAO; }
-	 */
-
-	public void connectBD() {
-		connect = ConnexionHikari.getConnection();
-
-	}
-
 	/**
 	 * Tout les ordinateurs de la table Computer
 	 * 
 	 * @return Liste de tous le ordinateurs
 	 */
+	
 	public List<Computer> getAll() {
-		connectBD();
-		List<Computer> computerList = new ArrayList<Computer>();
-
-		try (PreparedStatement statement = connect.prepareStatement(SELECT_ALL)) {
-			ResultSet resultSet = statement.executeQuery();
-			while (resultSet.next()) {
-				Computer computer = ComputerMapper.convert(resultSet);
-				computerList.add(computer);
-			}
-			connect.close();
-		} catch (SQLException e) {
-			logger.error("Erreur DAO -> Lister tous les ordinateurs : " + e.getMessage());
-		}
-		return computerList;
+		
+		List<Computer> computers = new ArrayList<Computer>();
+		try ( Connection connect = ConnexionHikari.getConnection()){
+			computers=jdbcTemplate.query(SELECT_ALL, new ComputerMapper());
+        } catch (SQLException e) {
+            logger.error("Error when listing all computers",e);
+        }
+		return computers;	
 	}
 
 	/**
@@ -91,25 +78,16 @@ public class ComputerDAO {
 	 * @return l'ordinateur correspondant si il existe
 	 */
 	public Computer findById(Long id) {
-		connectBD();
-
-		Computer result = null;
-		if (id != null) {
-			try (PreparedStatement statement = connect.prepareStatement(SELECT_BY_ID)) {
-				statement.setLong(1, id);
-				ResultSet resultSet = statement.executeQuery();
-
-				while (resultSet.next()) {
-					result = ComputerMapper.convert(resultSet);
-				}
-				connect.close();
-
-			} catch (SQLException e) {
-
-				logger.error("Erreur DAO -> Ordinateur par ID : " + e.getMessage());
-			}
+		
+		Computer computer = new Computer();
+		if(id!=null) {
+			try ( Connection connect = ConnexionHikari.getConnection()){
+				computer = jdbcTemplate.queryForObject(SELECT_BY_ID, new ComputerMapper(), id);
+	        } catch (SQLException e) {
+	           logger.error("Error when finding a computer with its ID",e);
+	        }
 		}
-		return result;
+		return computer;
 	}
 
 	/**
@@ -118,28 +96,18 @@ public class ComputerDAO {
 	 * @return Liste de tous le ordinateurs
 	 */
 	public List<Computer> getAllByName(Page p, String name, String orderBy) {
-		connectBD();
-		List<Computer> computerList = new ArrayList<Computer>();
+		List<Computer> computersList = new ArrayList<Computer>();
 		String request = orderBy(orderBy, SELECT_BY_NAME);
-
-		try (PreparedStatement statement = connect.prepareStatement(request)) {
-
-			statement.setString(1, "%" + name + "%");
-			statement.setString(2, "%" + name + "%");
-			statement.setInt(3, p.getMaxLines());
-			statement.setInt(4, p.getFirstLine());
-
-			ResultSet resultSet = statement.executeQuery();
-			while (resultSet.next()) {
-				Computer computer = ComputerMapper.convert(resultSet);
-				computerList.add(computer);
-			}
-
-			connect.close();
+		String nameInRequest= "%" + name + "%";
+		
+		try (Connection connect = ConnexionHikari.getConnection()){
+			
+			computersList = jdbcTemplate.query(request, new ComputerMapper(), nameInRequest, nameInRequest, p.getMaxLines(), p.getFirstLine());
+		
 		} catch (SQLException e) {
-			logger.error("Erreur DAO -> Lister tous les ordinateurs par nom : " + e.getMessage());
+			logger.error("Erreur DAO -> Lister les ordinateurs par nom : " + p.getNumberPage() + e.getMessage());
 		}
-		return computerList;
+		return computersList;
 	}
 
 	public String orderBy(String s, String requete) {
@@ -172,26 +140,17 @@ public class ComputerDAO {
 	 */
 	public List<Computer> getByPage(Page p, String orderBy) {
 
-		List<Computer> computerList = new ArrayList<Computer>();
-		connectBD();
-		String res = orderBy(orderBy, SELECT_PAGE);
+		List<Computer> computersList = new ArrayList<Computer>();
+		String order = orderBy(orderBy, SELECT_PAGE);
 
-		try {
-			PreparedStatement statement = connect.prepareStatement(res);
-
-			statement.setInt(1, p.getMaxLines());
-			statement.setInt(2, p.getFirstLine());
-
-			ResultSet resultSet = statement.executeQuery();
-			while (resultSet.next()) {
-				Computer computer = ComputerMapper.convert(resultSet);
-				computerList.add(computer);
-			}
-			connect.close();
+		try (Connection connect = ConnexionHikari.getConnection()){
+			
+			computersList = jdbcTemplate.query(order, new ComputerMapper(), p.getMaxLines(), p.getFirstLine());
+	
 		} catch (SQLException e) {
 			logger.error("Erreur DAO -> Lister les ordinateurs de la page : " + p.getNumberPage() + e.getMessage());
 		}
-		return computerList;
+		return computersList;
 	}
 
 	/**
@@ -202,29 +161,26 @@ public class ComputerDAO {
 	public void insert(Computer computer) {
 
 		if (computer != null) {
-			connectBD();
-			try (PreparedStatement statement = connect.prepareStatement(INSERT)) {
-				statement.setString(1, computer.getName());
+			
+			try (Connection connect = ConnexionHikari.getConnection()) {
+
 				Date introducedDate = null;
 				if (computer.getIntroduced() != null) {
 					introducedDate = Date.valueOf(computer.getIntroduced());
 				}
-				statement.setDate(2, introducedDate);
 
 				Date discontinuedDate = null;
 				if (computer.getDiscontinued() != null) {
 					discontinuedDate = Date.valueOf(computer.getDiscontinued());
 				}
-				statement.setDate(3, discontinuedDate);
 
-				Long idCompany = computer.getIdCompany();
-				if (idCompany != null) {
-					statement.setLong(4, idCompany);
-				} else {
-					statement.setNull(4, Types.BIGINT);
-				}
-				statement.execute();
-				connect.close();
+				Long idCompany = computer.getIdCompany()== null ? null : computer.getCompany().getId();
+				
+				jdbcTemplate.update(INSERT, 
+	            		computer.getName(), 
+	            		introducedDate,
+	            		discontinuedDate, 
+	            		idCompany);  
 			} catch (SQLException e) {
 				logger.error("Erreur insertion base de données (Vérifier que l'ID de l'entreprise existe bien) ");
 			}
@@ -238,22 +194,26 @@ public class ComputerDAO {
 	 */
 	public void update(Computer computer) {
 		if (computer != null) {
-			connectBD();
-			try (PreparedStatement statement = connect.prepareStatement(UPDATE)) {
-				statement.setString(1, computer.getName());
+ 
+			try (Connection connect = ConnexionHikari.getConnection()) {
+				Date introducedDate = null;
+				if (computer.getIntroduced() != null) {
+					introducedDate = Date.valueOf(computer.getIntroduced());
+				}
 
-				Date introducedDate = Date.valueOf(computer.getIntroduced()) == null ? null
-						: Date.valueOf(computer.getIntroduced());
-				statement.setDate(2, introducedDate);
+				Date discontinuedDate = null;
+				if (computer.getDiscontinued() != null) {
+					discontinuedDate = Date.valueOf(computer.getDiscontinued());
+				}
 
-				Date discontinuedDate = Date.valueOf(computer.getDiscontinued()) == null ? null
-						: Date.valueOf(computer.getDiscontinued());
-				statement.setDate(3, discontinuedDate);
-
-				statement.setLong(4, computer.getIdCompany());
-				statement.setLong(5, computer.getId());
-				statement.execute();
-				connect.close();
+				Long idCompany = computer.getIdCompany()== null ? null : computer.getCompany().getId();
+				
+				jdbcTemplate.update(UPDATE, 
+	            		computer.getName(), 
+	            		introducedDate,
+	            		discontinuedDate, 
+	            		idCompany,
+	            		computer.getId());  
 			} catch (SQLException e) {
 				logger.error("ErreurDAO : update ");
 			}
@@ -266,46 +226,31 @@ public class ComputerDAO {
 	 * @param id identifiant de l'ordinateur à supprimer
 	 */
 	public void delete(Long id) {
-		connectBD();
-		try (PreparedStatement statement = connect.prepareStatement(DELETE)) {
-			statement.setLong(1, id);
-			statement.execute();
-			connect.close();
-		} catch (SQLException e) {
-			logger.error("Erreur suppression de la base de données");
-		}
+		try (Connection connect = ConnexionHikari.getConnection()) {
+            jdbcTemplate.update(DELETE, id);
+        } catch (SQLException e) {
+            logger.error("Error when deleting a Computer",e);
+        }
 	}
 
 	/**
 	 * Compter le nombre d'entrées dans la table Computer
-	 * 
+	 * @param si il y'a un filtre
 	 * @return le nombre total d'entrées
 	 */
-	public int countAll(String s) {
-		connectBD();
-		int result = 0;
-		PreparedStatement statement;
-		try {
-			if (s == null) {
-				statement = connect.prepareStatement(COUNT);
-			} else {
-				statement = connect.prepareStatement(COUNT_BY_NAME);
-				statement.setString(1, "%" + s + "%");
-				statement.setString(2, "%" + s + "%");
-
+	public int countAll(String search) {
+		
+		int total = 0;
+		try (Connection connect = ConnexionHikari.getConnection()){
+			if(search==null) {
+				total = jdbcTemplate.queryForObject(COUNT, Integer.class);
+			}else {
+				total = jdbcTemplate.queryForObject(COUNT_BY_NAME, Integer.class , "%"+search+"%" , "%"+search+"%");
 			}
-			ResultSet resultSet = statement.executeQuery();
-
-			while (resultSet.next()) {
-				result = resultSet.getInt("total");
-			}
-			logger.info("Nombre total d'entrées dans la base : " + result);
-
-			connect.close();
-		} catch (SQLException e) {
-			logger.error("Erreur DAO -> CountAll Computer");
-		}
-		return result;
+		 } catch (SQLException e) {
+	            logger.error("Error when counting the number of computers",e);
+	     }
+        return total; 
 	}
 
 }
