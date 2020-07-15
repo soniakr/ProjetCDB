@@ -4,8 +4,8 @@ public class DashboardDTO {
 	
 	private String search="";
     private Integer pageIterator = 1;
-    private Integer pageSize;
-    private String orderBy = "";
+    private Integer taillePage=10;
+    private String orderby = "";
     
     public DashboardDTO() {
     	super();
@@ -30,26 +30,25 @@ public class DashboardDTO {
         this.pageIterator = page;
     }
 
-    public Integer getPageSize() {
-        return pageSize;
+    public Integer getTaillePage() {
+        return taillePage;
     }
 
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
+    public void setTaillePage(Integer pageSize) {
+        this.taillePage = pageSize;
     }
 
-    public String getOrderBy() {
-        return orderBy;
+    public String getOrderby() {
+        return orderby;
     }
 
-    public void setOrderBy(String orderBy) {
-        System.out.println(orderBy);
-        this.orderBy = orderBy;
+    public void setOrderby(String orderBy) {
+        this.orderby = orderBy;
     }
 
     @Override
     public String toString() {
-        return "DashboardDTO [search=" + search + ", page=" + pageIterator + ", pageSize=" + pageSize + ", orderBy=" + orderBy
+        return "DashboardDTO [search=" + search + ", page=" + pageIterator + ", pageSize=" + taillePage + ", orderBy=" + orderby
                 + "]";
     }
 

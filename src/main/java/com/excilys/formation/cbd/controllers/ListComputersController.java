@@ -31,8 +31,7 @@ public class ListComputersController extends HttpServlet{
 	
 	private static final long serialVersionUID = 1L;
 	private int pageNumber, pageDemande;
-	private int taillePage=10;
-	private String orderBy="id";
+
 	
 	@Autowired
 	public ComputerService computerService;
@@ -51,7 +50,7 @@ public class ListComputersController extends HttpServlet{
 		pageDemande=0;		
 		Page newPage = new Page();
 	
-		newPage.setMaxLines(taillePage);
+		newPage.setMaxLines(dashboard.getTaillePage());
 		
 	    nbComputer = computerService.countAll(dashboard.getSearch());
 		int maxPages=newPage.getTotalPages(nbComputer);
@@ -60,19 +59,17 @@ public class ListComputersController extends HttpServlet{
 
 			pageDemande=dashboard.getPageIterator();
 			if(pageDemande>0 && pageDemande<=maxPages) {
-				System.out.println("dans le if");
 				pageNumber=dashboard.getPageIterator();
 	    		newPage.setNumberPage(pageNumber);
 	    		newPage.calculFirstLine();
 			}
 		}
-		System.out.println("ici 2 : " + pageNumber);
 		
 		if(dashboard.getSearch() != null && !dashboard.getSearch().equals("")) {
-			allComputers=computerService.getAllByName(newPage,dashboard.getSearch(),orderBy);
+			allComputers=computerService.getAllByName(newPage,dashboard.getSearch(),dashboard.getOrderby());
 		} else {
 
-			allComputers = computerService.getByPage(newPage,orderBy);
+			allComputers = computerService.getByPage(newPage,dashboard.getOrderby());
 		}
 		
        allComputers.stream().forEach(computer->allComputersDTO.add(ComputerDtoMapper.convertToComputerDTO(computer)));
@@ -82,23 +79,26 @@ public class ListComputersController extends HttpServlet{
        mv.getModel().put("computersList", allComputersDTO);
        mv.getModel().put("nbComputers", nbComputer);
        mv.getModel().put("search", dashboard.getSearch());
-       mv.getModel().put("orderby", orderBy);
-       mv.getModel().put("taillePage", taillePage);
+       mv.getModel().put("orderby", dashboard.getOrderby());
+       mv.getModel().put("taillePage", dashboard.getTaillePage());
        
        return mv;
 
 	}
 	
 	@PostMapping("/deleteComputer")
-	public String deleteComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public ModelAndView deleteComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+        ModelAndView mv = new ModelAndView("redirect:dashboard");
+
 		String[] computerIdsAsListString=request.getParameter("selection").split(",");
 		
 		for(String idString:computerIdsAsListString) {
 			computerService.deleteComputer(Long.parseLong(idString));
 		}
 		logger.info("Delete complete");
-		return "redirect:dashboard";
+		
+		return mv;
 
 	}
 

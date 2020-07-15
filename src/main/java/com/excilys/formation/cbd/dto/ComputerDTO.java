@@ -28,11 +28,11 @@ public class ComputerDTO {
 		super();
 	}
 
-	public String getId() {
+	public String getIdComputer() {
         return idComputer;
     }
 
-    public void setId(String idComputer) {
+    public void setIdComputer(String idComputer) {
         this.idComputer = idComputer;
     }
 

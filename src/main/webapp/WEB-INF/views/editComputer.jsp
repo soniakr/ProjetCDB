@@ -23,7 +23,7 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: <c:out value="${idComp}"></c:out>
+                        id: <c:out value="${idComputer}"></c:out>
                     </div>
                     <h1>Edit Computer</h1>
 

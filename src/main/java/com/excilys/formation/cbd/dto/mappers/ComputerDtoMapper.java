@@ -22,7 +22,7 @@ public class ComputerDtoMapper {
 		ComputerDTO computerDto= new ComputerDTO();
 		if(computer.getId()!=null) { //Peut être nul si on insert
 			String id = String.valueOf(computer.getId());
-			computerDto.setId(id);
+			computerDto.setIdComputer(id);
 		}
 		
 		if(computer.getIntroduced()!=null) {
@@ -46,8 +46,8 @@ public class ComputerDtoMapper {
 	public static Computer toComputer(ComputerDTO computerDTO) {
 		        Computer computer = new Computer();
 		        try {
-		            if (computerDTO.getId() != null) {
-		                computer.setId(Long.valueOf(computerDTO.getId()));
+		            if (computerDTO.getIdComputer() != null) {
+		                computer.setId(Long.valueOf(computerDTO.getIdComputer()));
 		            }
 		            computer.setName(computerDTO.getName());
 		            if (computerDTO.getIntroduced() != null && !computerDTO.getIntroduced().equals("")) {
