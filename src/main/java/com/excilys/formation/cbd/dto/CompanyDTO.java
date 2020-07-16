@@ -3,15 +3,15 @@ package com.excilys.formation.cbd.dto;
 public class CompanyDTO {
 	
 	 	private String idCompany;
-	    private String name;
+	    private String nameCompany;
 	    
 		private CompanyDTO(CompanyDTOBuilder companyBuilder) {
 			this.idCompany=companyBuilder.idCompany;
-			this.name=companyBuilder.name;
+			this.nameCompany=companyBuilder.name;
 		}
 	    
 	    public CompanyDTO(long idCompanyCompany) {
-			this.idCompany=String.valueOf(idCompanyCompany);
+			this.idCompany=String.valueOf(idCompany);
 	    }
 	    
 	    public CompanyDTO() {
@@ -26,16 +26,16 @@ public class CompanyDTO {
 	        this.idCompany = idCompany;
 	    }
 
-	    public String getName() {
-	        return name;
+	    public String getNameCompany() {
+	        return nameCompany;
 	    }
 
-	    public void setName(String name) {
-	        this.name = name;
+	    public void setNameCompany(String name) {
+	        this.nameCompany = name;
 	    }
 	    
 		public String toString() {
-			return "Company : " + this.name + " - idCompany : " + this.idCompany;
+			return "Company : " + this.nameCompany + " - idCompany : " + this.idCompany;
 		}
 		
 		/**

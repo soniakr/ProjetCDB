@@ -131,7 +131,7 @@
 				                        </td>
 				                        <td><c:out value="${computer.introduced}"></c:out> </td>
 				                        <td><c:out value="${computer.discontinued}"></c:out> </td>
-				                        <td><c:out value="${computer.company.name}"></c:out></td>
+				                        <td><c:out value="${computer.company.nameCompany}"></c:out></td>
 				                    </tr>
 				</c:forEach>                    
                 </tbody>

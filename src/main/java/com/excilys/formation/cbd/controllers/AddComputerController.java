@@ -61,14 +61,12 @@ public class AddComputerController {
 	}
 
 	@PostMapping("/addComputer")
-	public ModelAndView addComputer(@ModelAttribute("computerDto")ComputerDTO computerDto, ModelAndView mv) throws ServletException, IOException {
-	
+	public ModelAndView addComputer(ComputerDTO computerDto, CompanyDTO companyDTO, ModelAndView mv) throws ServletException, IOException {
+
 		try {
-		
-			CompanyDTO companyDTO=null;
 			
-			if(computerDto.getCompany().getidCompany()!="") {
-				companyDTO=new CompanyDTO(Long.parseLong(computerDto.getCompany().getidCompany()));
+			if(companyDTO.getidCompany() != null) {
+				 computerDto.setCompany(companyDTO);
 			}
 			
 			ComputerDTO computerDTO=new ComputerDTO(computerDto.getName(),computerDto.getIntroduced(),computerDto.getDiscontinued(),companyDTO);

@@ -26,8 +26,8 @@
                     <form action="addComputer" method="POST" onsubmit="return validateForm()">
                         <fieldset>
                             <div class="form-group">
-                                <label for="computerName">Computer name</label>
-                                <input type="text" class="form-control" id="computerName" name="computerName" placeholder="Computer name" required>
+                                <label for="name">Computer name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="Computer name" required>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
@@ -40,9 +40,9 @@
                             <div class="form-group">
                                 <label for="companyId">Company</label>
                                 <select class="form-control" id="idCompany" name="idCompany" >
-	                                <option value="${testComputer.company.name}" selected> </option>
+	                                <option value="${testComputer.company.nameCompany}" selected> </option>
 	                                <c:forEach items="${companies}" var="company">
-	                                    <option value="${company.idCompany}"><c:out value="${company.name}"></c:out></option>
+	                                    <option value="${company.idCompany}"><c:out value="${company.nameCompany}"></c:out></option>
 	                                </c:forEach>
 								</select>
                             </div>                  
