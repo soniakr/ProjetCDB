@@ -26,19 +26,19 @@
                     <form action="addComputer" method="POST" onsubmit="return validateForm()">
                         <fieldset>
                             <div class="form-group">
-                                <label for="name">Computer name</label>
+                                <label for="name"><spring:message code="computerName"/></label>
                                 <input type="text" class="form-control" id="name" name="name" placeholder="Computer name" required>
                             </div>
                             <div class="form-group">
-                                <label for="introduced">Introduced date</label>
+                                <label for="introduced"><spring:message code="introduced"/></label>
                                 <input type="date" class="form-control" id="introduced" name="introduced" placeholder="Introduced date">
                             </div>
                             <div class="form-group">
-                                <label for="discontinued">Discontinued date</label>
+                                <label for="discontinued"><spring:message code="discontinued"/></label>
                                 <input type="date" class="form-control" id="discontinued" name="discontinued" placeholder="Discontinued date">
                             </div>
                             <div class="form-group">
-                                <label for="companyId">Company</label>
+                                <label for="companyId"><spring:message code="companyName"/></label>
                                 <select class="form-control" id="idCompany" name="idCompany" >
 	                                <option value="${testComputer.company.nameCompany}" selected> </option>
 	                                <c:forEach items="${companies}" var="company">

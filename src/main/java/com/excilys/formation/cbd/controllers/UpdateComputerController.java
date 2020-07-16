@@ -70,21 +70,22 @@ public class UpdateComputerController extends HttpServlet{
 		 mv.getModel().put("companies", companyDtoList);
 		 mv.getModel().put("idComputer", computer.getIdComputer());
 		 mv.getModel().put("computerToUpdate", computerDto);
-		 
+		
 		 return mv;
 	}
 	
 	@PostMapping("/editComputer")
-	public ModelAndView editComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public ModelAndView editComputer(ComputerDTO computerDto,CompanyDTO companyDTO) throws ServletException, IOException {
 		
-        ModelAndView mv = new ModelAndView("redirect:dashboard");
+        ModelAndView mv = new ModelAndView("redirect:ListComputers");
 
     	try {
-    		CompanyDTO companyDTO=null;
-    		if(request.getParameter("companyId")!="") {
-    			companyDTO=new CompanyDTO(Long.parseLong(request.getParameter("companyId")));
-    		}
-    		ComputerDTO computerDTO=new ComputerDTO(request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),companyDTO);
+    		
+    		if(companyDTO.getidCompany() != null) {
+				 computerDto.setCompany(companyDTO);
+			}
+    		
+			ComputerDTO computerDTO=new ComputerDTO(computerDto.getName(),computerDto.getIntroduced(),computerDto.getDiscontinued(),companyDTO);
     		ComputerValidator validator= new ComputerValidator();
     		if(validator.validateComputer(computerDTO)) {
     			Computer computer = ComputerDtoMapper.toComputer(computerDTO);

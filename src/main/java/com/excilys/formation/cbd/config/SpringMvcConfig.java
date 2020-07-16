@@ -50,7 +50,7 @@ public class SpringMvcConfig implements WebMvcConfigurer {
 	    public MessageSource messageSource() {
 	        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 	        messageSource.setBasename("/languages/message");
-	        messageSource.setDefaultEncoding("ISO-8859-1"); // or UTF8 ?
+	        messageSource.setDefaultEncoding("ISO-8859-1"); 
 	        return messageSource;
 	    }
 

@@ -1,12 +1,7 @@
 package com.excilys.formation.cbd.controllers;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -31,9 +25,6 @@ import com.excilys.formation.cbd.validators.ComputerValidator;
 @Controller
 public class AddComputerController {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@Autowired
@@ -44,7 +35,7 @@ public class AddComputerController {
 	private static Logger logger = LoggerFactory.getLogger(AddComputerController.class);
     
 	@GetMapping("/addComputer")
-	public ModelAndView getListCompanies(ModelMap dataMap) throws ServletException, IOException {
+	public ModelAndView getListCompanies(ModelMap dataMap) {
 		
 		List<Company> companyList=companyService.getAll();
 		List<CompanyDTO> companyDtoList=new ArrayList<CompanyDTO>();
@@ -61,7 +52,7 @@ public class AddComputerController {
 	}
 
 	@PostMapping("/addComputer")
-	public ModelAndView addComputer(ComputerDTO computerDto, CompanyDTO companyDTO, ModelAndView mv) throws ServletException, IOException {
+	public ModelAndView addComputer(ComputerDTO computerDto, CompanyDTO companyDTO) {
 
 		try {
 			

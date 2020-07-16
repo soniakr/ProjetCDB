@@ -23,20 +23,21 @@
     <section id="main">
         <div class="container">
             <h1 id="homeTitle">
-               <c:out value="${nbComputers}"/> Computers found
+               <c:out value="${nbComputers}"/> <spring:message code="search.number"/>
+               <i class="france flag"></i>
             </h1>
             <div id="actions" class="form-horizontal">
                 <div class="pull-left">
                     <form id="searchForm" action="#" method="GET" class="form-inline">
 
-                        <input type="search" id="searchbox" name="search" value="${search}" class="form-control" placeholder="Search name" />
-                        <input type="submit" id="searchsubmit" value="Filter by name"
+                        <input type="search" id="searchbox" name="search" value="${search}" class="form-control" placeholder='<spring:message code="search.name"/>' />
+                        <input type="submit" id="searchsubmit" value='<spring:message code="button.search"/>'
                         class="btn btn-primary" />
                     </form>
                 </div>
                 <div class="pull-right">
-                    <a class="btn btn-success" id="addComputer" href="addComputer">Add Computer</a> 
-                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();">Edit</a>
+                    <a class="btn btn-success" id="addComputer" href="addComputer"><spring:message code="button.addComputer"/></a> 
+                    <a class="btn btn-default" id="editComputer" href="#" onclick="$.fn.toggleEditMode();"><spring:message code="button.edit"/></a>
                 </div>
             </div>
         </div>
@@ -63,55 +64,55 @@
                         <th>
                        
                                <p>
-                                Computer name
+                                <spring:message code="title.computer"/>
                                
 			            		<a href="ListComputers?taillePage=${taillePage}&orderby=computer.name.ASC" >
-			            			<span class="glyphicon glyphicon-sort-by-alphabet"></span>
+			            			<i class="glyphicon glyphicon-chevron-up"></i>
 			            		</a>
 			            		
 			            		<a href="ListComputers?taillePage=${taillePage}&orderby=computer.name.DESC">
-			            			<span class="glyphicon glyphicon-sort-by-alphabet-alt"> </span>
+			            			<i class="glyphicon glyphicon-chevron-down"></i>
 			            		</a>
 								</p>
                         </th>
                         <th>
                               <p>
-                                Introduced Date
+                                <spring:message code="title.introduced"/>
                                
 			            		<a href="ListComputers?orderby=computer.introduced.ASC">
-			            			<span class="glyphicon glyphicon-sort-by-order"></span>
+			            			<i class="glyphicon glyphicon-chevron-up"></i>
 			            		</a>
 			            		
 			            		<a  href="ListComputers?orderby=computer.introduced.DESC">
-			            			<span class="glyphicon glyphicon-sort-by-order-alt"> </span>
+			            			<i class="glyphicon glyphicon-chevron-down"></i>
 			            		</a>
 								</p>
                         </th>
                         <!-- Table header for Discontinued Date -->
                         <th>
                               <p>
-                                Discontinued Date
+                                <spring:message code="title.discontinued"/>
                                
 			            		<a href="ListComputers?orderby=computer.discontinued.ASC">
-			            			<span class="glyphicon glyphicon-sort-by-order"></span>
+			            			<i class="glyphicon glyphicon-chevron-up"></i>
 			            		</a>
 			            		
 			            		<a  href="ListComputers?orderby=computer.discontinued.DESC">
-			            			<span class="glyphicon glyphicon-sort-by-order-alt"> </span>
+			            			<i class="glyphicon glyphicon-chevron-down"></i>
 			            		</a>
 								</p>
                         </th>
                         <!-- Table header for Company -->
                         <th>
                             <p>
-                                Company
+                                <spring:message code="title.company"/>
                                
 			            		<a href="ListComputers?orderby=company_name.ASC">
-			            			<span class="glyphicon glyphicon-sort-by-alphabet"></span>
+			            			<i class="glyphicon glyphicon-chevron-up"></i>
 			            		</a>
 			            		
 			            		<a  href="ListComputers?orderby=company_name.DESC">
-			            			<span class="glyphicon glyphicon-sort-by-alphabet-alt"> </span>
+			            			<i class="glyphicon glyphicon-chevron-down"></i>
 			            		</a>
 								</p>
                         </th>

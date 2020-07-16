@@ -67,10 +67,6 @@ public class ComputerDTO {
     public void setCompany(CompanyDTO companyDTO) {
         this.company = companyDTO;
     }
-    
-	public String toString() {
-		return "Computer DTO : " + this.name + " - ID : " + this.idComputer + " - Introduced : " + this.introduced + " - Discontinued : " + this.discontinued + " - Company : " + this.company.getidCompany() + " " + this.company.getNameCompany();
-	}
 	
 	/**
 	 * La classe Builder

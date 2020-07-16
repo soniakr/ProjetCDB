@@ -1,12 +1,10 @@
 package com.excilys.formation.cbd.mapper;
 
 import java.sql.ResultSet;
-import java.time.LocalDate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.excilys.formation.cbd.dto.ComputerDTO;
 import com.excilys.formation.cbd.model.Company;
 import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.model.Computer.ComputerBuilder;
