@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,7 +29,7 @@ import com.excilys.formation.cbd.service.ComputerService;
 import com.excilys.formation.cbd.validators.ComputerValidator;
 
 @Controller
-public class AddComputerController extends HttpServlet {
+public class AddComputerController {
 
 	/**
 	 * 
@@ -61,18 +61,17 @@ public class AddComputerController extends HttpServlet {
 	}
 
 	@PostMapping("/addComputer")
-	public ModelAndView addComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-        ModelAndView mv = new ModelAndView("redirect:ListComputers");
-
+	public ModelAndView addComputer(@ModelAttribute("computerDto")ComputerDTO computerDto, ModelAndView mv) throws ServletException, IOException {
+	
 		try {
 		
 			CompanyDTO companyDTO=null;
-			if(request.getParameter("companyId")!="") {
-				companyDTO=new CompanyDTO(Long.parseLong(request.getParameter("companyId")));
+			
+			if(computerDto.getCompany().getidCompany()!="") {
+				companyDTO=new CompanyDTO(Long.parseLong(computerDto.getCompany().getidCompany()));
 			}
 			
-			ComputerDTO computerDTO=new ComputerDTO(request.getParameter("computerName"),request.getParameter("introduced"),request.getParameter("discontinued"),companyDTO);
+			ComputerDTO computerDTO=new ComputerDTO(computerDto.getName(),computerDto.getIntroduced(),computerDto.getDiscontinued(),companyDTO);
 			ComputerValidator validator= new ComputerValidator();
 			
 			if(validator.validateComputer(computerDTO)) {
@@ -85,11 +84,9 @@ public class AddComputerController extends HttpServlet {
 			
 		} catch (NumberFormatException e) {
 			logger.error("Insert not allowed ", e);
-		} finally {
-			//getListCompanies(request, response);
-		}
+		} 
 		
-		return mv;
+		return new ModelAndView("redirect:ListComputers");
 
 	}
 

@@ -69,7 +69,7 @@ public class ComputerDTO {
     }
     
 	public String toString() {
-		return "Computer DTO : " + this.name + " - ID : " + this.idComputer + " - Introduced : " + this.introduced + " - Discontinued : " + this.discontinued + " - Company : " + this.company.getId() + " " + this.company.getName();
+		return "Computer DTO : " + this.name + " - ID : " + this.idComputer + " - Introduced : " + this.introduced + " - Discontinued : " + this.discontinued + " - Company : " + this.company.getidCompany() + " " + this.company.getName();
 	}
 	
 	/**

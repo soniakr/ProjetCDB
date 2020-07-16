@@ -33,14 +33,7 @@ public class ConnexionHikari {
 		}
 		return connect;
 	}
-/*
-	public static ConnexionHikari getInstance() {
-		if (instance == null) {
-			instance = new ConnexionHikari();
-		}
-		return instance;
-	}
-*/
+	
 	public static Connection disconnect() {
 		if (connect != null) {
 			try {

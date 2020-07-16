@@ -46,8 +46,6 @@ public class ListComputersController extends HttpServlet{
 	    List<Computer> allComputers;
 		
 		int nbComputer;
-		
-		pageDemande=0;		
 		Page newPage = new Page();
 	
 		newPage.setMaxLines(dashboard.getTaillePage());
@@ -86,16 +84,14 @@ public class ListComputersController extends HttpServlet{
 
 	}
 	
-	@PostMapping("/deleteComputer")
-	public ModelAndView deleteComputer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	@PostMapping("/ListComputers")
+	public ModelAndView deleteComputer(@RequestParam List<Long> selection) {
 		
-        ModelAndView mv = new ModelAndView("redirect:dashboard");
+        ModelAndView mv = new ModelAndView("redirect:ListComputers");
 
-		String[] computerIdsAsListString=request.getParameter("selection").split(",");
-		
-		for(String idString:computerIdsAsListString) {
-			computerService.deleteComputer(Long.parseLong(idString));
-		}
+        for (Long computerId : selection) {
+            computerService.deleteComputer(computerId);
+        }
 		logger.info("Delete complete");
 		
 		return mv;

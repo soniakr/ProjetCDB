@@ -58,7 +58,7 @@ public class ComputerDtoMapper {
 		            }
 		            if (computerDTO.getCompany() != null) {
 		                computer.setCompany(CompanyDtoMapper.toCompany(computerDTO.getCompany()));
-		                computer.setIdCompany(Long.valueOf(computerDTO.getCompany().getId()));
+		                computer.setIdCompany(Long.valueOf(computerDTO.getCompany().getidCompany()));
 		            }
 		        } catch (Exception e) {
 		            logger.error("error mapping computerDTO to Computer : " + e.toString());

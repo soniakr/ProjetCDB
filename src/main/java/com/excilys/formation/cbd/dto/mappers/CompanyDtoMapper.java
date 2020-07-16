@@ -10,7 +10,7 @@ public class CompanyDtoMapper {
 		CompanyDTO companyDto= new CompanyDTO();
 		
 		String id = String.valueOf(company.getId());
-		companyDto.setId(id);
+		companyDto.setidCompany(id);
 		companyDto.setName(company.getName());
 		
 		return companyDto;
@@ -19,7 +19,7 @@ public class CompanyDtoMapper {
 
 	public static Company toCompany(CompanyDTO companyDto) {
 		Company company = new Company();
-		company.setId(Long.parseLong(companyDto.getId()));
+		company.setId(Long.parseLong(companyDto.getidCompany()));
 		company.setName(companyDto.getName());
 		
 		return company;
