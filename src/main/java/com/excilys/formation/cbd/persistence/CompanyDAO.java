@@ -7,6 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +36,12 @@ public class CompanyDAO {
 	 
 	 private Connection connect;
 	  
-	 private static final String SELECT_ALL = "SELECT company.id, company.name FROM company ORDER BY id";
-	   
-	 private static final String SELECT_PAGE = "SELECT company.id, company.name FROM company ORDER BY id LIMIT ? OFFSET ? ";
+	// private static final String SELECT_ALL = "SELECT company.id, company.name FROM company ORDER BY id";
+     private static final String SELECT_ALL = "FROM Company"; 
 	 
-	 private static final String SELECT_BY_ID = "SELECT company.id, company.name FROM company WHERE company.id = ?  ";
+     private static final String SELECT_PAGE = "SELECT company.id, company.name FROM company ORDER BY id LIMIT ? OFFSET ? ";
+	 
+	 private static final String SELECT_BY_ID = "FROM Company company WHERE company.id = :id";
 
 	 private static final String COUNT = "SELECT COUNT(*) AS total FROM company";
 	 
@@ -48,16 +53,23 @@ public class CompanyDAO {
 	 
 	 private static Logger logger = LoggerFactory.getLogger(CompanyDAO.class);
 	 
+	 private SessionFactory sessionFactory;
+	 
+	 @Autowired
+	 public CompanyDAO (SessionFactory sessionFactory) {
+	        this.sessionFactory = sessionFactory;
+	 }
+	    
 	 /**
 	  * @return Liste de toutes les compagnies
 	  */
 	 public List<Company> getAll() {
 		 	
 		 List<Company> companies = new ArrayList<Company>();
-			try ( Connection connect = ConnexionHikari.getConnection()){
-				companies=jdbcTemplate.query(SELECT_ALL, new CompanyMapper());
-	        } catch (SQLException e) {
-	            logger.error("Error when listing all computers",e);
+		 try (Session session = sessionFactory.openSession()) {
+	            companies = session.createQuery(SELECT_ALL, Company.class).list();
+	        } catch (HibernateException e) {
+	            logger.error("error when getting all companies", e);
 	        }
 			return companies;	
 	}
@@ -65,12 +77,14 @@ public class CompanyDAO {
 	 
 	 public Company findById(Long id) {		 
 		 Company company = new Company();
-			if(id!=null) {
-				try ( Connection connect = ConnexionHikari.getConnection()){
-					company = jdbcTemplate.queryForObject(SELECT_BY_ID, new CompanyMapper(), id);
-		        } catch (SQLException e) {
-		           logger.error("Error when finding a computer with its ID",e);
-		        }
+		 if (id != null) {
+	            try (Session session = sessionFactory.openSession()) {
+	                Query<Company> query = session.createQuery(SELECT_BY_ID, Company.class);
+	                query.setParameter("id", id);
+	                company = query.uniqueResult();
+	            } catch (HibernateException e) {
+	                logger.error("error when finding computer by id", e);
+	            }
 			}
 			return company;
 	}

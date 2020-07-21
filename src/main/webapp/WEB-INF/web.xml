@@ -9,34 +9,17 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  <servlet>
-    <description></description>
-    <display-name>AddComputerServlet</display-name>
-    <servlet-name>AddComputerServlet</servlet-name>
-    <servlet-class>com.excilys.formation.cbd.servlets.AddComputerServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>AddComputerServlet</servlet-name>
-    <url-pattern>/AddComputerServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>EditComputerServlet</display-name>
-    <servlet-name>EditComputerServlet</servlet-name>
-    <servlet-class>com.excilys.formation.cbd.servlets.EditComputerServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>EditComputerServlet</servlet-name>
-    <url-pattern>/EditComputerServlet</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
-    <display-name>HomeServlet</display-name>
-    <servlet-name>HomeServlet</servlet-name>
-    <servlet-class>com.excilys.formation.cbd.controllers.HomeServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>HomeServlet</servlet-name>
-    <url-pattern>/HomeServlet</url-pattern>
-  </servlet-mapping>
+  <error-page>
+    <error-code>403</error-code>
+    <location>/views/403.html</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/views/404.html</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/views/500.html</location>
+  </error-page>
+  
 </web-app>

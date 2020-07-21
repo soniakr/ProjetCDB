@@ -27,7 +27,7 @@
                     </div>
                     <h1><spring:message code="editButton"/></h1>
 
-                    <form action="editComputer" method="POST">
+                    <form action="editComputer" method="POST" onsubmit="return validateForm()">
                         <input type="hidden" id="id" name="id" value="${computerToUpdate.idComputer }"/> <!-- TODO: Change this value with the computer id -->
                         <fieldset>
                             <div class="form-group">
@@ -44,7 +44,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="companyId"><spring:message code="companyName"/></label>
-                                <select class="form-control" id="companyId" name="companyId" >
+                                <select class="form-control" id="idCompany" name="idCompany" >
                                     <c:forEach items="${companies}" var="company">
 	                                	<c:if test="${company.idCompany==computerToUpdate.company.idCompany}">
 	                                		 <option value="${company.idCompany}" selected><c:out value="${company.nameCompany}"></c:out></option>
@@ -66,7 +66,7 @@
             </div>
         </div>
     </section>
-    <script src="resources/js/validatorForm.js"></script>
+    <script src="resources/js/validator.js"></script>
     <script src="resources/js/jquery.min.js"></script>
 	<script src="resources/js/bootstrap.min.js"></script>
 </body>

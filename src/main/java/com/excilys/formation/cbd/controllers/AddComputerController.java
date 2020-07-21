@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.formation.cbd.dto.CompanyDTO;
@@ -23,6 +24,7 @@ import com.excilys.formation.cbd.service.ComputerService;
 import com.excilys.formation.cbd.validators.ComputerValidator;
 
 @Controller
+@RequestMapping("/addComputer")
 public class AddComputerController {
 
 	private static final long serialVersionUID = 1L;
@@ -34,7 +36,7 @@ public class AddComputerController {
 	
 	private static Logger logger = LoggerFactory.getLogger(AddComputerController.class);
     
-	@GetMapping("/addComputer")
+	@GetMapping
 	public ModelAndView getListCompanies(ModelMap dataMap) {
 		
 		List<Company> companyList=companyService.getAll();
@@ -51,7 +53,7 @@ public class AddComputerController {
 
 	}
 
-	@PostMapping("/addComputer")
+	@PostMapping
 	public ModelAndView addComputer(ComputerDTO computerDto, CompanyDTO companyDTO) {
 
 		try {

@@ -19,10 +19,8 @@
     <javax.servlet-api.version>4.0.0</javax.servlet-api.version>    
     <slf4j-log4j12.version>1.7.5</slf4j-log4j12.version>
     <slf4j-api.version>1.7.5</slf4j-api.version>
-    <spring-context.version>5.2.7.RELEASE</spring-context.version>
-    <spring-webmvc.version>5.2.7.RELEASE</spring-webmvc.version>
-    <spring-test.version>5.2.7.RELEASE</spring-test.version>
-    <spring-jdbc.version>5.2.7.RELEASE</spring-jdbc.version>
+    <spring.version>5.2.7.RELEASE</spring.version>
+    <hibernate.version>5.4.18.Final</hibernate.version>
 </properties>
 
 <build>
@@ -66,6 +64,12 @@
 			<artifactId>jstl</artifactId>
 			<version>${jstl.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>5.4.18.Final</version>
 		</dependency>
 		
 		<dependency>
@@ -120,29 +124,41 @@
 			<version>${javax.servlet-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
+	
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version>
+		</dependency>
 		
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-webmvc</artifactId>
-		    <version>${spring-webmvc.version}</version>
+		    <version>${spring.version}</version>
 		</dependency>
 
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-context</artifactId>
-		   	<version>${spring-context.version}</version>
+		   	<version>${spring.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+		    <artifactId>spring-orm</artifactId>
+		    <version>${spring.version}</version>
 		</dependency>
 		
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-jdbc</artifactId>
-		    <version>${spring-jdbc.version}</version>
+		    <version>${spring.version}</version>
 		</dependency>
 		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${spring-test.version}</version>
+			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
 </dependencies>

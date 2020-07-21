@@ -2,19 +2,38 @@ package com.excilys.formation.cbd.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 /**
  * Classe representant l'entité Computer
  * @author sonia
  *
  */
 
+@Entity
+@Table(name = "computer")
 public class Computer {
 	
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+    @Column(name = "introduced")
 	private LocalDate introduced;
+    
+    @Column(name = "discontinued")
 	private LocalDate discontinued;
-	private Long company_id;
+    	
+	@ManyToOne
+    @JoinColumn(name = "company_id")
 	private Company company;
 	
 	
@@ -24,7 +43,6 @@ public class Computer {
 		this.introduced=computerBuilder.introduced;
 		this.discontinued=computerBuilder.discontinued;
 		this.company=computerBuilder.company;
-		this.company_id=computerBuilder.company_id;
 	}
 	
 	public Computer() {
@@ -67,14 +85,6 @@ public class Computer {
 			throw new Exception("Discontinued date must be greater");
 		}
 		this.discontinued = newDate;
-	}
-	
-	public Long getIdCompany() {
-		return this.company_id;
-	}
-	
-	public void setIdCompany(Long i) {
-		this.company_id=i;
 	}
 	
 	public Company getCompany() {

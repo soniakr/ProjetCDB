@@ -7,6 +7,9 @@ public class CompanyDtoMapper {
 	
 	
 	public static CompanyDTO companyToCompanyDto(Company company) {
+		if(company==null) {
+			return null;
+		}
 		CompanyDTO companyDto= new CompanyDTO();
 		
 		String id = String.valueOf(company.getId());

@@ -6,6 +6,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,25 +35,32 @@ public class ComputerDAO {
 
 	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
-	private static final String SELECT_ALL = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY computer.id";
+	private static final String SELECT_ALL = "FROM Computer";
 
-	private static final String SELECT_BY_ID = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.id = ?  ";
+	private static final String SELECT_BY_ID = "FROM Computer computer WHERE computer.id = :id";
 
-	private static final String SELECT_BY_NAME = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ? ORDER BY %s LIMIT ? OFFSET ? ";
+	private static final String SELECT_BY_NAME = "FROM Computer computer WHERE computer.name LIKE :search OR company.name LIKE :search ";
 
-	private static final String SELECT_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY %s LIMIT ? OFFSET ?";
+//	private static final String SELECT_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY %s LIMIT ? OFFSET ?";
 
-	private static final String COUNT = "SELECT COUNT(*) AS total FROM computer ";
+	private static final String COUNT = "COUNT(computer) from Computer computer LEFT JOIN computer.company as company";
 
-	private static final String COUNT_BY_NAME = "SELECT COUNT(*) AS total FROM computer LEFT JOIN company ON company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
+	private static final String COUNT_BY_NAME = "SELECT COUNT(computer) from Computer computer LEFT JOIN computer.company as company WHERE computer.name LIKE :search OR computer.company.name LIKE :search";
 
 	private static final String INSERT = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 
-	private static final String UPDATE = "UPDATE computer SET name = ?, introduced = ?, discontinued = ?, company_id = ? WHERE id = ?";
+	private static final String UPDATE = "UPDATE Computer computer SET computer.name = :name, computer.introducedDate = :introduced, computer.discontinuedDate = :discontinued, company.id = :companyId WHERE computer.id = :computerId";
 
-	private static final String DELETE = "DELETE FROM computer WHERE id = ?";
+	private static final String DELETE = "DELETE Computer WHERE id = :id";
 
 	static final String DELETE_COMPUTER_WITH_COMPANY_ID = "DELETE FROM computer WHERE company_id= ? ";
+	
+    private SessionFactory sessionFactory;
+    
+	@Autowired
+	public ComputerDAO(SessionFactory sessionFactory) {
+		this.sessionFactory = sessionFactory;
+	}
 
 	/**
 	 * Tout les ordinateurs de la table Computer
@@ -135,19 +146,23 @@ public class ComputerDAO {
 	 * @param orderBy
 	 * @return la liste d'ordinateurs
 	 */
-	public List<Computer> getByPage(Page p, String orderBy) {
+	public List<Computer> getByPage(Page page, String orderBy) {
 
-		List<Computer> computersList = new ArrayList<Computer>();
-		String order = orderBy(orderBy, SELECT_PAGE);
+		List<Computer> computerList = new ArrayList<Computer>();
 
-		try (Connection connect = ConnexionHikari.getConnection()){
-			
-			computersList = jdbcTemplate.query(order, new ComputerMapper(), p.getMaxLines(), p.getFirstLine());
-	
-		} catch (SQLException e) {
-			logger.error("Erreur DAO -> Lister les ordinateurs de la page : " + p.getNumberPage() + e.getMessage());
-		}
-		return computersList;
+        if (page == null) {
+            logger.error("the page is null");
+        } else if (page.getNumberPage() > 0) {
+            try (Session session = sessionFactory.openSession()) {
+                Query<Computer> query = session.createQuery(SELECT_ALL, Computer.class);
+                query.setFirstResult(page.getFirstLine());
+                query.setMaxResults(page.getMaxLines());
+                computerList = query.list();
+            } catch (Exception e) {
+                logger.error("error when get all by page:", e);
+            }
+        }
+        return computerList;
 	}
 
 	/**
@@ -171,7 +186,7 @@ public class ComputerDAO {
 					discontinuedDate = Date.valueOf(computer.getDiscontinued());
 				}
 
-				Long idCompany = computer.getIdCompany()== null ? null : computer.getCompany().getId();
+				Long idCompany = computer.getCompany().getId()== null ? null : computer.getCompany().getId();
 				
 				jdbcTemplate.update(INSERT, 
 	            		computer.getName(), 
@@ -203,7 +218,7 @@ public class ComputerDAO {
 					discontinuedDate = Date.valueOf(computer.getDiscontinued());
 				}
 
-				Long idCompany = computer.getIdCompany()== null ? null : computer.getCompany().getId();
+				Long idCompany = computer.getCompany()== null ? null : computer.getCompany().getId();
 				
 				jdbcTemplate.update(UPDATE, 
 	            		computer.getName(), 
@@ -235,16 +250,17 @@ public class ComputerDAO {
 	 * @param si il y'a un filtre
 	 * @return le nombre total d'entrées
 	 */
-	public int countAll(String search) {
+	public int countAll(String name) {
 		
 		int total = 0;
-		try (Connection connect = ConnexionHikari.getConnection()){
-			if(search==null) {
-				total = jdbcTemplate.queryForObject(COUNT, Integer.class);
-			}else {
-				total = jdbcTemplate.queryForObject(COUNT_BY_NAME, Integer.class , "%"+search+"%" , "%"+search+"%");
+		try (Session session = sessionFactory.openSession()){
+			if(name==null) {
+				total = session.createQuery(COUNT, Long.class).getFirstResult();
+			}	else {
+				System.out.println("ici");
+				total = session.createQuery(COUNT_BY_NAME, Long.class).setParameter("search", "%".concat(name).concat("%")).uniqueResult().intValue();
 			}
-		 } catch (SQLException e) {
+		 } catch (HibernateException e) {
 	            logger.error("Error when counting the number of computers",e);
 	     }
         return total; 

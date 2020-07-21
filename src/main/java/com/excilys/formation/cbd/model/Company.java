@@ -1,5 +1,12 @@
 package com.excilys.formation.cbd.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import com.excilys.formation.cbd.dto.CompanyDTO;
 import com.excilys.formation.cbd.dto.CompanyDTO.CompanyDTOBuilder;
 
@@ -8,9 +15,15 @@ import com.excilys.formation.cbd.dto.CompanyDTO.CompanyDTOBuilder;
  * @author sonia
  *
  */
+
+@Entity
+@Table(name = "company")
 public class Company {
 	
-	private long id;
+	@Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	private String name;
 	
 	public Company(long id, String name) {
@@ -39,11 +52,11 @@ public class Company {
 		this.name=n;
 	}
 	
-	public long getId() {
+	public Long getId() {
 		return this.id;
 	}
 	
-	public void setId(long i) {
+	public void setId(Long i) {
 		this.id=i;
 	}
 	
