@@ -39,13 +39,13 @@ public class ComputerDAO {
 
 	private static final String SELECT_BY_ID = "FROM Computer computer WHERE computer.id = :id";
 
-	private static final String SELECT_BY_NAME = "FROM Computer computer WHERE computer.name LIKE :search OR company.name LIKE :search ";
+	private static final String SELECT_BY_NAME = "FROM Computer computer WHERE computer.name LIKE :toSearch OR company.name LIKE :toSearch ORDER BY ";
 
 //	private static final String SELECT_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY %s LIMIT ? OFFSET ?";
 
-	private static final String COUNT = "COUNT(computer) from Computer computer LEFT JOIN computer.company as company";
+	private static final String COUNT = "SELECT COUNT(computer) from Computer computer LEFT JOIN computer.company as company";
 
-	private static final String COUNT_BY_NAME = "SELECT COUNT(computer) from Computer computer LEFT JOIN computer.company as company WHERE computer.name LIKE :search OR computer.company.name LIKE :search";
+	private static final String COUNT_BY_NAME = "SELECT COUNT(computer) from Computer computer LEFT JOIN computer.company as company WHERE computer.name LIKE :toSearch OR computer.company.name LIKE :toSearch";
 
 	private static final String INSERT = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
 
@@ -103,19 +103,21 @@ public class ComputerDAO {
 	 * 
 	 * @return Liste de tous le ordinateurs
 	 */
-	public List<Computer> getAllByName(Page p, String name, String orderBy) {
-		List<Computer> computersList = new ArrayList<Computer>();
-		String request = orderBy(orderBy, SELECT_BY_NAME);
-		String nameInRequest= "%" + name + "%";
-		
-		try (Connection connect = ConnexionHikari.getConnection()){
-			
-			computersList = jdbcTemplate.query(request, new ComputerMapper(), nameInRequest, nameInRequest, p.getMaxLines(), p.getFirstLine());
-		
-		} catch (SQLException e) {
-			logger.error("Erreur DAO -> Lister les ordinateurs par nom : " + p.getNumberPage() + e.getMessage());
-		}
-		return computersList;
+	public List<Computer> getAllByName(Page page, String name, String orderBy) {
+		String request = orderBy(orderBy,SELECT_BY_NAME);
+		 List<Computer> computerList = new ArrayList<Computer>();
+	        if (page.getNumberPage() > 0 && name != null && !name.isEmpty() && !name.contains("%") && !name.contains("_")) {
+	            try (Session session = sessionFactory.openSession()) {
+	                Query<Computer> query = session.createQuery(request, Computer.class);
+	                query.setParameter("toSearch", "%".concat(name).concat("%"));
+	                query.setFirstResult(page.getFirstLine());
+	                query.setMaxResults(page.getMaxLines());
+	                computerList = query.list();
+	            } catch (HibernateException e) {
+	                logger.error("error when get all by page:", e);
+	            }
+	        }
+	        return computerList;
 	}
 
 	public String orderBy(String s, String requete) {
@@ -135,7 +137,7 @@ public class ComputerDAO {
 			order = "computer.id";
 		}
 
-		String res = String.format(requete, order);
+		String res = requete + order;
 		return res;
 	}
 
@@ -258,7 +260,7 @@ public class ComputerDAO {
 				total = session.createQuery(COUNT, Long.class).getFirstResult();
 			}	else {
 				System.out.println("ici");
-				total = session.createQuery(COUNT_BY_NAME, Long.class).setParameter("search", "%".concat(name).concat("%")).uniqueResult().intValue();
+				total = session.createQuery(COUNT_BY_NAME, Long.class).setParameter("toSearch", ("%".concat(name).concat("%"))).uniqueResult().intValue();
 			}
 		 } catch (HibernateException e) {
 	            logger.error("Error when counting the number of computers",e);
