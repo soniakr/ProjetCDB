@@ -7,8 +7,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.excilys.formation.cbd.dto.CompanyDTO;
-import com.excilys.formation.cbd.dto.CompanyDTO.CompanyDTOBuilder;
 
 /**
  * Classe representant l'entité Company

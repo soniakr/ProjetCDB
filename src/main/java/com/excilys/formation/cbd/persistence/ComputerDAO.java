@@ -1,22 +1,22 @@
 package com.excilys.formation.cbd.persistence;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.PersistenceException;
+import javax.persistence.RollbackException;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.formation.cbd.persistence.mapper.ComputerMapper;
 import com.excilys.formation.cbd.model.Computer;
 import com.excilys.formation.cbd.model.Page;
 
@@ -30,10 +30,6 @@ import com.excilys.formation.cbd.model.Page;
 @Repository
 public class ComputerDAO {
 	
-	@Autowired
-	private JdbcTemplate jdbcTemplate; 
-
-	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
 
 	private static final String SELECT_ALL = "FROM Computer";
 
@@ -41,42 +37,24 @@ public class ComputerDAO {
 
 	private static final String SELECT_BY_NAME = "FROM Computer computer WHERE computer.name LIKE :toSearch OR company.name LIKE :toSearch ORDER BY ";
 
-//	private static final String SELECT_PAGE = "SELECT computer.id, computer.name, introduced, discontinued, company_id, company.name AS company_name FROM computer LEFT JOIN company ON company_id = company.id ORDER BY %s LIMIT ? OFFSET ?";
-
 	private static final String COUNT = "SELECT COUNT(computer) from Computer computer LEFT JOIN computer.company as company";
 
 	private static final String COUNT_BY_NAME = "SELECT COUNT(computer) from Computer computer LEFT JOIN computer.company as company WHERE computer.name LIKE :toSearch OR computer.company.name LIKE :toSearch";
 
-	private static final String INSERT = "INSERT INTO computer (name, introduced, discontinued, company_id) VALUES (?, ?, ?, ?)";
-
-	private static final String UPDATE = "UPDATE Computer computer SET computer.name = :name, computer.introducedDate = :introduced, computer.discontinuedDate = :discontinued, company.id = :companyId WHERE computer.id = :computerId";
+	private static final String UPDATE = "UPDATE Computer computer SET computer.name = :name, computer.introduced = :introduced, computer.discontinued = :discontinued, company.id = :companyId WHERE computer.id = :computerId";
 
 	private static final String DELETE = "DELETE Computer WHERE id = :id";
 
 	static final String DELETE_COMPUTER_WITH_COMPANY_ID = "DELETE FROM computer WHERE company_id= ? ";
+	
+	private static Logger logger = LoggerFactory.getLogger(ComputerDAO.class);
+
 	
     private SessionFactory sessionFactory;
     
 	@Autowired
 	public ComputerDAO(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
-	}
-
-	/**
-	 * Tout les ordinateurs de la table Computer
-	 * 
-	 * @return Liste de tous le ordinateurs
-	 */
-	
-	public List<Computer> getAll() {
-		
-		List<Computer> computers = new ArrayList<Computer>();
-		try ( Connection connect = ConnexionHikari.getConnection()){
-			computers=jdbcTemplate.query(SELECT_ALL, new ComputerMapper());
-        } catch (SQLException e) {
-            logger.error("Error when listing all computers",e);
-        }
-		return computers;	
 	}
 
 	/**
@@ -88,13 +66,17 @@ public class ComputerDAO {
 	public Computer findById(Long id) {
 		
 		Computer computer = new Computer();
-		if(id!=null) {
-			try ( Connection connect = ConnexionHikari.getConnection()){
-				computer = jdbcTemplate.queryForObject(SELECT_BY_ID, new ComputerMapper(), id);
-	        } catch (SQLException e) {
-	           logger.error("Error when finding a computer with its ID",e);
-	        }
-		}
+		if (id != null) {
+            try (Session session = sessionFactory.openSession()) {
+                Query<Computer> query = session.createQuery(SELECT_BY_ID, Computer.class);
+                query.setParameter("id", id);
+                computer = query.uniqueResult();
+            } catch (HibernateException e) {
+                logger.error("error when finding computer by id", e);
+            }
+        } else {
+            logger.error("company id to find is null");
+        }
 		return computer;
 	}
 
@@ -153,7 +135,7 @@ public class ComputerDAO {
 		List<Computer> computerList = new ArrayList<Computer>();
 
         if (page == null) {
-            logger.error("the page is null");
+            logger.error("Error listing computers : the page is null");
         } else if (page.getNumberPage() > 0) {
             try (Session session = sessionFactory.openSession()) {
                 Query<Computer> query = session.createQuery(SELECT_ALL, Computer.class);
@@ -173,32 +155,17 @@ public class ComputerDAO {
 	 * @param computer l'entité à insérer dans la table
 	 */
 	public void insert(Computer computer) {
-
-		if (computer != null) {
-			
-			try (Connection connect = ConnexionHikari.getConnection()) {
-
-				Date introducedDate = null;
-				if (computer.getIntroduced() != null) {
-					introducedDate = Date.valueOf(computer.getIntroduced());
-				}
-
-				Date discontinuedDate = null;
-				if (computer.getDiscontinued() != null) {
-					discontinuedDate = Date.valueOf(computer.getDiscontinued());
-				}
-
-				Long idCompany = computer.getCompany().getId()== null ? null : computer.getCompany().getId();
-				
-				jdbcTemplate.update(INSERT, 
-	            		computer.getName(), 
-	            		introducedDate,
-	            		discontinuedDate, 
-	            		idCompany);  
-			} catch (SQLException e) {
-				logger.error("Erreur insertion base de données (Vérifier que l'ID de l'entreprise existe bien) ");
-			}
-		}
+		
+	    if (computer != null) {
+			try (Session session = sessionFactory.openSession()) {
+	            session.save(computer);
+	        } catch (HibernateException e) {
+	            logger.error("Error creating a computer", e);
+	        }
+	    } else {
+	        logger.error("Error creating computer : the computer is null");
+	    }
+	    	logger.info(computer.toString());
 	}
 
 	/**
@@ -207,29 +174,23 @@ public class ComputerDAO {
 	 * @param computer l'entité avec les modifications à apporter
 	 */
 	public void update(Computer computer) {
+        int nbResults = 0;
 		if (computer != null) {
  
-			try (Connection connect = ConnexionHikari.getConnection()) {
-				Date introducedDate = null;
-				if (computer.getIntroduced() != null) {
-					introducedDate = Date.valueOf(computer.getIntroduced());
-				}
-
-				Date discontinuedDate = null;
-				if (computer.getDiscontinued() != null) {
-					discontinuedDate = Date.valueOf(computer.getDiscontinued());
-				}
-
-				Long idCompany = computer.getCompany()== null ? null : computer.getCompany().getId();
-				
-				jdbcTemplate.update(UPDATE, 
-	            		computer.getName(), 
-	            		introducedDate,
-	            		discontinuedDate, 
-	            		idCompany,
-	            		computer.getId());  
-			} catch (SQLException e) {
-				logger.error("ErreurDAO : update ");
+			 try (Session session = sessionFactory.openSession()) {
+	                Transaction transaction = session.beginTransaction();
+	                nbResults = session.createQuery(UPDATE)
+	                        .setParameter("name", computer.getName())
+	                        .setParameter("introduced", computer.getIntroduced())
+	                        .setParameter("discontinued", computer.getDiscontinued())
+	                        .setParameter("companyId", computer.getCompany() == null ? null : computer.getCompany().getId())
+	                        .setParameter("computerId", computer.getId()).executeUpdate();
+	                transaction.commit();
+	                if (nbResults != 1) {
+	                    logger.error("%d rows affected when updating computer", nbResults);
+	                }
+			} catch (IllegalStateException | RollbackException | HibernateException e) {
+				logger.error("ErrorDAO : Updating computer ");
 			}
 		}
 	}
@@ -240,11 +201,21 @@ public class ComputerDAO {
 	 * @param id identifiant de l'ordinateur à supprimer
 	 */
 	public void delete(Long id) {
-		try (Connection connect = ConnexionHikari.getConnection()) {
-            jdbcTemplate.update(DELETE, id);
-        } catch (SQLException e) {
-            logger.error("Error when deleting a Computer",e);
-        }
+		int nbRows = 0;
+		if (id != null) {
+			try (Session session = sessionFactory.openSession()) {
+				Transaction transaction = session.beginTransaction();
+				nbRows = session.createQuery(DELETE).setParameter("id", id).executeUpdate();
+				transaction.commit();
+				if (nbRows != 1) {
+					logger.error("%d rows affected when deleting computer", nbRows);
+				}
+			} catch (IllegalStateException | PersistenceException e) {
+				logger.error("error when deleting computer", e);
+			}
+		} else {
+			logger.error("the id of the computer to delete is null");
+		}
 	}
 
 	/**

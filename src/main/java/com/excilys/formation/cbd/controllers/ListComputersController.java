@@ -25,6 +25,7 @@ import com.excilys.formation.cbd.service.ComputerService;
 @Controller
 public class ListComputersController {
 	
+	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 	private int pageNumber, pageDemande;
 

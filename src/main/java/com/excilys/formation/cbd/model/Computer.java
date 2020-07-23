@@ -119,7 +119,6 @@ public class Computer {
 		private String name;
 		private LocalDate introduced;
 		private LocalDate discontinued;
-		private Long company_id;
 		private Company company;
 		
 		public ComputerBuilder(String name) {
@@ -140,11 +139,6 @@ public class Computer {
 			this.discontinued=discontinued;
 			return this;
 	    }
-		
-		public ComputerBuilder initializeWithCompanyID(Long company_id) {
-			this.company_id=company_id;
-			return this;
-		}
 		
 		public ComputerBuilder initializeWithCompany(Company company) {
 			this.company=company;

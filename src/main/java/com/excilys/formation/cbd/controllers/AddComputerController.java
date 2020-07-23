@@ -27,6 +27,7 @@ import com.excilys.formation.cbd.validators.ComputerValidator;
 @RequestMapping("/addComputer")
 public class AddComputerController {
 
+	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 	
 	@Autowired

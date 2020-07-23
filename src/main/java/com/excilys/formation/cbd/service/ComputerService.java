@@ -19,18 +19,6 @@ public class ComputerService {
 		
 	@Autowired
     private ComputerDAO computerDAO;
-
-    //synchronized?
-/*    public static ComputerService getInstance() {
-        if (computerService == null) {
-            computerService = new ComputerService();
-        }
-        return computerService;
-    }*/
-    
-    public List<Computer> getAll() {
-        return computerDAO.getAll();
-    }
     
     public List<Computer> getAllByName(Page newPage, String name, String orderBy) {
         return computerDAO.getAllByName(newPage, name, orderBy);
