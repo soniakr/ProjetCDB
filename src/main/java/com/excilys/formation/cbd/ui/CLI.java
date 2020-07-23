@@ -219,8 +219,8 @@ public class CLI {
 					newComp = new ComputerBuilder(name)
 										.initializeWithIntroducedDate(dateIntroduced)
 										.initializeWithDiscontinuedDate(dateDisc)
-										.initializeWithCompanyID(idComp)
-			.build(); 
+										//.initializeWithCompanyID(idComp) //TODO
+										.build(); 
 				} catch (NumberFormatException | DateTimeParseException e) {  
 					logger.error("Erreur de format : ", e);
 				}

@@ -31,7 +31,7 @@ import com.excilys.formation.cbd.model.Page;
 public class ComputerDAO {
 	
 
-	private static final String SELECT_ALL = "FROM Computer";
+	private static final String SELECT_ALL = "FROM Computer computer ORDER BY ";
 
 	private static final String SELECT_BY_ID = "FROM Computer computer WHERE computer.id = :id";
 
@@ -39,7 +39,7 @@ public class ComputerDAO {
 
 	private static final String COUNT = "SELECT COUNT(computer) from Computer computer LEFT JOIN computer.company as company";
 
-	private static final String COUNT_BY_NAME = "SELECT COUNT(computer) from Computer computer LEFT JOIN computer.company as company WHERE computer.name LIKE :toSearch OR computer.company.name LIKE :toSearch";
+	private static final String COUNT_BY_NAME = "SELECT COUNT(computer) from Computer computer LEFT JOIN computer.company as company WHERE computer.name LIKE :toSearch OR computer.company.name LIKE :toSearch ";
 
 	private static final String UPDATE = "UPDATE Computer computer SET computer.name = :name, computer.introduced = :introduced, computer.discontinued = :discontinued, company.id = :companyId WHERE computer.id = :computerId";
 
@@ -113,10 +113,10 @@ public class ComputerDAO {
 			} else if (arguments.length == 2) {
 				order = arguments[0] + " " + arguments[1];
 			} else {
-				order = "computer.id";
+				order = "computer.id desc";
 			}
 		} else {
-			order = "computer.id";
+			order = "computer.id desc";
 		}
 
 		String res = requete + order;
@@ -133,12 +133,13 @@ public class ComputerDAO {
 	public List<Computer> getByPage(Page page, String orderBy) {
 
 		List<Computer> computerList = new ArrayList<Computer>();
+		String request = orderBy(orderBy,SELECT_ALL);
 
         if (page == null) {
             logger.error("Error listing computers : the page is null");
         } else if (page.getNumberPage() > 0) {
             try (Session session = sessionFactory.openSession()) {
-                Query<Computer> query = session.createQuery(SELECT_ALL, Computer.class);
+                Query<Computer> query = session.createQuery(request, Computer.class);
                 query.setFirstResult(page.getFirstLine());
                 query.setMaxResults(page.getMaxLines());
                 computerList = query.list();
