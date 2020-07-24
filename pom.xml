@@ -1,165 +1,53 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.excilys.maven</groupId>
-  <artifactId>computer_database</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <groupId>com.excilys.java.cdb</groupId>
+  <artifactId>cdb</artifactId>
+  <packaging>pom</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>cdb</name>
+  <url>http://maven.apache.org</url>
   
-  <properties>
+    <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     
-    <junit.version>4.11</junit.version>
-    <jstl.version>1.2</jstl.version>
-    <mysql-connector-java.version>8.0.20</mysql-connector-java.version>
-    <mockito-all.version>1.10.19</mockito-all.version>
-    <HikariCP.version>3.2.0</HikariCP.version>
-    <dbunit.version>2.7.0</dbunit.version>
-    <javax.servlet-api.version>4.0.0</javax.servlet-api.version>    
-    <slf4j-log4j12.version>1.7.5</slf4j-log4j12.version>
-    <slf4j-api.version>1.7.5</slf4j-api.version>
-    <spring.version>5.2.7.RELEASE</spring.version>
-    <hibernate.version>5.4.18.Final</hibernate.version>
-</properties>
-
-<build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.7.1</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.0.0</version>
-            </plugin>
-
-        </plugins>
-    </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.1</version>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>checkstyle</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-        </plugins>
-    </reporting>
-
-<dependencies>
-
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-			<version>${jstl.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.hibernate</groupId>
-		    <artifactId>hibernate-core</artifactId>
-		    <version>5.4.18.Final</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>${mysql-connector-java.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		
-		<dependency>
-		    <groupId>com.zaxxer</groupId>
-		    <artifactId>HikariCP</artifactId>
-		    <version>${HikariCP.version}</version>
-		</dependency>
-
-		<dependency>
-       <groupId>org.slf4j</groupId>
-       <artifactId>slf4j-api</artifactId>
-       <version>${slf4j-api.version}</version>
-  		</dependency>
-   
-	   <dependency>
-	       <groupId>org.slf4j</groupId>
-	       <artifactId>slf4j-log4j12</artifactId>
-	       <version>${slf4j-log4j12.version}</version>
-	   </dependency>
-
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>${mockito-all.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-		  <groupId>org.dbunit</groupId>
-		  <artifactId>dbunit</artifactId>
-		  <version>${dbunit.version}</version>
-		  <scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${javax.servlet-api.version}</version>
-			<scope>provided</scope>
-		</dependency>
-	
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>2.0.1.Final</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-webmvc</artifactId>
-		    <version>${spring.version}</version>
-		</dependency>
-
-		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-context</artifactId>
-		   	<version>${spring.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework</groupId>
-		    <artifactId>spring-orm</artifactId>
-		    <version>${spring.version}</version>
-		</dependency>
-		
-		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-jdbc</artifactId>
-		    <version>${spring.version}</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
-			<scope>test</scope>
-		</dependency>
-</dependencies>
+	<project.version>6.0.0</project.version>
+	<junit.version>4.12</junit.version>
+	<javax.servlet-api.version>4.0.0</javax.servlet-api.version>
+	<mysql-connector-java.version>8.0.20</mysql-connector-java.version>
+	<mockito-all.version>1.10.19</mockito-all.version>
+	<slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
+	<slf4j-api.version>1.6.1</slf4j-api.version>
+	<h2.version>1.4.200</h2.version>
+	<jstl.version>1.2</jstl.version>
+	<HikariCP.version>3.4.5</HikariCP.version>
+	<spring.version>5.2.6.RELEASE</spring.version>
+	<hibernate.version>5.4.18.Final</hibernate.version>
+  </properties>
+  
+  <reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>3.1.1</version>
+				<configuration>
+					<configLocation>config/checkstyle.xml</configLocation>
+					<suppressionsLocation>config/suppressions.xml</suppressionsLocation>
+					<suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+  
+<modules> 
+	<module>core</module>
+    <module>service</module>
+    <module>persistence</module>
+    <module>console</module>
+    <module>binding</module>
+    <module>webapp</module>
+  </modules>
 </project>
