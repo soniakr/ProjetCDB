@@ -1,4 +1,4 @@
-package com.excilys.formation.cbd.config;
+package com.excilys.java.cdb.spring;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -16,7 +16,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan({"com.excilys.formation.cbd.persistence" , "com.excilys.formation.cbd.service" , "com.excilys.formation.cbd.ui"})
+@ComponentScan("com.excilys" )
 public class SpringConfig implements  WebApplicationInitializer {
 
 	 @Override

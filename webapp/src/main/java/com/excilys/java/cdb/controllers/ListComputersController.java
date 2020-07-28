@@ -1,4 +1,4 @@
-package com.excilys.formation.cbd.controllers;
+package com.excilys.java.cdb.controllers;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.formation.cbd.dto.ComputerDTO;
-import com.excilys.formation.cbd.dto.DashboardDTO;
-import com.excilys.formation.cbd.dto.mappers.ComputerDtoMapper;
-import com.excilys.formation.cbd.model.Computer;
-import com.excilys.formation.cbd.model.Page;
-import com.excilys.formation.cbd.service.ComputerService;
+import com.excilys.java.cdb.dto.ComputerDTO;
+import com.excilys.java.cdb.dto.DashboardDTO;
+import com.excilys.java.cdb.dto.mappers.ComputerDtoMapper;
+import com.excilys.java.cdb.model.Computer;
+import com.excilys.java.cdb.model.Page;
+import com.excilys.java.cdb.service.ComputerService;
 
-@Controller
+@Controller("/ListComputers")
 public class ListComputersController {
 	
 	@SuppressWarnings("unused")
@@ -35,12 +35,13 @@ public class ListComputersController {
 	
 	private static Logger logger = LoggerFactory.getLogger(ListComputersController.class);
 	
-	@GetMapping("/ListComputers")
+	@GetMapping
 	public ModelAndView getListComputers(DashboardDTO dashboard) throws ServletException, IOException {
 		
         ModelAndView mv = new ModelAndView("dashboard");
 		List<ComputerDTO>allComputersDTO=new ArrayList<ComputerDTO>();
 	    List<Computer> allComputers;
+		System.out.println("hello");
 		
 		int nbComputer;
 		Page newPage = new Page();
@@ -63,10 +64,9 @@ public class ListComputersController {
 		if(dashboard.getSearch() != null && !dashboard.getSearch().equals("")) {
 			allComputers=computerService.getAllByName(newPage,dashboard.getSearch(),dashboard.getOrderby());
 		} else {
-
 			allComputers = computerService.getByPage(newPage,dashboard.getOrderby());
 		}
-		
+		System.out.println("taille comp :" + allComputers.size());
        allComputers.stream().forEach(computer->allComputersDTO.add(ComputerDtoMapper.convertToComputerDTO(computer)));
        
        mv.getModel().put("maxPages", maxPages);
@@ -81,7 +81,7 @@ public class ListComputersController {
 
 	}
 	
-	@PostMapping("/ListComputers")
+	@PostMapping
 	public ModelAndView deleteComputer(@RequestParam List<Long> selection) {
 		
         ModelAndView mv = new ModelAndView("redirect:ListComputers");

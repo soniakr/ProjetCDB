@@ -79,13 +79,13 @@
 						<th>
 
 							<p>
-								<spring:message code="title.computer" />
-
+								<spring:message code="title.computer" /> 
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 								<a
-									href="ListComputers?taillePage=${taillePage}&orderby=computer.name.ASC">
+									href="ListComputers?taillePage=${taillePage}&search=${search}&orderby=computer.name.ASC">
 									<i class="glyphicon glyphicon-chevron-up"></i>
 								</a> <a
-									href="ListComputers?taillePage=${taillePage}&orderby=computer.name.DESC">
+									href="ListComputers?taillePage=${taillePage}&search=${search}&orderby=computer.name.DESC">
 									<i class="glyphicon glyphicon-chevron-down"></i>
 								</a>
 							</p>
@@ -94,9 +94,9 @@
 							<p>
 								<spring:message code="title.introduced" />
 
-								<a href="ListComputers?orderby=computer.introduced.ASC"> <i
+								<a href="ListComputers?taillePage=${taillePage}&search=${search}&orderby=computer.introduced.ASC"> <i
 									class="glyphicon glyphicon-chevron-up"></i>
-								</a> <a href="ListComputers?orderby=computer.introduced.DESC"> <i
+								</a> <a href="ListComputers?taillePage=${taillePage}&search=${search}&orderby=computer.introduced.DESC"> <i
 									class="glyphicon glyphicon-chevron-down"></i>
 								</a>
 							</p>
@@ -106,9 +106,9 @@
 							<p>
 								<spring:message code="title.discontinued" />
 
-								<a href="ListComputers?orderby=computer.discontinued.ASC"> <i
+								<a href="ListComputers?taillePage=${taillePage}&search=${search}&orderby=computer.discontinued.ASC"> <i
 									class="glyphicon glyphicon-chevron-up"></i>
-								</a> <a href="ListComputers?orderby=computer.discontinued.DESC">
+								</a> <a href="ListComputers?taillePage=${taillePage}&search=${search}&orderby=computer.discontinued.DESC">
 									<i class="glyphicon glyphicon-chevron-down"></i>
 								</a>
 							</p>
@@ -118,9 +118,9 @@
 							<p>
 								<spring:message code="title.company" />
 
-								<a href="ListComputers?orderby=company_name.ASC"> <i
+								<a href="ListComputers?taillePage=${taillePage}&search=${search}&orderby=company_name.ASC"> <i
 									class="glyphicon glyphicon-chevron-up"></i>
-								</a> <a href="ListComputers?orderby=company_name.DESC"> <i
+								</a> <a href="ListComputers?taillePage=${taillePage}&search=${search}&orderby=company_name.DESC"> <i
 									class="glyphicon glyphicon-chevron-down"></i>
 								</a>
 							</p>

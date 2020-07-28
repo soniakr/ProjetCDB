@@ -1,4 +1,4 @@
-package com.excilys.formation.cbd.config;
+package com.excilys.java.cdb.spring;
 
 import java.util.Locale;
 
@@ -12,7 +12,6 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
@@ -21,20 +20,15 @@ import org.springframework.web.servlet.view.JstlView;
 
 @EnableWebMvc
 @Configuration
-@ComponentScan(basePackages = { "com.excilys.formation.cbd.controllers" })
+@ComponentScan
 public class SpringMvcConfig implements WebMvcConfigurer {
-	
-	@Override
-	   public void addViewControllers(ViewControllerRegistry registry) {
-	      registry.addViewController("/").setViewName("home");
-	   }
-	 
+
 	 @Bean
 	   public ViewResolver getViewLocation() {
 	      InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
 	 
 	      viewResolver.setViewClass(JstlView.class);
-	      viewResolver.setPrefix("/WEB-INF/views/");
+	      viewResolver.setPrefix("/views/");
 	      viewResolver.setSuffix(".jsp");
 	 
 	      return viewResolver;

@@ -1,4 +1,4 @@
-package com.excilys.formation.cbd.controllers;
+package com.excilys.java.cdb.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

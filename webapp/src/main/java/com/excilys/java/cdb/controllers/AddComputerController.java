@@ -1,4 +1,4 @@
-package com.excilys.formation.cbd.controllers;
+package com.excilys.java.cdb.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,15 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.formation.cbd.dto.CompanyDTO;
-import com.excilys.formation.cbd.dto.ComputerDTO;
-import com.excilys.formation.cbd.dto.mappers.CompanyDtoMapper;
-import com.excilys.formation.cbd.dto.mappers.ComputerDtoMapper;
-import com.excilys.formation.cbd.model.Company;
-import com.excilys.formation.cbd.model.Computer;
-import com.excilys.formation.cbd.service.CompanyService;
-import com.excilys.formation.cbd.service.ComputerService;
-import com.excilys.formation.cbd.validators.ComputerValidator;
+import com.excilys.java.cdb.dto.CompanyDTO;
+import com.excilys.java.cdb.dto.ComputerDTO;
+import com.excilys.java.cdb.dto.mappers.CompanyDtoMapper;
+import com.excilys.java.cdb.dto.mappers.ComputerDtoMapper;
+import com.excilys.java.cdb.model.Company;
+import com.excilys.java.cdb.model.Computer;
+
+import com.excilys.java.cdb.service.CompanyService;
+import com.excilys.java.cdb.service.ComputerService;
+import com.excilys.java.cdb.validators.ComputerValidator;
 
 @Controller
 @RequestMapping("/addComputer")
