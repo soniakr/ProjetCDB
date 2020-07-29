@@ -23,7 +23,7 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1><spring:message code="label.register"/></h1>
-                    <form class="registrationForm" action="RegisterUser" method="POST">                    
+                    <form class="registrationForm" action="Register" method="POST">                    
                         <fieldset>
                             <div class="form-group">
                                 <label for="username"><spring:message code="label.username"/> *</label>
