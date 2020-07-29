@@ -7,9 +7,7 @@
     <artifactId>cdb</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  <groupId>com.excilys.java.cdb</groupId>
   <artifactId>persistence</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <name>persistence</name>
   <url>http://maven.apache.org</url>
   

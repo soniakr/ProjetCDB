@@ -16,13 +16,13 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan("com.excilys" )
+@ComponentScan({"com.excilys.java.cdb.service", "com.excilys.java.cdb.persistence" , "com.excilys.java.cdb.controllers"})
 public class SpringConfig implements  WebApplicationInitializer {
 
 	 @Override
 		public void onStartup(ServletContext servletContext) throws ServletException {
 			AnnotationConfigWebApplicationContext webContext = new AnnotationConfigWebApplicationContext();
-			webContext.register(SpringConfig.class,SpringMvcConfig.class,HibernateConfig.class);
+			webContext.register(SpringConfig.class,SpringMvcConfig.class);
 			webContext.setServletContext(servletContext);
 			ServletRegistration.Dynamic servlet = servletContext.addServlet("dynamicServlet", new DispatcherServlet(webContext));
 			servlet.setLoadOnStartup(1);

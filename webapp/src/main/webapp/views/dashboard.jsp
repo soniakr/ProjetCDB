@@ -80,7 +80,6 @@
 
 							<p>
 								<spring:message code="title.computer" /> 
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 								<a
 									href="ListComputers?taillePage=${taillePage}&search=${search}&orderby=computer.name.ASC">
 									<i class="glyphicon glyphicon-chevron-up"></i>

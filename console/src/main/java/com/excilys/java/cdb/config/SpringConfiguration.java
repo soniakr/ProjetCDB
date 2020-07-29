@@ -9,7 +9,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
-@ComponentScan({"com.excilys.formation.cbd.persistence" , "com.excilys.formation.cbd.service" , "com.excilys.formation.cbd.ui"})
+@ComponentScan({"com.excilys.java.cdb.persistence" , "com.excilys.java.cdb.service" , "com.excilys.java.cdb.ui"})
 
 public class SpringConfiguration {	
 		 
