@@ -19,9 +19,13 @@ public class ComputerService {
 		
 	@Autowired
     private ComputerDAO computerDAO;
-    
-    public List<Computer> getAllByName(Page newPage, String name, String orderBy) {
+	
+	public List<Computer> getAllByName(Page newPage, String name, String orderBy) {
         return computerDAO.getAllByName(newPage, name, orderBy);
+    }
+    
+    public List<Computer> getAll() {
+        return computerDAO.getAll();
     }
     
     public Computer getById(Long id) {

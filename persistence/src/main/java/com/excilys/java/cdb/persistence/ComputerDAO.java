@@ -56,6 +56,19 @@ public class ComputerDAO {
 	public ComputerDAO(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
+	
+	public List<Computer> getAll() {
+		
+		String request = orderBy("",SELECT_ALL);
+        List<Computer> computerList = new ArrayList<Computer>();
+        
+        try (Session session = sessionFactory.openSession()) {
+            computerList = session.createQuery(request, Computer.class).list();
+        } catch (HibernateException e) {
+            logger.error("error when getting all computers", e);
+        }
+        return computerList;
+    }
 
 	/**
 	 * Trouver un ordinateur à partir de l'id
@@ -66,6 +79,7 @@ public class ComputerDAO {
 	public Computer findById(Long id) {
 		
 		Computer computer = new Computer();
+		
 		if (id != null) {
             try (Session session = sessionFactory.openSession()) {
                 Query<Computer> query = session.createQuery(SELECT_BY_ID, Computer.class);
@@ -105,7 +119,7 @@ public class ComputerDAO {
 	public String orderBy(String s, String requete) {
 
 		String order;
-		if (s != null) {
+		if (s != null && !s.equals("")) {
 			String[] arguments = s.split("\\.");
 
 			if (arguments.length == 3) {

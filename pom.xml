@@ -15,6 +15,7 @@
     
 	<project.version>1.0.0</project.version>
 	<junit.version>4.12</junit.version>
+	 <jackson.version>2.11.1</jackson.version>
 	<javax.servlet-api.version>4.0.0</javax.servlet-api.version>
 	<mysql-connector-java.version>8.0.20</mysql-connector-java.version>
 	<mockito-all.version>1.10.19</mockito-all.version>
