@@ -12,7 +12,7 @@
     
     <junit.version>4.11</junit.version>
     <jstl.version>1.2</jstl.version>
-    <mysql-connector-java.version>8.0.20</mysql-connector-java.version>
+    <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
     <mockito-all.version>1.10.19</mockito-all.version>
     <HikariCP.version>3.2.0</HikariCP.version>
     <dbunit.version>2.7.0</dbunit.version>
